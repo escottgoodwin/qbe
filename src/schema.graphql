@@ -1,0 +1,93 @@
+# import User,Institution,Course,Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
+
+directive @isAuthenticated on QUERY | FIELD_DEFINITION  | MUTATION
+directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION
+directive @isOwner(type: String) on QUERY | FIELD_DEFINITION  | MUTATION
+
+type Query {
+
+  users(filter: String): [User!]! @isAuthenticated
+  institutions(filter: String): [Institution!]! @isAuthenticated
+  courses(filter: String): [Course!]! @isAuthenticated
+  departments(filter: String): [Department!]! @isAuthenticated
+  tests(filter: String): [Test!]! @isAuthenticated
+  panels(filter: String): [Panel!]! @isAuthenticated
+  questions(filter: String): [Question!]! @isAuthenticated
+  questionchoices(filter: String): [QuestionChoice!]! @isAuthenticated
+  challenges(filter: String): [Challenge!]! @isAuthenticated
+  answers(filter: String): [Answer!]! @isAuthenticated
+  sequences(filter: String): [Sequence!]! @isAuthenticated
+
+  me: User
+}
+
+type Mutation {
+
+  signup(email: String!, password: String!, firstName: String!,lastName: String!, role: String): AuthPayload
+
+  login(email: String!, password: String!): AuthPayload
+
+  addInstitution(name: String!, type: String, contactIds: ID, teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution ! @hasRole(roles: ["QUANDRIA"])
+
+  updateInstitution(id: ID!, name: String, type: String, contactIds: [ID], teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution! @hasRole(roles: ["QUANDRIA"])
+
+  deleteInstitution(id: ID!): Institution! @hasRole(roles: ["QUANDRIA"])
+
+  addDepartment(name: String!, type: String, institutionId: ID!): Department @hasRole(roles: ["ADMIN"])
+
+  updateDepartment(id: ID!, name: String, type: String, adminIds:[ID], teacherIds: [ID], courseIds: [ID], adminIds: [ID]): Department @hasRole(roles: ["ADMIN"])
+
+  deleteDepartment(id: ID!): Department! @hasRole(roles: ["ADMIN"])
+
+  addCourse(name: String!, courseNumber: String, time: String, institutionId: ID!, departmentId: ID): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  updateCourse(id: ID!, name: String, courseNumber: String, time: String, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  deleteCourse(id: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  addTest(subject: String!, testNumber: String, testDate: DateTime, courseId: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  updateTest(id: ID!, subject: String!, testNumber: String, testDate: DateTime, published: Boolean, publishDate: DateTime, release: Boolean, releaseDate: DateTime): Test! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  deleteTest(id: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  addPanel(link: String!, testId: ID!): Panel! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  deletePanel(id: ID!): Panel! @hasRole(roles: ["TEACHER","ADMIN"])
+
+  addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  updateQuestion(id: ID!, question: String!, sentToId: ID): Question! @hasRole(roles: ["STUDENT"])
+
+  deleteQuestion(id: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  addQuestionChoice(choice: String!, correct: Boolean, questionId: ID!): QuestionChoice! @hasRole(roles: ["STUDENT"])
+
+  updateQuestionChoice(id: ID!, choice: String, correct: Boolean): QuestionChoice! @hasRole(roles: ["STUDENT"])
+
+  deleteQuestionChoice(id: ID!): QuestionChoice! @hasRole(roles: ["STUDENT"])
+
+  addChallenge(challenge: String!, questionId: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  updateChallenge(id: ID!, challenge: String!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  deleteChallenge(id: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  addAnswer(questionId: ID!, answerChoiceId: ID!): Answer! @hasRole(roles: ["STUDENT"])
+
+  deleteAnswer(id: ID!): Answer! @hasRole(roles: ["STUDENT"])
+
+  addSequence(testId: ID!, studentIds: [ID!]!, panelIds: [ID!]!): Sequence!
+
+  updateSequence(id: ID!, studentIds: [ID], usedStudentIds: [ID], panelIds: [ID], usedPanelIds: [ID]): Sequence!
+
+  deleteSequence(id: ID!): Sequence!
+
+  updateUser(email: String, salutation: String, firstName: String, lastName: String, studentInstitutionIds: [ID], teacherInstitutionIds: [ID], teacherDepartmentIds: [ID], studentIds:[String], teacherIds: [String], phone: String, online: Boolean): User! @isAuthenticated
+
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}

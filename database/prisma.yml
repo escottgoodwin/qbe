@@ -1,0 +1,8 @@
+endpoint: https://qbe-59fcbd371e.herokuapp.com/database/dev
+datamodel: datamodel.prisma
+
+hooks:
+  post-deploy:
+    - graphql get-schema --project database
+
+secret: mysecret123
