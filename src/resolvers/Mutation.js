@@ -210,7 +210,7 @@ async function addCourse(parent, { name, courseNumber, time, institutionId, depa
         institution: {
           connect: { id: institutionId  }
         },
-        institution: {
+        department: {
           connect: { id: departmentId  }
         },
         addedBy: {
