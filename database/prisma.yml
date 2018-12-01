@@ -1,8 +1,0 @@
-endpoint: ${env:PRISMA_SERVER}
-datamodel: datamodel.prisma
-
-hooks:
-  post-deploy:
-    - graphql get-schema --project database
-
-secret: ${env:PRISMA_SECRET}
