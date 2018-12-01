@@ -1,4 +1,4 @@
-# import User,Institution,Course,Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
+# import User,Institution,Course,CourseOrderByInput, UserOrderByInput, Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
 
 directive @isAuthenticated on QUERY | FIELD_DEFINITION  | MUTATION
 directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION
@@ -6,9 +6,9 @@ directive @isOwner(type: String) on QUERY | FIELD_DEFINITION  | MUTATION
 
 type Query {
 
-  users(filter: String): [User!]! @isAuthenticated
   institutions(filter: String): [Institution!]! @isAuthenticated
-  courses(filter: String): [Course!]! @isAuthenticated
+  courses(filter: String, skip: Int, first: Int, orderBy: CourseOrderByInput): CourseSearch! @isAuthenticated
+  users(filter: String, skip: Int, first: Int, orderBy: UserOrderByInput): UserSearch! @isAuthenticated
   departments(filter: String): [Department!]! @isAuthenticated
   tests(filter: String): [Test!]! @isAuthenticated
   panels(filter: String): [Panel!]! @isAuthenticated
@@ -98,6 +98,16 @@ type Mutation {
   phone: String,
   online: Boolean): User! @isAuthenticated
 
+}
+
+type CourseSearch {
+  courses: [Course!]!
+  count: Int!
+}
+
+type UserSearch {
+  users: [User!]!
+  count: Int!
 }
 
 type AuthPayload {

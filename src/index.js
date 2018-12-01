@@ -3,11 +3,15 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 const Mutation = require('./resolvers/Mutation')
 const Query = require('./resolvers/Query')
+const CourseSearch = require('./resolvers/CourseSearch')
+const UserSearch = require('./resolvers/UserSearch')
 const { directiveResolvers } = require("./directives")
 
 const resolvers = {
   Query,
   Mutation,
+  CourseSearch,
+  UserSearch,
   Node: {
     __resolveType() {
       return null;
