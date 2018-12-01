@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Fri Nov 30 2018 14:38:26 GMT-0800 (Pacific Standard Time)
+# timestamp: Fri Nov 30 2018 16:10:16 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -2081,6 +2081,7 @@ type Department implements Node {
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User
+  students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   admins(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
@@ -2104,6 +2105,7 @@ input DepartmentCreateInput {
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
   admins: UserCreateManyWithoutDepartmentAdminsInput
   courses: CourseCreateManyWithoutDepartmentInput
@@ -2121,6 +2123,11 @@ input DepartmentCreateManyWithoutAdminsInput {
 
 input DepartmentCreateManyWithoutInstitutionInput {
   create: [DepartmentCreateWithoutInstitutionInput!]
+  connect: [DepartmentWhereUniqueInput!]
+}
+
+input DepartmentCreateManyWithoutStudentsInput {
+  create: [DepartmentCreateWithoutStudentsInput!]
   connect: [DepartmentWhereUniqueInput!]
 }
 
@@ -2146,6 +2153,7 @@ input DepartmentCreateWithoutAddedByInput {
   updateDate: DateTime
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
   admins: UserCreateManyWithoutDepartmentAdminsInput
   courses: CourseCreateManyWithoutDepartmentInput
@@ -2159,6 +2167,7 @@ input DepartmentCreateWithoutAdminsInput {
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
   courses: CourseCreateManyWithoutDepartmentInput
 }
@@ -2171,6 +2180,7 @@ input DepartmentCreateWithoutCoursesInput {
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
   admins: UserCreateManyWithoutDepartmentAdminsInput
 }
@@ -2180,6 +2190,20 @@ input DepartmentCreateWithoutInstitutionInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  addedBy: UserCreateOneWithoutDepartmentsAddedInput!
+  updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
+  teachers: UserCreateManyWithoutDepartmentTeachersInput
+  admins: UserCreateManyWithoutDepartmentAdminsInput
+  courses: CourseCreateManyWithoutDepartmentInput
+}
+
+input DepartmentCreateWithoutStudentsInput {
+  name: String!
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
@@ -2195,6 +2219,7 @@ input DepartmentCreateWithoutTeachersInput {
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
   updatedBy: UserCreateOneWithoutDepartmentsUpdatedInput
+  students: UserCreateManyWithoutDepartmentStudentsInput
   admins: UserCreateManyWithoutDepartmentAdminsInput
   courses: CourseCreateManyWithoutDepartmentInput
 }
@@ -2206,6 +2231,7 @@ input DepartmentCreateWithoutUpdatedByInput {
   updateDate: DateTime
   institution: InstitutionCreateOneWithoutDepartmentsInput!
   addedBy: UserCreateOneWithoutDepartmentsAddedInput!
+  students: UserCreateManyWithoutDepartmentStudentsInput
   teachers: UserCreateManyWithoutDepartmentTeachersInput
   admins: UserCreateManyWithoutDepartmentAdminsInput
   courses: CourseCreateManyWithoutDepartmentInput
@@ -2467,6 +2493,7 @@ input DepartmentUpdateInput {
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
   admins: UserUpdateManyWithoutDepartmentAdminsInput
   courses: CourseUpdateManyWithoutDepartmentInput
@@ -2519,6 +2546,17 @@ input DepartmentUpdateManyWithoutInstitutionInput {
   upsert: [DepartmentUpsertWithWhereUniqueWithoutInstitutionInput!]
 }
 
+input DepartmentUpdateManyWithoutStudentsInput {
+  create: [DepartmentCreateWithoutStudentsInput!]
+  connect: [DepartmentWhereUniqueInput!]
+  disconnect: [DepartmentWhereUniqueInput!]
+  delete: [DepartmentWhereUniqueInput!]
+  update: [DepartmentUpdateWithWhereUniqueWithoutStudentsInput!]
+  updateMany: [DepartmentUpdateManyWithWhereNestedInput!]
+  deleteMany: [DepartmentScalarWhereInput!]
+  upsert: [DepartmentUpsertWithWhereUniqueWithoutStudentsInput!]
+}
+
 input DepartmentUpdateManyWithoutTeachersInput {
   create: [DepartmentCreateWithoutTeachersInput!]
   connect: [DepartmentWhereUniqueInput!]
@@ -2562,6 +2600,7 @@ input DepartmentUpdateWithoutAddedByDataInput {
   updateDate: DateTime
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
   admins: UserUpdateManyWithoutDepartmentAdminsInput
   courses: CourseUpdateManyWithoutDepartmentInput
@@ -2575,6 +2614,7 @@ input DepartmentUpdateWithoutAdminsDataInput {
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
   courses: CourseUpdateManyWithoutDepartmentInput
 }
@@ -2587,6 +2627,7 @@ input DepartmentUpdateWithoutCoursesDataInput {
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
   admins: UserUpdateManyWithoutDepartmentAdminsInput
 }
@@ -2596,6 +2637,20 @@ input DepartmentUpdateWithoutInstitutionDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
+  updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
+  teachers: UserUpdateManyWithoutDepartmentTeachersInput
+  admins: UserUpdateManyWithoutDepartmentAdminsInput
+  courses: CourseUpdateManyWithoutDepartmentInput
+}
+
+input DepartmentUpdateWithoutStudentsDataInput {
+  name: String
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
@@ -2611,6 +2666,7 @@ input DepartmentUpdateWithoutTeachersDataInput {
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
   updatedBy: UserUpdateOneWithoutDepartmentsUpdatedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   admins: UserUpdateManyWithoutDepartmentAdminsInput
   courses: CourseUpdateManyWithoutDepartmentInput
 }
@@ -2622,6 +2678,7 @@ input DepartmentUpdateWithoutUpdatedByDataInput {
   updateDate: DateTime
   institution: InstitutionUpdateOneRequiredWithoutDepartmentsInput
   addedBy: UserUpdateOneRequiredWithoutDepartmentsAddedInput
+  students: UserUpdateManyWithoutDepartmentStudentsInput
   teachers: UserUpdateManyWithoutDepartmentTeachersInput
   admins: UserUpdateManyWithoutDepartmentAdminsInput
   courses: CourseUpdateManyWithoutDepartmentInput
@@ -2640,6 +2697,11 @@ input DepartmentUpdateWithWhereUniqueWithoutAdminsInput {
 input DepartmentUpdateWithWhereUniqueWithoutInstitutionInput {
   where: DepartmentWhereUniqueInput!
   data: DepartmentUpdateWithoutInstitutionDataInput!
+}
+
+input DepartmentUpdateWithWhereUniqueWithoutStudentsInput {
+  where: DepartmentWhereUniqueInput!
+  data: DepartmentUpdateWithoutStudentsDataInput!
 }
 
 input DepartmentUpdateWithWhereUniqueWithoutTeachersInput {
@@ -2673,6 +2735,12 @@ input DepartmentUpsertWithWhereUniqueWithoutInstitutionInput {
   where: DepartmentWhereUniqueInput!
   update: DepartmentUpdateWithoutInstitutionDataInput!
   create: DepartmentCreateWithoutInstitutionInput!
+}
+
+input DepartmentUpsertWithWhereUniqueWithoutStudentsInput {
+  where: DepartmentWhereUniqueInput!
+  update: DepartmentUpdateWithoutStudentsDataInput!
+  create: DepartmentCreateWithoutStudentsInput!
 }
 
 input DepartmentUpsertWithWhereUniqueWithoutTeachersInput {
@@ -2863,6 +2931,9 @@ input DepartmentWhereInput {
   institution: InstitutionWhereInput
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
+  students_every: UserWhereInput
+  students_some: UserWhereInput
+  students_none: UserWhereInput
   teachers_every: UserWhereInput
   teachers_some: UserWhereInput
   teachers_none: UserWhereInput
@@ -7682,6 +7753,7 @@ type User implements Node {
   institutionContact(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
   teacherInstitution(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
   studentInstitution(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
+  institutionAdmins(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
   teacherCourses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
   studentCourses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
@@ -7708,7 +7780,7 @@ type User implements Node {
   departmentsUpdated(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department!]
   departmentTeachers(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department!]
   departmentAdmins(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department!]
-  institutionAdmins(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
+  departmentStudents(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department!]
 }
 
 """A connection to a list of items."""
@@ -7740,6 +7812,7 @@ input UserCreateInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -7766,11 +7839,16 @@ input UserCreateInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateManyWithoutDepartmentAdminsInput {
   create: [UserCreateWithoutDepartmentAdminsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutDepartmentStudentsInput {
+  create: [UserCreateWithoutDepartmentStudentsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -7946,6 +8024,7 @@ input UserCreateWithoutAnswersInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   questions: QuestionCreateManyInput
@@ -7971,7 +8050,7 @@ input UserCreateWithoutAnswersInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutAnswerUpdatesInput {
@@ -7993,6 +8072,7 @@ input UserCreateWithoutAnswerUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8018,7 +8098,7 @@ input UserCreateWithoutAnswerUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutChallengesInput {
@@ -8040,6 +8120,7 @@ input UserCreateWithoutChallengesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8065,7 +8146,7 @@ input UserCreateWithoutChallengesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutChallengeUpdatesInput {
@@ -8087,6 +8168,7 @@ input UserCreateWithoutChallengeUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8112,7 +8194,7 @@ input UserCreateWithoutChallengeUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutCoursesAddedInput {
@@ -8134,6 +8216,7 @@ input UserCreateWithoutCoursesAddedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8159,7 +8242,7 @@ input UserCreateWithoutCoursesAddedInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutCourseUpdatesInput {
@@ -8181,6 +8264,7 @@ input UserCreateWithoutCourseUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8206,7 +8290,7 @@ input UserCreateWithoutCourseUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutDepartmentAdminsInput {
@@ -8228,6 +8312,7 @@ input UserCreateWithoutDepartmentAdminsInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8253,7 +8338,7 @@ input UserCreateWithoutDepartmentAdminsInput {
   departmentsAdded: DepartmentCreateManyWithoutAddedByInput
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutDepartmentsAddedInput {
@@ -8275,6 +8360,7 @@ input UserCreateWithoutDepartmentsAddedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8300,7 +8386,55 @@ input UserCreateWithoutDepartmentsAddedInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
+}
+
+input UserCreateWithoutDepartmentStudentsInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherInstitution: InstitutionCreateManyWithoutTeachersInput
+  studentInstitution: InstitutionCreateManyWithoutStudentsInput
   institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  departmentsAdded: DepartmentCreateManyWithoutAddedByInput
+  departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
+  departmentTeachers: DepartmentCreateManyWithoutTeachersInput
+  departmentAdmins: DepartmentCreateManyWithoutAdminsInput
 }
 
 input UserCreateWithoutDepartmentsUpdatedInput {
@@ -8322,6 +8456,7 @@ input UserCreateWithoutDepartmentsUpdatedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8347,7 +8482,7 @@ input UserCreateWithoutDepartmentsUpdatedInput {
   departmentsAdded: DepartmentCreateManyWithoutAddedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutDepartmentTeachersInput {
@@ -8369,6 +8504,7 @@ input UserCreateWithoutDepartmentTeachersInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8394,7 +8530,7 @@ input UserCreateWithoutDepartmentTeachersInput {
   departmentsAdded: DepartmentCreateManyWithoutAddedByInput
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutInstitutionAdminsInput {
@@ -8442,6 +8578,7 @@ input UserCreateWithoutInstitutionAdminsInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutInstitutionContactInput {
@@ -8462,6 +8599,7 @@ input UserCreateWithoutInstitutionContactInput {
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8488,7 +8626,7 @@ input UserCreateWithoutInstitutionContactInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutInstitutionsAddedInput {
@@ -8510,6 +8648,7 @@ input UserCreateWithoutInstitutionsAddedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8535,7 +8674,7 @@ input UserCreateWithoutInstitutionsAddedInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutInstitutionUpdatesInput {
@@ -8557,6 +8696,7 @@ input UserCreateWithoutInstitutionUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8582,7 +8722,7 @@ input UserCreateWithoutInstitutionUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutPanelsAddedInput {
@@ -8604,6 +8744,7 @@ input UserCreateWithoutPanelsAddedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8629,7 +8770,7 @@ input UserCreateWithoutPanelsAddedInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutQuestionChoiceAddedByInput {
@@ -8651,6 +8792,7 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8676,7 +8818,7 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutQuestionChoiceUpdatesInput {
@@ -8698,6 +8840,7 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8723,7 +8866,7 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutQuestionsAddedByInput {
@@ -8745,6 +8888,7 @@ input UserCreateWithoutQuestionsAddedByInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8770,7 +8914,7 @@ input UserCreateWithoutQuestionsAddedByInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutQuestionsSentToInput {
@@ -8792,6 +8936,7 @@ input UserCreateWithoutQuestionsSentToInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8817,7 +8962,7 @@ input UserCreateWithoutQuestionsSentToInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutQuestionUpdatesInput {
@@ -8839,6 +8984,7 @@ input UserCreateWithoutQuestionUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8864,7 +9010,7 @@ input UserCreateWithoutQuestionUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutStudentCoursesInput {
@@ -8886,6 +9032,7 @@ input UserCreateWithoutStudentCoursesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   answers: AnswerCreateManyWithoutAddedByInput
   questions: QuestionCreateManyInput
@@ -8911,7 +9058,7 @@ input UserCreateWithoutStudentCoursesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutStudentInstitutionInput {
@@ -8932,6 +9079,7 @@ input UserCreateWithoutStudentInstitutionInput {
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -8958,7 +9106,7 @@ input UserCreateWithoutStudentInstitutionInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutTeacherCoursesInput {
@@ -8980,6 +9128,7 @@ input UserCreateWithoutTeacherCoursesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
   questions: QuestionCreateManyInput
@@ -9005,7 +9154,7 @@ input UserCreateWithoutTeacherCoursesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutTeacherInstitutionInput {
@@ -9026,6 +9175,7 @@ input UserCreateWithoutTeacherInstitutionInput {
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9052,7 +9202,7 @@ input UserCreateWithoutTeacherInstitutionInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutTestsAddedInput {
@@ -9074,6 +9224,7 @@ input UserCreateWithoutTestsAddedInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9099,7 +9250,7 @@ input UserCreateWithoutTestsAddedInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutTestSequenceInput {
@@ -9121,6 +9272,7 @@ input UserCreateWithoutTestSequenceInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9146,7 +9298,7 @@ input UserCreateWithoutTestSequenceInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutTestUpdatesInput {
@@ -9168,6 +9320,7 @@ input UserCreateWithoutTestUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9193,7 +9346,7 @@ input UserCreateWithoutTestUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutUpdatedByInput {
@@ -9214,6 +9367,7 @@ input UserCreateWithoutUpdatedByInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9240,7 +9394,7 @@ input UserCreateWithoutUpdatedByInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutUsedTestSequenceInput {
@@ -9262,6 +9416,7 @@ input UserCreateWithoutUsedTestSequenceInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9287,7 +9442,7 @@ input UserCreateWithoutUsedTestSequenceInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 input UserCreateWithoutUserUpdatesInput {
@@ -9309,6 +9464,7 @@ input UserCreateWithoutUserUpdatesInput {
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherInstitution: InstitutionCreateManyWithoutTeachersInput
   studentInstitution: InstitutionCreateManyWithoutStudentsInput
+  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
   studentCourses: CourseCreateManyWithoutStudentsInput
   answers: AnswerCreateManyWithoutAddedByInput
@@ -9334,7 +9490,7 @@ input UserCreateWithoutUserUpdatesInput {
   departmentsUpdated: DepartmentCreateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentCreateManyWithoutTeachersInput
   departmentAdmins: DepartmentCreateManyWithoutAdminsInput
-  institutionAdmins: InstitutionCreateManyWithoutAdminsInput
+  departmentStudents: DepartmentCreateManyWithoutStudentsInput
 }
 
 """An edge in a connection."""
@@ -9873,6 +10029,7 @@ input UserUpdateInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -9899,7 +10056,7 @@ input UserUpdateInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateManyDataInput {
@@ -9945,6 +10102,17 @@ input UserUpdateManyWithoutDepartmentAdminsInput {
   updateMany: [UserUpdateManyWithWhereNestedInput!]
   deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutDepartmentAdminsInput!]
+}
+
+input UserUpdateManyWithoutDepartmentStudentsInput {
+  create: [UserCreateWithoutDepartmentStudentsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutDepartmentStudentsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutDepartmentStudentsInput!]
 }
 
 input UserUpdateManyWithoutDepartmentTeachersInput {
@@ -10242,6 +10410,7 @@ input UserUpdateWithoutAnswersDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   questions: QuestionUpdateManyInput
@@ -10267,7 +10436,7 @@ input UserUpdateWithoutAnswersDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutAnswerUpdatesDataInput {
@@ -10289,6 +10458,7 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10314,7 +10484,7 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutChallengesDataInput {
@@ -10336,6 +10506,7 @@ input UserUpdateWithoutChallengesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10361,7 +10532,7 @@ input UserUpdateWithoutChallengesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutChallengeUpdatesDataInput {
@@ -10383,6 +10554,7 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10408,7 +10580,7 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutCoursesAddedDataInput {
@@ -10430,6 +10602,7 @@ input UserUpdateWithoutCoursesAddedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10455,7 +10628,7 @@ input UserUpdateWithoutCoursesAddedDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutCourseUpdatesDataInput {
@@ -10477,6 +10650,7 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10502,7 +10676,7 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutDepartmentAdminsDataInput {
@@ -10524,6 +10698,7 @@ input UserUpdateWithoutDepartmentAdminsDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10549,7 +10724,7 @@ input UserUpdateWithoutDepartmentAdminsDataInput {
   departmentsAdded: DepartmentUpdateManyWithoutAddedByInput
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutDepartmentsAddedDataInput {
@@ -10571,6 +10746,7 @@ input UserUpdateWithoutDepartmentsAddedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10596,7 +10772,55 @@ input UserUpdateWithoutDepartmentsAddedDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
+}
+
+input UserUpdateWithoutDepartmentStudentsDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitution: InstitutionUpdateManyWithoutStudentsInput
   institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  departmentsAdded: DepartmentUpdateManyWithoutAddedByInput
+  departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
+  departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
+  departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
 }
 
 input UserUpdateWithoutDepartmentsUpdatedDataInput {
@@ -10618,6 +10842,7 @@ input UserUpdateWithoutDepartmentsUpdatedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10643,7 +10868,7 @@ input UserUpdateWithoutDepartmentsUpdatedDataInput {
   departmentsAdded: DepartmentUpdateManyWithoutAddedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutDepartmentTeachersDataInput {
@@ -10665,6 +10890,7 @@ input UserUpdateWithoutDepartmentTeachersDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10690,7 +10916,7 @@ input UserUpdateWithoutDepartmentTeachersDataInput {
   departmentsAdded: DepartmentUpdateManyWithoutAddedByInput
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutInstitutionAdminsDataInput {
@@ -10738,6 +10964,7 @@ input UserUpdateWithoutInstitutionAdminsDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutInstitutionContactDataInput {
@@ -10758,6 +10985,7 @@ input UserUpdateWithoutInstitutionContactDataInput {
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10784,7 +11012,7 @@ input UserUpdateWithoutInstitutionContactDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutInstitutionsAddedDataInput {
@@ -10806,6 +11034,7 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10831,7 +11060,7 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutInstitutionUpdatesDataInput {
@@ -10853,6 +11082,7 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10878,7 +11108,7 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutPanelsAddedDataInput {
@@ -10900,6 +11130,7 @@ input UserUpdateWithoutPanelsAddedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10925,7 +11156,7 @@ input UserUpdateWithoutPanelsAddedDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutQuestionChoiceAddedByDataInput {
@@ -10947,6 +11178,7 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -10972,7 +11204,7 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
@@ -10994,6 +11226,7 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11019,7 +11252,7 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutQuestionsAddedByDataInput {
@@ -11041,6 +11274,7 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11066,7 +11300,7 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutQuestionsSentToDataInput {
@@ -11088,6 +11322,7 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11113,7 +11348,7 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutQuestionUpdatesDataInput {
@@ -11135,6 +11370,7 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11160,7 +11396,7 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutStudentCoursesDataInput {
@@ -11182,6 +11418,7 @@ input UserUpdateWithoutStudentCoursesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   answers: AnswerUpdateManyWithoutAddedByInput
   questions: QuestionUpdateManyInput
@@ -11207,7 +11444,7 @@ input UserUpdateWithoutStudentCoursesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutStudentInstitutionDataInput {
@@ -11228,6 +11465,7 @@ input UserUpdateWithoutStudentInstitutionDataInput {
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11254,7 +11492,7 @@ input UserUpdateWithoutStudentInstitutionDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutTeacherCoursesDataInput {
@@ -11276,6 +11514,7 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
   questions: QuestionUpdateManyInput
@@ -11301,7 +11540,7 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutTeacherInstitutionDataInput {
@@ -11322,6 +11561,7 @@ input UserUpdateWithoutTeacherInstitutionDataInput {
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11348,7 +11588,7 @@ input UserUpdateWithoutTeacherInstitutionDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutTestsAddedDataInput {
@@ -11370,6 +11610,7 @@ input UserUpdateWithoutTestsAddedDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11395,7 +11636,7 @@ input UserUpdateWithoutTestsAddedDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutTestSequenceDataInput {
@@ -11417,6 +11658,7 @@ input UserUpdateWithoutTestSequenceDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11442,7 +11684,7 @@ input UserUpdateWithoutTestSequenceDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutTestUpdatesDataInput {
@@ -11464,6 +11706,7 @@ input UserUpdateWithoutTestUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11489,7 +11732,7 @@ input UserUpdateWithoutTestUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutUpdatedByDataInput {
@@ -11510,6 +11753,7 @@ input UserUpdateWithoutUpdatedByDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11536,7 +11780,7 @@ input UserUpdateWithoutUpdatedByDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutUsedTestSequenceDataInput {
@@ -11558,6 +11802,7 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11583,7 +11828,7 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithoutUserUpdatesDataInput {
@@ -11605,6 +11850,7 @@ input UserUpdateWithoutUserUpdatesDataInput {
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherInstitution: InstitutionUpdateManyWithoutTeachersInput
   studentInstitution: InstitutionUpdateManyWithoutStudentsInput
+  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
   studentCourses: CourseUpdateManyWithoutStudentsInput
   answers: AnswerUpdateManyWithoutAddedByInput
@@ -11630,12 +11876,17 @@ input UserUpdateWithoutUserUpdatesDataInput {
   departmentsUpdated: DepartmentUpdateManyWithoutUpdatedByInput
   departmentTeachers: DepartmentUpdateManyWithoutTeachersInput
   departmentAdmins: DepartmentUpdateManyWithoutAdminsInput
-  institutionAdmins: InstitutionUpdateManyWithoutAdminsInput
+  departmentStudents: DepartmentUpdateManyWithoutStudentsInput
 }
 
 input UserUpdateWithWhereUniqueWithoutDepartmentAdminsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutDepartmentAdminsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutDepartmentStudentsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutDepartmentStudentsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutDepartmentTeachersInput {
@@ -11787,6 +12038,12 @@ input UserUpsertWithWhereUniqueWithoutDepartmentAdminsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutDepartmentAdminsDataInput!
   create: UserCreateWithoutDepartmentAdminsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutDepartmentStudentsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutDepartmentStudentsDataInput!
+  create: UserCreateWithoutDepartmentStudentsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutDepartmentTeachersInput {
@@ -12268,6 +12525,9 @@ input UserWhereInput {
   studentInstitution_every: InstitutionWhereInput
   studentInstitution_some: InstitutionWhereInput
   studentInstitution_none: InstitutionWhereInput
+  institutionAdmins_every: InstitutionWhereInput
+  institutionAdmins_some: InstitutionWhereInput
+  institutionAdmins_none: InstitutionWhereInput
   teacherCourses_every: CourseWhereInput
   teacherCourses_some: CourseWhereInput
   teacherCourses_none: CourseWhereInput
@@ -12346,9 +12606,9 @@ input UserWhereInput {
   departmentAdmins_every: DepartmentWhereInput
   departmentAdmins_some: DepartmentWhereInput
   departmentAdmins_none: DepartmentWhereInput
-  institutionAdmins_every: InstitutionWhereInput
-  institutionAdmins_some: InstitutionWhereInput
-  institutionAdmins_none: InstitutionWhereInput
+  departmentStudents_every: DepartmentWhereInput
+  departmentStudents_some: DepartmentWhereInput
+  departmentStudents_none: DepartmentWhereInput
 }
 
 input UserWhereUniqueInput {

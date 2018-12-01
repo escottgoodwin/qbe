@@ -25,6 +25,7 @@ type User {
   institutionContact: [Institution!]! @relation(name: "ContactsByInstitution")
   teacherInstitution: [Institution!]! @relation(name: "TeachersByInstitution" )
   studentInstitution: [Institution!]! @relation(name: "StudentsByInstitution")
+  institutionAdmins: [Institution!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
   teacherCourses: [Course!]! @relation(name: "TeachersByCourse" )
   studentCourses: [Course!]! @relation(name: "StudentsByCourse" )
   answers: [Answer!]! @relation(name: "AnswersByUser" onDelete: CASCADE)
@@ -51,7 +52,7 @@ type User {
   departmentsUpdated: [Department!]! @relation(name: "DepartmentUpdatesByUser")
   departmentTeachers: [Department!]! @relation(name: "TeachersByDepartment")
   departmentAdmins: [Department!]! @relation(name: "AdminsByDepartment")
-  institutionAdmins: [Institution!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
+  departmentStudents: [Department!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
 }
 
 type Institution {
@@ -79,6 +80,7 @@ type Department {
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User @relation(name: "DepartmentUpdatesByUser")
+  students: [User!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
   teachers: [User!]! @relation(name: "TeachersByDepartment" onDelete: CASCADE)
   admins: [User!]! @relation(name: "AdminsByDepartment" onDelete: CASCADE)
   courses: [Course!]! @relation(name: "CoursesByDepartment" onDelete: CASCADE)

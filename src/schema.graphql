@@ -83,7 +83,20 @@ type Mutation {
 
   deleteSequence(id: ID!): Sequence!
 
-  updateUser(email: String, salutation: String, firstName: String, lastName: String, studentInstitutionIds: [ID], teacherInstitutionIds: [ID], teacherDepartmentIds: [ID], studentIds:[String], teacherIds: [String], phone: String, online: Boolean): User! @isAuthenticated
+  updateUser(email: String,
+  salutation: String,
+  firstName: String,
+  lastName: String,
+  studentInstitutionIds: [ID],
+  teacherInstitutionIds: [ID],
+  adminInstitutionIds: [ID],
+  teacherDepartmentIds: [ID],
+  studentDepartmentIds: [ID],
+  adminDepartmentIds: [ID],
+  studentIds:[String],
+  teacherIds: [String],
+  phone: String,
+  online: Boolean): User! @isAuthenticated
 
 }
 

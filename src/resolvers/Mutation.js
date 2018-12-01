@@ -35,7 +35,7 @@ async function login(parent, args, ctx, info) {
   const lastLogin = new Date()
 
   const user = await ctx.db.query.user({ where: { email: args.email } }, ` { id password firstName lastName role } ` )
-
+  //` { id password firstName lastName role } `
   if (!user) {
     throw new Error('No such user found')
   }
@@ -44,6 +44,20 @@ async function login(parent, args, ctx, info) {
   if (!valid) {
     throw new Error('Invalid password')
   }
+
+  const userupdate = await ctx.db.mutation.updateUser(
+    {
+      data: {
+        lastLogin,
+        online:true
+      },
+      where: {
+        id: user.id
+      },
+    },
+    ` { id password firstName lastName role } `
+  )
+
 
   return {
     token: jwt.sign({ userId: user.id }, APP_SECRET),
@@ -787,30 +801,52 @@ async function deleteSequence(parent, { id }, ctx, info) {
   )
 }
 
-async function updateUser(parent, args, ctx, info) {
+async function updateUser(parent,  {
+email,
+salutation,
+firstName,
+lastName,
+studentInstitutionIds,
+teacherInstitutionIds,
+adminInstitutionIds,
+teacherDepartmentIds,
+studentDepartmentIds,
+adminDepartmentIds,
+studentIds,
+teacherIds,
+phone,
+online
+}, ctx, info) {
+
   const userId = await getUserId(ctx)
 
-  const teacherInstitution = await checkField(args.teacherInstitutionIds)
-  const studentDepartment = await checkField(args.teacherDepartmentIds)
-  const studentInstitution = await checkField(args.studentInstitutionIds)
+  const departmentTeachers = await checkField(teacherDepartmentIds)
+  const departmentStudents = await checkField(studentDepartmentIds)
+  const departmentAdmins = await checkField(adminDepartmentIds)
+
+  const teacherInstitution = await checkField(teacherInstitutionIds)
+  const studentInstitution = await checkField(studentInstitutionIds)
+  const institutionAdmins = await checkField(adminInstitutionIds)
 
   const updateDate = new Date()
-
-  const userId = await getUserId(ctx)
-  const userExists = await ctx.db.exists.User({
-    id: userId
-  })
-  if (!userExists) {
-    throw new Error(` Unauthorized, this is not your profile `)
-  }
 
   return await ctx.db.mutation.updateUser(
     {
       data: {
-        ...args,
+        email,
+        salutation,
+        firstName,
+        lastName,
+        departmentTeachers,
+        departmentAdmins,
+        departmentStudents,
         teacherInstitution,
         studentInstitution,
-        studentDepartment,
+        institutionAdmins,
+        studentIds,
+        teacherIds,
+        phone,
+        online,
         updateDate
       },
       where: {
