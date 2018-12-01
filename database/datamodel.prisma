@@ -1,0 +1,193 @@
+enum UserType {
+  STUDENT
+  TEACHER
+  ADMIN
+  QUANDRIA
+}
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  studentIds: [String!]!
+  teacherIds: [String!]!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  updatedBy: User @relation(name: "UserUpdatesByUser" onDelete: CASCADE)
+  role: UserType @default(value: "STUDENT")
+  institutionContact: [Institution!]! @relation(name: "ContactsByInstitution")
+  teacherInstitution: [Institution!]! @relation(name: "TeachersByInstitution" )
+  studentInstitution: [Institution!]! @relation(name: "StudentsByInstitution")
+  institutionAdmins: [Institution!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
+  teacherCourses: [Course!]! @relation(name: "TeachersByCourse" )
+  studentCourses: [Course!]! @relation(name: "StudentsByCourse" )
+  answers: [Answer!]! @relation(name: "AnswersByUser" onDelete: CASCADE)
+  questions: [Question!]! @relation(name: "QuestionsByUser" onDelete: CASCADE)
+  challenges: [Challenge!]! @relation(name: "ChallengesByUser" onDelete: CASCADE)
+  testSequence: [Sequence!]! @relation(name: "UserBySequence")
+  usedTestSequence: [Sequence!]! @relation(name: "UsedUserBySequence")
+  coursesAdded: [Course!]! @relation(name: "AddedByCourse" )
+  testsAdded: [Test!]! @relation(name: "AddedByTest" )
+  panelsAdded:  [Panel!]! @relation(name: "AddedByPanel" )
+  institutionsAdded: [Institution!]! @relation(name: "InstitutionsAddedByUser" onDelete: CASCADE)
+  institutionUpdates: [Institution!]! @relation(name: "InstitutionUpdatesByUser" onDelete: CASCADE)
+  courseUpdates: [Course!]! @relation(name: "CourseUpdatesByUser" )
+  testUpdates: [Test!]! @relation(name: "TestUpdatesByUser" )
+  questionsAddedBy: [Question!]!  @relation(name: "QuestionsAddedByUser")
+  questionUpdates: [Question!]! @relation(name: "QuestionUpdatesByUser" )
+  answerUpdates: [Answer!]! @relation(name: "AnswerUpdatesByUser" )
+  questionChoiceAddedBy: [QuestionChoice!]! @relation(name: "QuestionChoiceByUser")
+  questionChoiceUpdates: [QuestionChoice!]! @relation(name: "QuestionChoiceUpdatesByUser")
+  challengeUpdates: [Challenge!]! @relation(name: "ChallengeUpdatesByUser" )
+  userUpdates: [User!]! @relation(name: "UserUpdatesByUser" )
+  questionsSentTo: [Question!]! @relation(name: "QuestionSentTotByUser")
+  departmentsAdded: [Department!]! @relation(name: "AddedByDepartment")
+  departmentsUpdated: [Department!]! @relation(name: "DepartmentUpdatesByUser")
+  departmentTeachers: [Department!]! @relation(name: "TeachersByDepartment")
+  departmentAdmins: [Department!]! @relation(name: "AdminsByDepartment")
+  departmentStudents: [Department!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
+}
+
+type Institution {
+  id: ID! @unique
+  name: String!
+  type: String
+  addedDate: DateTime
+  addedBy: User! @relation(name: "InstitutionsAddedByUser")
+  updateDate: DateTime
+  updatedBy: User @relation(name: "InstitutionUpdatesByUser")
+  contacts: [User!]! @relation(name: "ContactsByInstitution" onDelete: CASCADE)
+  admins: [User!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
+  teachers: [User!]! @relation(name: "TeachersByInstitution" onDelete: CASCADE)
+  students: [User!]! @relation(name: "StudentsByInstitution" onDelete: CASCADE)
+  courses: [Course!]! @relation(name: "CoursesByInstitution" onDelete: CASCADE)
+  departments: [Department!]! @relation(name: "DepartmentsByInstitution" onDelete: CASCADE)
+}
+
+type Department {
+  id: ID! @unique
+  institution: Institution! @relation(name: "DepartmentsByInstitution")
+  name: String!
+  type: String
+  addedBy: User! @relation(name: "AddedByDepartment")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "DepartmentUpdatesByUser")
+  students: [User!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
+  teachers: [User!]! @relation(name: "TeachersByDepartment" onDelete: CASCADE)
+  admins: [User!]! @relation(name: "AdminsByDepartment" onDelete: CASCADE)
+  courses: [Course!]! @relation(name: "CoursesByDepartment" onDelete: CASCADE)
+}
+
+type Course {
+  id: ID! @unique
+  addedBy: User! @relation(name: "AddedByCourse")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "CourseUpdatesByUser")
+  name: String!
+  courseNumber: String
+  time: String
+  department: Department @relation(name: "CoursesByDepartment" onDelete: CASCADE)
+  institution: Institution! @relation(name: "CoursesByInstitution")
+  teachers: [User!]! @relation(name: "TeachersByCourse")
+  students: [User!]! @relation(name: "StudentsByCourse")
+  tests: [Test!]! @relation(name: "TestsByCourse" onDelete: CASCADE)
+}
+
+type Test {
+  id: ID! @unique
+  addedBy: User! @relation(name: "AddedByTest")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "TestUpdatesByUser")
+  subject: String!
+  testNumber: String
+  testDate: DateTime
+  published: Boolean
+  publishDate: DateTime
+  release: Boolean
+  releaseDate: DateTime
+  course: Course! @relation(name: "TestsByCourse")
+  panels: [Panel!]! @relation(name: "PanelsByTest" onDelete: CASCADE)
+  questions: [Question!]! @relation(name: "QuestionsByTest" onDelete: CASCADE)
+  sequences: Sequence @relation(name: "SequencesByTest" onDelete: CASCADE)
+}
+
+type Panel {
+  id: ID! @unique
+  addedBy: User! @relation(name: "AddedByPanel")
+  addedDate: DateTime
+  test: Test! @relation(name: "PanelsByTest")
+  link: String!
+  sequences: [Sequence!]! @relation(name: "PanelSequenceByTest")
+  usedSequence: [Sequence!]! @relation(name: "UsedPanelBySequence")
+  questions: [Question!]! @relation(name: "PanelByQuestion")
+}
+
+type Question {
+  id: ID! @unique
+  question: String!
+  addedBy: User! @relation(name: "QuestionsAddedByUser")
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "QuestionUpdatesByUser")
+  panel: Panel @relation(name: "PanelByQuestion")
+  sentTo: User @relation(name: "QuestionSentTotByUser")
+  test: Test! @relation(name: "QuestionsByTest")
+  choices: [QuestionChoice!]! @relation(name: "QuestionChoicesByQuestion" onDelete: CASCADE)
+  challenges: [Challenge!]! @relation(name: "ChallengesByQuestion" onDelete: CASCADE)
+  questionAnswers: [Answer!]! @relation(name: "AnswerByQuestion" onDelete: CASCADE)
+}
+
+type Answer {
+  id: ID! @unique
+  answer: QuestionChoice! @relation(name: "AnswerByQuestionChoice")
+  answerCorrect: Boolean
+  addedBy: User! @relation(name: "AnswersByUser")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "AnswerUpdatesByUser")
+  question: Question! @relation(name: "AnswerByQuestion")
+}
+
+type QuestionChoice {
+  id: ID! @unique
+  choice: String!
+  addedBy: User! @relation(name: "QuestionChoiceByUser")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "QuestionChoiceUpdatesByUser")
+  question: Question! @relation(name: "QuestionChoicesByQuestion")
+  answers: [Answer!]! @relation(name: "AnswerByQuestionChoice" onDelete: CASCADE)
+  correct: Boolean  @default(value: false)
+}
+
+type Challenge {
+  id: ID! @unique
+  challenge: String
+  addedBy: User! @relation(name: "ChallengesByUser")
+  addedDate: DateTime
+  updateDate: DateTime
+  updatedBy: User @relation(name: "ChallengeUpdatesByUser")
+  question: Question! @relation(name: "ChallengesByQuestion")
+}
+
+type Sequence {
+  id: ID! @unique
+  sequenceAdded: DateTime
+  test: Test! @relation(name: "SequencesByTest")
+  students: [User!]! @relation(name: "UserBySequence")
+  usedStudents: [User!]! @relation(name: "UsedUserBySequence")
+  panels: [Panel!]! @relation(name: "PanelBySequence")
+  usedPanels: [Panel!]! @relation(name: "UsedPanelBySequence")
+}
