@@ -1,4 +1,3 @@
-const _get = require("lodash.get")
 const { getUserId, getUser } = require('./utils')
 
 const isLoggedIn = ctx => {
