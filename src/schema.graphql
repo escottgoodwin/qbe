@@ -1,4 +1,4 @@
-# import User,Institution,Course,CourseOrderByInput, UserOrderByInput, Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
+# import User,Institution,Course,CourseOrderByInput, UserOrderByInput, UserWhereInput, Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
 
 directive @isAuthenticated on QUERY | FIELD_DEFINITION  | MUTATION
 directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION

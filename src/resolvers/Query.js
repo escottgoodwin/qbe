@@ -1,16 +1,15 @@
 const { getUserId, getUser, getUserRole } = require('../utils')
 
-
 async function users(parent, args, ctx, info) {
 
   const where = args.filter
       ? {
           OR: [
             { id: args.filter },
-            { firstName: args.filter },
-            { lastName: args.filter },
-            { phone: args.filter },
-            { email: args.filter }
+            { firstName_contains: args.filter },
+            { lastName_contains: args.filter },
+            { phone_contains: args.filter },
+            { email_contains: args.filter }
           ],
         }
       : {}
@@ -29,11 +28,11 @@ async function users(parent, args, ctx, info) {
         }
       }
     `
-    const usersConnection = await ctx.db.query.usersConnection({}, countSelectionSet)
+    const usersConnection = await ctx.db.query.usersConnection( {where: where}, countSelectionSet)
 
     return {
       count: usersConnection.aggregate.count,
-      courseIds: queriedUsers.map(course => course.id),
+      userIds: queriedUsers.map(course => course.id),
     }
 
 }
@@ -74,8 +73,8 @@ async function courses(parent, args, ctx, info) {
         ? {
             OR: [
               { id: args.filter },
-              { name: args.filter },
-              { courseNumber: args.filter }
+              { name_contains: args.filter },
+              { courseNumber_contains: args.filter }
             ],
           }
         : {}
