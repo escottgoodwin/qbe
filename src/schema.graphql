@@ -1,4 +1,4 @@
-# import User,Institution,Course,CourseOrderByInput, UserOrderByInput, UserWhereInput, Test,Question,QuestionChoice,Challenge,Answer,Sequence from "./generated/prisma.graphql"
+# import User,Institution,Course, CourseOrderByInput, UserOrderByInput, InstitutionOrderByInput, DepartmentOrderByInput, TestOrderByInput, PanelOrderByInput, QuestionOrderByInput, QuestionChoice, ChallengeOrderByInput, AnswerOrderByInput, Test, Question, QuestionChoice, Challenge, Answer,Sequence from "./generated/prisma.graphql"
 
 directive @isAuthenticated on QUERY | FIELD_DEFINITION  | MUTATION
 directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION
@@ -6,16 +6,16 @@ directive @isOwner(type: String) on QUERY | FIELD_DEFINITION  | MUTATION
 
 type Query {
 
-  institutions(filter: String): [Institution!]! @isAuthenticated
+  institutions(filter: String, skip: Int, first: Int, orderBy: InstitutionOrderByInput): InstitutionSearch! @isAuthenticated
   courses(filter: String, skip: Int, first: Int, orderBy: CourseOrderByInput): CourseSearch! @isAuthenticated
   users(filter: String, skip: Int, first: Int, orderBy: UserOrderByInput): UserSearch! @isAuthenticated
-  departments(filter: String): [Department!]! @isAuthenticated
-  tests(filter: String): [Test!]! @isAuthenticated
-  panels(filter: String): [Panel!]! @isAuthenticated
-  questions(filter: String): [Question!]! @isAuthenticated
-  questionchoices(filter: String): [QuestionChoice!]! @isAuthenticated
-  challenges(filter: String): [Challenge!]! @isAuthenticated
-  answers(filter: String): [Answer!]! @isAuthenticated
+  departments(filter: String, skip: Int, first: Int, orderBy: DepartmentOrderByInput): DepartmentSearch! @isAuthenticated
+  tests(filter: String, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
+  panels(filter: String, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated
+  questions(filter: String, skip: Int, first: Int, orderBy: QuestionOrderByInput): QuestionSearch! @isAuthenticated
+  questionchoices(filter: String, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
+  challenges(filter: String, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
+  answers(filter: String, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated
   sequences(filter: String): [Sequence!]! @isAuthenticated
 
   me: User
@@ -100,13 +100,53 @@ type Mutation {
 
 }
 
+type UserSearch {
+  users: [User!]!
+  count: Int!
+}
+
 type CourseSearch {
   courses: [Course!]!
   count: Int!
 }
 
-type UserSearch {
-  users: [User!]!
+type InstitutionSearch {
+  institutions: [Institution!]!
+  count: Int!
+}
+
+type DepartmentSearch {
+  departments: [Department!]!
+  count: Int!
+}
+
+type TestSearch {
+  tests: [Test!]!
+  count: Int!
+}
+
+type PanelSearch {
+  panels: [Panel!]!
+  count: Int!
+}
+
+type QuestionSearch {
+  questions: [Question!]!
+  count: Int!
+}
+
+type QuestionChoiceSearch {
+  questionchoices: [QuestionChoice!]!
+  count: Int!
+}
+
+type ChallengeSearch {
+  challenges: [Challenge!]!
+  count: Int!
+}
+
+type AnswerSearch {
+  answers: [Answer!]!
   count: Int!
 }
 

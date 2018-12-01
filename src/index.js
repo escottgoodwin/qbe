@@ -5,6 +5,15 @@ const Mutation = require('./resolvers/Mutation')
 const Query = require('./resolvers/Query')
 const CourseSearch = require('./resolvers/CourseSearch')
 const UserSearch = require('./resolvers/UserSearch')
+const InstitutionSearch = require('./resolvers/InstitutionSearch')
+const DepartmentSearch = require('./resolvers/DepartmentSearch')
+const TestSearch = require('./resolvers/TestSearch')
+const PanelSearch = require('./resolvers/PanelSearch')
+const QuestionSearch = require('./resolvers/QuestionSearch')
+const QuestionChoiceSearch = require('./resolvers/QuestionChoiceSearch')
+const ChallengeSearch = require('./resolvers/ChallengeSearch')
+const AnswerSearch = require('./resolvers/AnswerSearch')
+
 const { directiveResolvers } = require("./directives")
 
 const resolvers = {
@@ -12,6 +21,14 @@ const resolvers = {
   Mutation,
   CourseSearch,
   UserSearch,
+  InstitutionSearch,
+  DepartmentSearch,
+  TestSearch,
+  PanelSearch,
+  QuestionSearch,
+  QuestionChoiceSearch,
+  ChallengeSearch,
+  AnswerSearch,
   Node: {
     __resolveType() {
       return null;
