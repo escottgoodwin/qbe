@@ -14,11 +14,9 @@ async function users(parent, args, ctx, info) {
         }
       : {}
 
-
-
     const queriedUsers = await ctx.db.query.users(
-    { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
-    `{ id firstName lastName salutation}`,
+    { where },
+    `{ id }`,
   )
 
     const countSelectionSet = `
@@ -33,6 +31,7 @@ async function users(parent, args, ctx, info) {
     return {
       count: usersConnection.aggregate.count,
       userIds: queriedUsers.map(course => course.id),
+      args1: args
     }
 
 }
@@ -50,7 +49,7 @@ async function institutions(parent, args, ctx, info) {
       : {}
 
       const queriedInstitutions = await ctx.db.query.institutions(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -66,6 +65,7 @@ async function institutions(parent, args, ctx, info) {
       return {
         count: institutionsConnection.aggregate.count,
         institutionIds: queriedInstitutions.map(institution => institution.id),
+        args1: args
       }
 
 }
@@ -83,7 +83,7 @@ async function departments(parent, args, ctx, info) {
       : {}
 
       const queriedDepartments = await ctx.db.query.departments(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -99,6 +99,7 @@ async function departments(parent, args, ctx, info) {
       return {
         count: departmentsConnection.aggregate.count,
         departmentIds: queriedDepartments.map(department => department.id),
+        args1: args
       }
 }
 
@@ -115,7 +116,7 @@ async function courses(parent, args, ctx, info) {
         : {}
 
     const queriedCourses = await ctx.db.query.courses(
-    { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+    { where },
     `{ id }`,
   )
 
@@ -131,6 +132,7 @@ async function courses(parent, args, ctx, info) {
     return {
       count: coursesConnection.aggregate.count,
       courseIds: queriedCourses.map(course => course.id),
+      args1: args
     }
 }
 
@@ -194,7 +196,7 @@ async function tests(parent, args, ctx, info) {
 
 
       const queriedTests = await ctx.db.query.tests(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -210,6 +212,7 @@ async function tests(parent, args, ctx, info) {
       return {
         count: testsConnection.aggregate.count,
         testIds: queriedTests.map(test => test.id),
+        args1: args
       }
 }
 
@@ -225,7 +228,7 @@ async function panels(parent, args, ctx, info) {
       : {}
 
       const queriedPanels = await ctx.db.query.panels(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -241,6 +244,7 @@ async function panels(parent, args, ctx, info) {
       return {
         count: panelsConnection.aggregate.count,
         panelIds: queriedPanels.map(panel => panel.id),
+        args1: args
       }
 }
 
@@ -277,7 +281,7 @@ async function questions(parent, args, ctx, info) {
       : {}
 
       const queriedQuestions = await ctx.db.query.questions(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -294,6 +298,7 @@ async function questions(parent, args, ctx, info) {
       return {
         count: questionsConnection.aggregate.count,
         questionIds: queriedQuestions.map(question => question.id),
+        args1: args
       }
 }
 
@@ -309,7 +314,7 @@ async function questionchoices(parent, args, ctx, info) {
       : {}
 
       const queriedQuestionChoices = await ctx.db.query.questionChoices(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -325,6 +330,7 @@ async function questionchoices(parent, args, ctx, info) {
       return {
         count: questionChoicesConnection.aggregate.count,
         questionChoiceIds: queriedQuestionChoices.map(questionChoice => questionChoice.id),
+        args1: args
       }
 }
 
@@ -340,7 +346,7 @@ async function challenges(parent, args, ctx, info) {
       : {}
 
       const queriedChallenges = await ctx.db.query.challenges(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -356,6 +362,7 @@ async function challenges(parent, args, ctx, info) {
       return {
         count: challengesConnection.aggregate.count,
         challengeIds: queriedChallenges.map(challenge => challenge.id),
+        args1: args
       }
 }
 
@@ -370,7 +377,7 @@ async function answers(parent, args, ctx, info) {
       : {}
 
       const queriedAnswers = await ctx.db.query.answers(
-      { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
+      { where },
       `{ id }`,
     )
 
@@ -386,6 +393,7 @@ async function answers(parent, args, ctx, info) {
       return {
         count: answersConnection.aggregate.count,
         answerIds: queriedAnswers.map(answer => answer.id),
+        args1: args
       }
 }
 

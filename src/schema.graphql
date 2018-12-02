@@ -106,7 +106,6 @@ type Mutation {
 type UserSearch {
   users: [User!]!
   count: Int!
-  fullName: String!
 }
 
 type CourseSearch {
