@@ -13,7 +13,7 @@ type Query {
   tests(filter: String, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
   panels(filter: String, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated
   questions(filter: String, skip: Int, first: Int, orderBy: QuestionOrderByInput): QuestionSearch! @isAuthenticated
-  questionPercentCorrect(questionId: String): PercentCorrect!
+  questionStats(questionId: String): PercentCorrect!
   questionchoices(filter: String, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
   challenges(filter: String, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
   answers(filter: String, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated

@@ -198,7 +198,7 @@ async function panels(parent, args, ctx, info) {
       }
 }
 
-async function questionPercentCorrect(parent, args, ctx, info) {
+async function questionStats(parent, args, ctx, info) {
 
       const countSelectionSet = `
         {
@@ -207,6 +207,7 @@ async function questionPercentCorrect(parent, args, ctx, info) {
           }
         }
       `
+
       const answersConnection = await ctx.db.query.answersConnection({ where: { question: { id: args.questionId } } }, countSelectionSet)
       const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { question: { id: args.questionId }, answerCorrect: true } }, countSelectionSet)
       const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
@@ -364,7 +365,7 @@ module.exports = {
   tests,
   panels,
   questions,
-  questionPercentCorrect,
+  questionStats,
   questionchoices,
   challenges,
   answers,
