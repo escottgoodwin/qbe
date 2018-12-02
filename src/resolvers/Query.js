@@ -14,11 +14,11 @@ async function users(parent, args, ctx, info) {
         }
       : {}
 
-    //return await ctx.db.query.users({ where }, info)
+
 
     const queriedUsers = await ctx.db.query.users(
     { where, skip: args.skip, first: args.first, orderBy: args.orderBy },
-    `{ id }`,
+    `{ id firstName lastName salutation}`,
   )
 
     const countSelectionSet = `
@@ -198,6 +198,26 @@ async function panels(parent, args, ctx, info) {
       }
 }
 
+async function questionPercentCorrect(parent, args, ctx, info) {
+
+      const countSelectionSet = `
+        {
+          aggregate {
+            count
+          }
+        }
+      `
+      const answersConnection = await ctx.db.query.answersConnection({ where: { question: { id: args.questionId } } }, countSelectionSet)
+      const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { question: { id: args.questionId }, answerCorrect: true } }, countSelectionSet)
+      const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
+
+      return {
+        total: answersConnection.aggregate.count,
+        totalCorrect: answersCorrectConnection.aggregate.count,
+        percentCorrect: questionCorrectPercent,
+      }
+}
+
 async function questions(parent, args, ctx, info) {
 
   const where = args.filter
@@ -221,6 +241,7 @@ async function questions(parent, args, ctx, info) {
           }
         }
       `
+
       const questionsConnection = await ctx.db.query.questionsConnection({ where }, countSelectionSet)
 
       return {
@@ -343,6 +364,7 @@ module.exports = {
   tests,
   panels,
   questions,
+  questionPercentCorrect,
   questionchoices,
   challenges,
   answers,

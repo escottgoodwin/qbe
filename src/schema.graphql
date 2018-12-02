@@ -13,6 +13,7 @@ type Query {
   tests(filter: String, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
   panels(filter: String, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated
   questions(filter: String, skip: Int, first: Int, orderBy: QuestionOrderByInput): QuestionSearch! @isAuthenticated
+  questionPercentCorrect(questionId: String): PercentCorrect!
   questionchoices(filter: String, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
   challenges(filter: String, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
   answers(filter: String, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated
@@ -103,6 +104,7 @@ type Mutation {
 type UserSearch {
   users: [User!]!
   count: Int!
+  fullName: String!
 }
 
 type CourseSearch {
@@ -133,6 +135,12 @@ type PanelSearch {
 type QuestionSearch {
   questions: [Question!]!
   count: Int!
+}
+
+type PercentCorrect {
+  total: Int!
+  totalCorrect: Int!
+  percentCorrect: Float!
 }
 
 type QuestionChoiceSearch {
