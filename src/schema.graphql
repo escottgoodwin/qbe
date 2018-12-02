@@ -11,9 +11,11 @@ type Query {
   users(filter: String, skip: Int, first: Int, orderBy: UserOrderByInput): UserSearch! @isAuthenticated
   departments(filter: String, skip: Int, first: Int, orderBy: DepartmentOrderByInput): DepartmentSearch! @isAuthenticated
   tests(filter: String, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
+  testStats(testId: String): PercentCorrect! @isAuthenticated
+  userTestStats(testId: String, userId: String): PercentCorrect! @isAuthenticated
   panels(filter: String, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated
   questions(filter: String, skip: Int, first: Int, orderBy: QuestionOrderByInput): QuestionSearch! @isAuthenticated
-  questionStats(questionId: String): PercentCorrect!
+  questionStats(questionId: String): PercentCorrect! @isAuthenticated
   questionchoices(filter: String, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
   challenges(filter: String, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
   answers(filter: String, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated

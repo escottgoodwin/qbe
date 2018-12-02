@@ -134,6 +134,52 @@ async function courses(parent, args, ctx, info) {
     }
 }
 
+async function testStats(parent, args, ctx, info) {
+
+      const countSelectionSet = `
+        {
+          aggregate {
+            count
+          }
+        }
+      `
+
+      const answersConnection = await ctx.db.query.answersConnection({ where: { answer:{ question: { test: { id: args.testId } } } } }, countSelectionSet)
+      const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { answer: { question:{ test:{ id: args.testId } } }, answerCorrect: true } }, countSelectionSet)
+      const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
+
+      return {
+        total: answersConnection.aggregate.count,
+        totalCorrect: answersCorrectConnection.aggregate.count,
+        //percentCorrect: questionCorrectPercent,
+      }
+}
+
+async function userTestStats(parent, args, ctx, info) {
+
+      const countSelectionSet = `
+        {
+          aggregate {
+            count
+          }
+        }
+      `
+
+      const answersConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: args.userId }, answer: { question: { test: { id: args.testId } } } } },
+        countSelectionSet )
+
+      const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: args.userId }, answer: { question: { test: { id: args.testId } } }, answerCorrect: true } },
+        countSelectionSet )
+
+      const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
+
+      return {
+        total: answersConnection.aggregate.count,
+        totalCorrect: answersCorrectConnection.aggregate.count,
+        percentCorrect: questionCorrectPercent,
+      }
+}
+
 async function tests(parent, args, ctx, info) {
 
   const where = args.filter
@@ -363,6 +409,8 @@ module.exports = {
   departments,
   courses,
   tests,
+  testStats,
+  userTestStats,
   panels,
   questions,
   questionStats,
