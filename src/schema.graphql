@@ -26,9 +26,15 @@ type Query {
 
 type Mutation {
 
-  signup(email: String!, password: String!, firstName: String!,lastName: String!, role: String): AuthPayload
+  signup(email: String!, password: String!, firstName: String!,lastName: String!, role: String): signUpPayload
 
   login(email: String!, password: String!): AuthPayload
+
+  newPasswordRequest(email: String!): signUpPayload
+
+  resetPassword(email: String!, resetToken: String!, resetPassword: String!): signUpPayload
+
+  confirmEmail(email: String!, confirmationToken: String!): signUpPayload
 
   addInstitution(name: String!, type: String, contactIds: ID, teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution ! @hasRole(roles: ["QUANDRIA"])
 
@@ -161,5 +167,10 @@ type AnswerSearch {
 
 type AuthPayload {
   token: String
+  user: User
+}
+
+type signUpPayload {
+  authMsg: String
   user: User
 }

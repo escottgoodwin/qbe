@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Fri Nov 30 2018 16:10:16 GMT-0800 (Pacific Standard Time)
+# timestamp: Mon Dec 03 2018 12:32:51 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -7748,6 +7748,10 @@ type User implements Node {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   updatedBy: User
   role: UserType
   institutionContact(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
@@ -7805,6 +7809,10 @@ input UserCreateInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8017,6 +8025,10 @@ input UserCreateWithoutAnswersInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8065,6 +8077,10 @@ input UserCreateWithoutAnswerUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8113,6 +8129,10 @@ input UserCreateWithoutChallengesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8161,6 +8181,10 @@ input UserCreateWithoutChallengeUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8209,6 +8233,10 @@ input UserCreateWithoutCoursesAddedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8257,6 +8285,10 @@ input UserCreateWithoutCourseUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8305,6 +8337,10 @@ input UserCreateWithoutDepartmentAdminsInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8353,6 +8389,10 @@ input UserCreateWithoutDepartmentsAddedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8401,6 +8441,10 @@ input UserCreateWithoutDepartmentStudentsInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8449,6 +8493,10 @@ input UserCreateWithoutDepartmentsUpdatedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8497,6 +8545,10 @@ input UserCreateWithoutDepartmentTeachersInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8545,6 +8597,10 @@ input UserCreateWithoutInstitutionAdminsInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8593,6 +8649,10 @@ input UserCreateWithoutInstitutionContactInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8641,6 +8701,10 @@ input UserCreateWithoutInstitutionsAddedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8689,6 +8753,10 @@ input UserCreateWithoutInstitutionUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8737,6 +8805,10 @@ input UserCreateWithoutPanelsAddedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8785,6 +8857,10 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8833,6 +8909,10 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8881,6 +8961,10 @@ input UserCreateWithoutQuestionsAddedByInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8929,6 +9013,10 @@ input UserCreateWithoutQuestionsSentToInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -8977,6 +9065,10 @@ input UserCreateWithoutQuestionUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9025,6 +9117,10 @@ input UserCreateWithoutStudentCoursesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9073,6 +9169,10 @@ input UserCreateWithoutStudentInstitutionInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9121,6 +9221,10 @@ input UserCreateWithoutTeacherCoursesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9169,6 +9273,10 @@ input UserCreateWithoutTeacherInstitutionInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9217,6 +9325,10 @@ input UserCreateWithoutTestsAddedInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9265,6 +9377,10 @@ input UserCreateWithoutTestSequenceInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9313,6 +9429,10 @@ input UserCreateWithoutTestUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9361,6 +9481,10 @@ input UserCreateWithoutUpdatedByInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9409,6 +9533,10 @@ input UserCreateWithoutUsedTestSequenceInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9457,6 +9585,10 @@ input UserCreateWithoutUserUpdatesInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
@@ -9527,6 +9659,14 @@ enum UserOrderByInput {
   pushToken_DESC
   updateDate_ASC
   updateDate_DESC
+  resetToken_ASC
+  resetToken_DESC
+  confirmationToken_ASC
+  confirmationToken_DESC
+  tokenExpirationTime_ASC
+  tokenExpirationTime_DESC
+  confirmed_ASC
+  confirmed_DESC
   role_ASC
   role_DESC
   updatedAt_ASC
@@ -9550,6 +9690,10 @@ type UserPreviousValues {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
 }
 
@@ -9952,6 +10096,112 @@ input UserScalarWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
+  resetToken: String
+
+  """All values that are not equal to given value."""
+  resetToken_not: String
+
+  """All values that are contained in given list."""
+  resetToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetToken_not_in: [String!]
+
+  """All values less than the given value."""
+  resetToken_lt: String
+
+  """All values less than or equal the given value."""
+  resetToken_lte: String
+
+  """All values greater than the given value."""
+  resetToken_gt: String
+
+  """All values greater than or equal the given value."""
+  resetToken_gte: String
+
+  """All values containing the given string."""
+  resetToken_contains: String
+
+  """All values not containing the given string."""
+  resetToken_not_contains: String
+
+  """All values starting with the given string."""
+  resetToken_starts_with: String
+
+  """All values not starting with the given string."""
+  resetToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetToken_ends_with: String
+
+  """All values not ending with the given string."""
+  resetToken_not_ends_with: String
+  confirmationToken: String
+
+  """All values that are not equal to given value."""
+  confirmationToken_not: String
+
+  """All values that are contained in given list."""
+  confirmationToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  confirmationToken_not_in: [String!]
+
+  """All values less than the given value."""
+  confirmationToken_lt: String
+
+  """All values less than or equal the given value."""
+  confirmationToken_lte: String
+
+  """All values greater than the given value."""
+  confirmationToken_gt: String
+
+  """All values greater than or equal the given value."""
+  confirmationToken_gte: String
+
+  """All values containing the given string."""
+  confirmationToken_contains: String
+
+  """All values not containing the given string."""
+  confirmationToken_not_contains: String
+
+  """All values starting with the given string."""
+  confirmationToken_starts_with: String
+
+  """All values not starting with the given string."""
+  confirmationToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  confirmationToken_ends_with: String
+
+  """All values not ending with the given string."""
+  confirmationToken_not_ends_with: String
+  tokenExpirationTime: DateTime
+
+  """All values that are not equal to given value."""
+  tokenExpirationTime_not: DateTime
+
+  """All values that are contained in given list."""
+  tokenExpirationTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  tokenExpirationTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  tokenExpirationTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  tokenExpirationTime_lte: DateTime
+
+  """All values greater than the given value."""
+  tokenExpirationTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  tokenExpirationTime_gte: DateTime
+  confirmed: Boolean
+
+  """All values that are not equal to given value."""
+  confirmed_not: Boolean
   role: UserType
 
   """All values that are not equal to given value."""
@@ -10022,6 +10272,10 @@ input UserUpdateInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10071,6 +10325,10 @@ input UserUpdateManyDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10088,6 +10346,10 @@ input UserUpdateManyMutationInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10403,6 +10665,10 @@ input UserUpdateWithoutAnswersDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10451,6 +10717,10 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10499,6 +10769,10 @@ input UserUpdateWithoutChallengesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10547,6 +10821,10 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10595,6 +10873,10 @@ input UserUpdateWithoutCoursesAddedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10643,6 +10925,10 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10691,6 +10977,10 @@ input UserUpdateWithoutDepartmentAdminsDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10739,6 +11029,10 @@ input UserUpdateWithoutDepartmentsAddedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10787,6 +11081,10 @@ input UserUpdateWithoutDepartmentStudentsDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10835,6 +11133,10 @@ input UserUpdateWithoutDepartmentsUpdatedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10883,6 +11185,10 @@ input UserUpdateWithoutDepartmentTeachersDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10931,6 +11237,10 @@ input UserUpdateWithoutInstitutionAdminsDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -10979,6 +11289,10 @@ input UserUpdateWithoutInstitutionContactDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11027,6 +11341,10 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11075,6 +11393,10 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11123,6 +11445,10 @@ input UserUpdateWithoutPanelsAddedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11171,6 +11497,10 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11219,6 +11549,10 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11267,6 +11601,10 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11315,6 +11653,10 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11363,6 +11705,10 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11411,6 +11757,10 @@ input UserUpdateWithoutStudentCoursesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11459,6 +11809,10 @@ input UserUpdateWithoutStudentInstitutionDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11507,6 +11861,10 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11555,6 +11913,10 @@ input UserUpdateWithoutTeacherInstitutionDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11603,6 +11965,10 @@ input UserUpdateWithoutTestsAddedDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11651,6 +12017,10 @@ input UserUpdateWithoutTestSequenceDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11699,6 +12069,10 @@ input UserUpdateWithoutTestUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11747,6 +12121,10 @@ input UserUpdateWithoutUpdatedByDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11795,6 +12173,10 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -11843,6 +12225,10 @@ input UserUpdateWithoutUserUpdatesDataInput {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
@@ -12505,6 +12891,112 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
+  resetToken: String
+
+  """All values that are not equal to given value."""
+  resetToken_not: String
+
+  """All values that are contained in given list."""
+  resetToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetToken_not_in: [String!]
+
+  """All values less than the given value."""
+  resetToken_lt: String
+
+  """All values less than or equal the given value."""
+  resetToken_lte: String
+
+  """All values greater than the given value."""
+  resetToken_gt: String
+
+  """All values greater than or equal the given value."""
+  resetToken_gte: String
+
+  """All values containing the given string."""
+  resetToken_contains: String
+
+  """All values not containing the given string."""
+  resetToken_not_contains: String
+
+  """All values starting with the given string."""
+  resetToken_starts_with: String
+
+  """All values not starting with the given string."""
+  resetToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetToken_ends_with: String
+
+  """All values not ending with the given string."""
+  resetToken_not_ends_with: String
+  confirmationToken: String
+
+  """All values that are not equal to given value."""
+  confirmationToken_not: String
+
+  """All values that are contained in given list."""
+  confirmationToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  confirmationToken_not_in: [String!]
+
+  """All values less than the given value."""
+  confirmationToken_lt: String
+
+  """All values less than or equal the given value."""
+  confirmationToken_lte: String
+
+  """All values greater than the given value."""
+  confirmationToken_gt: String
+
+  """All values greater than or equal the given value."""
+  confirmationToken_gte: String
+
+  """All values containing the given string."""
+  confirmationToken_contains: String
+
+  """All values not containing the given string."""
+  confirmationToken_not_contains: String
+
+  """All values starting with the given string."""
+  confirmationToken_starts_with: String
+
+  """All values not starting with the given string."""
+  confirmationToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  confirmationToken_ends_with: String
+
+  """All values not ending with the given string."""
+  confirmationToken_not_ends_with: String
+  tokenExpirationTime: DateTime
+
+  """All values that are not equal to given value."""
+  tokenExpirationTime_not: DateTime
+
+  """All values that are contained in given list."""
+  tokenExpirationTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  tokenExpirationTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  tokenExpirationTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  tokenExpirationTime_lte: DateTime
+
+  """All values greater than the given value."""
+  tokenExpirationTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  tokenExpirationTime_gte: DateTime
+  confirmed: Boolean
+
+  """All values that are not equal to given value."""
+  confirmed_not: Boolean
   role: UserType
 
   """All values that are not equal to given value."""

@@ -20,6 +20,10 @@ type User {
   online: Boolean
   pushToken: String
   updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
   updatedBy: User @relation(name: "UserUpdatesByUser" onDelete: CASCADE)
   role: UserType @default(value: "STUDENT")
   institutionContact: [Institution!]! @relation(name: "ContactsByInstitution")

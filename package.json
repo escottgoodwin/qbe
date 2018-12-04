@@ -10,7 +10,9 @@
     "dev": "npm-run-all --parallel start playground"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "bcryptjs": "2.4.3",
+    "crypto": "^1.0.1",
     "dotenv": "^6.1.0",
     "graphql-yoga": "1.16.7",
     "jsonwebtoken": "8.3.0",
