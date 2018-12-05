@@ -674,7 +674,7 @@ async function addQuestion(parent, { question, testId, panelId, sentToId }, ctx,
   const userId = await getUserId(ctx)
   const addedDate = new Date()
   const expirationTime = addedDate
-  expirationTime.setHours(expirationTime.getHours() + 1);
+  expirationTime.setHours(expirationTime.getHours() + 1)
 
   const test = await ctx.db.query.test({where: { id: testId } },`{ course { students { id } } }`)
   const testStudents = JSON.stringify(test.course.students)

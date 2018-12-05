@@ -2,7 +2,9 @@ const { getUserId, getUser, getUserRole } = require('../utils')
 
 async function users(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -38,7 +40,9 @@ async function users(parent, args, ctx, info) {
 
 async function institutions(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -72,7 +76,9 @@ async function institutions(parent, args, ctx, info) {
 
 async function departments(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -105,7 +111,9 @@ async function departments(parent, args, ctx, info) {
 
 async function courses(parent, args, ctx, info) {
 
-    const where = args.filter
+    const where = args.where
+
+    const where1 = args.filter
         ? {
             OR: [
               { id: args.filter },
@@ -184,7 +192,9 @@ async function userTestStats(parent, args, ctx, info) {
 
 async function tests(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -218,7 +228,9 @@ async function tests(parent, args, ctx, info) {
 
 async function panels(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -271,7 +283,9 @@ async function questionStats(parent, args, ctx, info) {
 
 async function questions(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -304,7 +318,9 @@ async function questions(parent, args, ctx, info) {
 
 async function questionchoices(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -336,7 +352,9 @@ async function questionchoices(parent, args, ctx, info) {
 
 async function challenges(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -368,7 +386,9 @@ async function challenges(parent, args, ctx, info) {
 
 async function answers(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
@@ -399,7 +419,9 @@ async function answers(parent, args, ctx, info) {
 
 async function sequences(parent, args, ctx, info) {
 
-  const where = args.filter
+  const where = args.where
+
+  const where1 = args.filter
       ? {
           OR: [
             { id: args.filter },
