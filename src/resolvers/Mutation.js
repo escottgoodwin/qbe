@@ -14,6 +14,28 @@ function checkField(itemIds) {
   }
 }
 
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array
+}
+
+function shuffleIds(itemIds) {
+    if (itemIds) {
+      if (Array.isArray(itemIds)) {
+        const items = itemIds.map(x => x.id)
+        const shuffled = shuffleArray(items)
+        return shuffled
+    } else {
+      return items = []
+    }
+  }
+}
+
 function sendGridSend(msg){
   const sgMail = require('@sendgrid/mail');
 
@@ -565,6 +587,42 @@ async function addTest(parent, { subject, testNumber, testDate, courseId }, ctx,
   )
 }
 
+async function publishTest(parent, { testId, courseId }, ctx, info) {
+  const userId = await getUserId(ctx)
+  const publishDate = new Date()
+
+  const course = ctx.db.query.course({ where: { id: courseId } }, info)
+  const courseStudents = course.students
+  const studentSequence = shuffleIds(courseStudents)
+
+  const test = ctx.db.query.test({ where: { id: testId } }, info)
+  const coursePanels = course.panels
+  const panelSequence = shuffleIds(coursePanels)
+
+  return await ctx.db.mutation.updateTest(
+    {
+      data: {
+        studentSequence,
+        panelSequence,
+        publishDate,
+        published:true,
+        publishedBy: {
+          connect: {
+            id: userId
+          },
+        },
+      },
+      where: {
+        id: testId
+    },
+  },
+    info
+  )
+  // get all students for a course
+
+}
+
+
 async function updateTest(parent, { id, subject, testNumber, testDate, published, publishDate, release, releaseDate }, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
@@ -669,7 +727,59 @@ async function deletePanel(parent, { id }, ctx, info) {
   throw new Error(`Unauthorized, must be a teacher for this panel`)
 }
 
-async function addQuestion(parent, { question, testId, panelId, sentToId }, ctx, info) {
+async function addResponseImage(parent, args , ctx, info) {
+  const userId = await getUserId(ctx)
+  const addedDate = new Date()
+
+  return await ctx.db.mutation.createResponseImage(
+    {
+      data: {
+        ...args,
+        addedDate,
+        addedBy: {
+          connect: { id: userId },
+        },
+      },
+    },
+    info
+  )
+
+}
+
+async function updateResponseImage(parent, args, ctx, info) {
+  const userId = await getUserId(ctx)
+  const updateDate = new Date()
+
+  return await ctx.db.mutation.updateResponseImage(
+    {
+      data: {
+        ...args,
+        updateDate,
+        updatedBy: {
+          connect: { id: userId  }
+        },
+      },
+      where: {
+        id: args.id
+      },
+    },
+    info
+  )
+}
+
+async function deleteResponseImage(parent, { id }, ctx, info) {
+
+  return await ctx.db.mutation.deleteResponseImage(
+    {
+      where: {
+        id: id
+      }
+    },
+    info
+  )
+}
+
+async function addQuestion(parent, { question, testId, panelId, sentToId, correctResponseId, incorrectResponseId,  }, ctx, info) {
 
   const userId = await getUserId(ctx)
   const addedDate = new Date()
@@ -680,7 +790,7 @@ async function addQuestion(parent, { question, testId, panelId, sentToId }, ctx,
   const testStudents = JSON.stringify(test.course.students)
 
   if (testStudents.includes(userId)){
-
+correctResponseImage
     return await ctx.db.mutation.createQuestion(
       {
         data: {
@@ -696,6 +806,12 @@ async function addQuestion(parent, { question, testId, panelId, sentToId }, ctx,
           sentTo: {
             connect: { id: sentToId  }
           },
+          correctResponseImage: {
+            connect: { id: correctResponseImageId  }
+          },
+          incorrectResponseImage: {
+            connect: { id: incorrectResponseImageId  }
+          },
           addedBy: {
             connect: { id: userId },
           }
@@ -707,7 +823,7 @@ async function addQuestion(parent, { question, testId, panelId, sentToId }, ctx,
   throw new Error(`Unauthorized, must be a student for this test`)
 }
 
-async function updateQuestion(parent, { id, question, sentToId }, ctx, info) {
+async function updateQuestion(parent, { id, question, sentToId, correctResponseId, incorrectResponseId, }, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
   const questionExists = await ctx.db.exists.Question({
@@ -724,6 +840,12 @@ async function updateQuestion(parent, { id, question, sentToId }, ctx, info) {
         question,
         sentTo: {
           connect: { id: sentToId  }
+        },
+        correctResponseImage: {
+          connect: { id: correctResponseImageId  }
+        },
+        incorrectResponseImage: {
+          connect: { id: incorrectResponseImageId  }
         },
         updateDate,
         updatedBy: {
@@ -1133,6 +1255,9 @@ module.exports = {
   deleteTest,
   addPanel,
   deletePanel,
+  addResponseImage,
+  updateResponseImage,
+  deleteResponseImage,
   addQuestion,
   updateQuestion,
   deleteQuestion,

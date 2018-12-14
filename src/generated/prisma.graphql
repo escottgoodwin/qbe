@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Mon Dec 03 2018 12:32:51 GMT-0800 (Pacific Standard Time)
+# timestamp: Thu Dec 06 2018 19:28:00 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -30,6 +30,10 @@ type AggregateQuestion {
 }
 
 type AggregateQuestionChoice {
+  count: Int!
+}
+
+type AggregateResponseImage {
   count: Int!
 }
 
@@ -3903,6 +3907,7 @@ type Mutation {
   createDepartment(data: DepartmentCreateInput!): Department!
   createCourse(data: CourseCreateInput!): Course!
   createTest(data: TestCreateInput!): Test!
+  createResponseImage(data: ResponseImageCreateInput!): ResponseImage!
   createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionChoice(data: QuestionChoiceCreateInput!): QuestionChoice!
   createChallenge(data: ChallengeCreateInput!): Challenge!
@@ -3914,6 +3919,7 @@ type Mutation {
   updateDepartment(data: DepartmentUpdateInput!, where: DepartmentWhereUniqueInput!): Department
   updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
   updateTest(data: TestUpdateInput!, where: TestWhereUniqueInput!): Test
+  updateResponseImage(data: ResponseImageUpdateInput!, where: ResponseImageWhereUniqueInput!): ResponseImage
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionChoice(data: QuestionChoiceUpdateInput!, where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   updateChallenge(data: ChallengeUpdateInput!, where: ChallengeWhereUniqueInput!): Challenge
@@ -3925,6 +3931,7 @@ type Mutation {
   deleteDepartment(where: DepartmentWhereUniqueInput!): Department
   deleteCourse(where: CourseWhereUniqueInput!): Course
   deleteTest(where: TestWhereUniqueInput!): Test
+  deleteResponseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   deleteChallenge(where: ChallengeWhereUniqueInput!): Challenge
@@ -3936,6 +3943,7 @@ type Mutation {
   upsertDepartment(where: DepartmentWhereUniqueInput!, create: DepartmentCreateInput!, update: DepartmentUpdateInput!): Department!
   upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
   upsertTest(where: TestWhereUniqueInput!, create: TestCreateInput!, update: TestUpdateInput!): Test!
+  upsertResponseImage(where: ResponseImageWhereUniqueInput!, create: ResponseImageCreateInput!, update: ResponseImageUpdateInput!): ResponseImage!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionChoice(where: QuestionChoiceWhereUniqueInput!, create: QuestionChoiceCreateInput!, update: QuestionChoiceUpdateInput!): QuestionChoice!
   upsertChallenge(where: ChallengeWhereUniqueInput!, create: ChallengeCreateInput!, update: ChallengeUpdateInput!): Challenge!
@@ -3947,6 +3955,7 @@ type Mutation {
   updateManyDepartments(data: DepartmentUpdateManyMutationInput!, where: DepartmentWhereInput): BatchPayload!
   updateManyCourses(data: CourseUpdateManyMutationInput!, where: CourseWhereInput): BatchPayload!
   updateManyTests(data: TestUpdateManyMutationInput!, where: TestWhereInput): BatchPayload!
+  updateManyResponseImages(data: ResponseImageUpdateManyMutationInput!, where: ResponseImageWhereInput): BatchPayload!
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestionChoices(data: QuestionChoiceUpdateManyMutationInput!, where: QuestionChoiceWhereInput): BatchPayload!
   updateManyChallenges(data: ChallengeUpdateManyMutationInput!, where: ChallengeWhereInput): BatchPayload!
@@ -3958,6 +3967,7 @@ type Mutation {
   deleteManyDepartments(where: DepartmentWhereInput): BatchPayload!
   deleteManyCourses(where: CourseWhereInput): BatchPayload!
   deleteManyTests(where: TestWhereInput): BatchPayload!
+  deleteManyResponseImages(where: ResponseImageWhereInput): BatchPayload!
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionChoices(where: QuestionChoiceWhereInput): BatchPayload!
   deleteManyChallenges(where: ChallengeWhereInput): BatchPayload!
@@ -4572,6 +4582,7 @@ type Query {
   departments(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department]!
   courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course]!
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
+  responseImages(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ResponseImage]!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionChoices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice]!
   challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge]!
@@ -4583,6 +4594,7 @@ type Query {
   department(where: DepartmentWhereUniqueInput!): Department
   course(where: CourseWhereUniqueInput!): Course
   test(where: TestWhereUniqueInput!): Test
+  responseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   answer(where: AnswerWhereUniqueInput!): Answer
   questionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   challenge(where: ChallengeWhereUniqueInput!): Challenge
@@ -4594,6 +4606,7 @@ type Query {
   departmentsConnection(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DepartmentConnection!
   coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
+  responseImagesConnection(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResponseImageConnection!
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionChoicesConnection(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionChoiceConnection!
   challengesConnection(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeConnection!
@@ -4619,10 +4632,13 @@ type Question implements Node {
   updatedBy: User
   panel: Panel
   sentTo: User
+  sentDate: DateTime
   test: Test!
   choices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice!]
   challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge!]
   questionAnswers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
+  correctResponse: ResponseImage
+  incorrectResponse: ResponseImage
 }
 
 type QuestionChoice implements Node {
@@ -5243,6 +5259,7 @@ input QuestionCreateInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5251,6 +5268,8 @@ input QuestionCreateInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateManyInput {
@@ -5260,6 +5279,16 @@ input QuestionCreateManyInput {
 
 input QuestionCreateManyWithoutAddedByInput {
   create: [QuestionCreateWithoutAddedByInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreateManyWithoutCorrectResponseInput {
+  create: [QuestionCreateWithoutCorrectResponseInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreateManyWithoutIncorrectResponseInput {
+  create: [QuestionCreateWithoutIncorrectResponseInput!]
   connect: [QuestionWhereUniqueInput!]
 }
 
@@ -5304,6 +5333,7 @@ input QuestionCreateWithoutAddedByInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
@@ -5311,6 +5341,8 @@ input QuestionCreateWithoutAddedByInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutChallengesInput {
@@ -5319,6 +5351,7 @@ input QuestionCreateWithoutChallengesInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5326,6 +5359,8 @@ input QuestionCreateWithoutChallengesInput {
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutChoicesInput {
@@ -5334,6 +5369,7 @@ input QuestionCreateWithoutChoicesInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5341,6 +5377,44 @@ input QuestionCreateWithoutChoicesInput {
   test: TestCreateOneWithoutQuestionsInput!
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionCreateWithoutCorrectResponseInput {
+  question: String!
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserCreateOneWithoutQuestionsAddedByInput!
+  updatedBy: UserCreateOneWithoutQuestionUpdatesInput
+  panel: PanelCreateOneWithoutQuestionsInput
+  sentTo: UserCreateOneWithoutQuestionsSentToInput
+  test: TestCreateOneWithoutQuestionsInput!
+  choices: QuestionChoiceCreateManyWithoutQuestionInput
+  challenges: ChallengeCreateManyWithoutQuestionInput
+  questionAnswers: AnswerCreateManyWithoutQuestionInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionCreateWithoutIncorrectResponseInput {
+  question: String!
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserCreateOneWithoutQuestionsAddedByInput!
+  updatedBy: UserCreateOneWithoutQuestionUpdatesInput
+  panel: PanelCreateOneWithoutQuestionsInput
+  sentTo: UserCreateOneWithoutQuestionsSentToInput
+  test: TestCreateOneWithoutQuestionsInput!
+  choices: QuestionChoiceCreateManyWithoutQuestionInput
+  challenges: ChallengeCreateManyWithoutQuestionInput
+  questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutPanelInput {
@@ -5349,6 +5423,7 @@ input QuestionCreateWithoutPanelInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
@@ -5356,6 +5431,8 @@ input QuestionCreateWithoutPanelInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutQuestionAnswersInput {
@@ -5364,6 +5441,7 @@ input QuestionCreateWithoutQuestionAnswersInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5371,6 +5449,8 @@ input QuestionCreateWithoutQuestionAnswersInput {
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutSentToInput {
@@ -5379,6 +5459,7 @@ input QuestionCreateWithoutSentToInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5386,6 +5467,8 @@ input QuestionCreateWithoutSentToInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutTestInput {
@@ -5394,6 +5477,7 @@ input QuestionCreateWithoutTestInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
@@ -5401,6 +5485,8 @@ input QuestionCreateWithoutTestInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionCreateWithoutUpdatedByInput {
@@ -5409,6 +5495,7 @@ input QuestionCreateWithoutUpdatedByInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
@@ -5416,6 +5503,8 @@ input QuestionCreateWithoutUpdatedByInput {
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
 
 """An edge in a connection."""
@@ -5440,6 +5529,8 @@ enum QuestionOrderByInput {
   expirationTime_DESC
   updateDate_ASC
   updateDate_DESC
+  sentDate_ASC
+  sentDate_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -5453,6 +5544,7 @@ type QuestionPreviousValues {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
 }
 
 input QuestionScalarWhereInput {
@@ -5632,6 +5724,28 @@ input QuestionScalarWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
+  sentDate: DateTime
+
+  """All values that are not equal to given value."""
+  sentDate_not: DateTime
+
+  """All values that are contained in given list."""
+  sentDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  sentDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  sentDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  sentDate_lte: DateTime
+
+  """All values greater than the given value."""
+  sentDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  sentDate_gte: DateTime
 }
 
 type QuestionSubscriptionPayload {
@@ -5679,6 +5793,7 @@ input QuestionUpdateDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5687,6 +5802,8 @@ input QuestionUpdateDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateInput {
@@ -5695,6 +5812,7 @@ input QuestionUpdateInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5703,6 +5821,8 @@ input QuestionUpdateInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateManyDataInput {
@@ -5711,6 +5831,7 @@ input QuestionUpdateManyDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
 }
 
 input QuestionUpdateManyInput {
@@ -5730,6 +5851,7 @@ input QuestionUpdateManyMutationInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
 }
 
 input QuestionUpdateManyWithoutAddedByInput {
@@ -5741,6 +5863,28 @@ input QuestionUpdateManyWithoutAddedByInput {
   updateMany: [QuestionUpdateManyWithWhereNestedInput!]
   deleteMany: [QuestionScalarWhereInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input QuestionUpdateManyWithoutCorrectResponseInput {
+  create: [QuestionCreateWithoutCorrectResponseInput!]
+  connect: [QuestionWhereUniqueInput!]
+  disconnect: [QuestionWhereUniqueInput!]
+  delete: [QuestionWhereUniqueInput!]
+  update: [QuestionUpdateWithWhereUniqueWithoutCorrectResponseInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  upsert: [QuestionUpsertWithWhereUniqueWithoutCorrectResponseInput!]
+}
+
+input QuestionUpdateManyWithoutIncorrectResponseInput {
+  create: [QuestionCreateWithoutIncorrectResponseInput!]
+  connect: [QuestionWhereUniqueInput!]
+  disconnect: [QuestionWhereUniqueInput!]
+  delete: [QuestionWhereUniqueInput!]
+  update: [QuestionUpdateWithWhereUniqueWithoutIncorrectResponseInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  upsert: [QuestionUpsertWithWhereUniqueWithoutIncorrectResponseInput!]
 }
 
 input QuestionUpdateManyWithoutPanelInput {
@@ -5819,6 +5963,7 @@ input QuestionUpdateWithoutAddedByDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
@@ -5826,6 +5971,8 @@ input QuestionUpdateWithoutAddedByDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutChallengesDataInput {
@@ -5834,6 +5981,7 @@ input QuestionUpdateWithoutChallengesDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5841,6 +5989,8 @@ input QuestionUpdateWithoutChallengesDataInput {
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutChoicesDataInput {
@@ -5849,6 +5999,7 @@ input QuestionUpdateWithoutChoicesDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5856,6 +6007,44 @@ input QuestionUpdateWithoutChoicesDataInput {
   test: TestUpdateOneRequiredWithoutQuestionsInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionUpdateWithoutCorrectResponseDataInput {
+  question: String
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
+  updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
+  panel: PanelUpdateOneWithoutQuestionsInput
+  sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  test: TestUpdateOneRequiredWithoutQuestionsInput
+  choices: QuestionChoiceUpdateManyWithoutQuestionInput
+  challenges: ChallengeUpdateManyWithoutQuestionInput
+  questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionUpdateWithoutIncorrectResponseDataInput {
+  question: String
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
+  updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
+  panel: PanelUpdateOneWithoutQuestionsInput
+  sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  test: TestUpdateOneRequiredWithoutQuestionsInput
+  choices: QuestionChoiceUpdateManyWithoutQuestionInput
+  challenges: ChallengeUpdateManyWithoutQuestionInput
+  questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutPanelDataInput {
@@ -5864,6 +6053,7 @@ input QuestionUpdateWithoutPanelDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
@@ -5871,6 +6061,8 @@ input QuestionUpdateWithoutPanelDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutQuestionAnswersDataInput {
@@ -5879,6 +6071,7 @@ input QuestionUpdateWithoutQuestionAnswersDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5886,6 +6079,8 @@ input QuestionUpdateWithoutQuestionAnswersDataInput {
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutSentToDataInput {
@@ -5894,6 +6089,7 @@ input QuestionUpdateWithoutSentToDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5901,6 +6097,8 @@ input QuestionUpdateWithoutSentToDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutTestDataInput {
@@ -5909,6 +6107,7 @@ input QuestionUpdateWithoutTestDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
@@ -5916,6 +6115,8 @@ input QuestionUpdateWithoutTestDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithoutUpdatedByDataInput {
@@ -5924,6 +6125,7 @@ input QuestionUpdateWithoutUpdatedByDataInput {
   questionTime: DateTime
   expirationTime: DateTime
   updateDate: DateTime
+  sentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
@@ -5931,6 +6133,8 @@ input QuestionUpdateWithoutUpdatedByDataInput {
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
 
 input QuestionUpdateWithWhereUniqueNestedInput {
@@ -5941,6 +6145,16 @@ input QuestionUpdateWithWhereUniqueNestedInput {
 input QuestionUpdateWithWhereUniqueWithoutAddedByInput {
   where: QuestionWhereUniqueInput!
   data: QuestionUpdateWithoutAddedByDataInput!
+}
+
+input QuestionUpdateWithWhereUniqueWithoutCorrectResponseInput {
+  where: QuestionWhereUniqueInput!
+  data: QuestionUpdateWithoutCorrectResponseDataInput!
+}
+
+input QuestionUpdateWithWhereUniqueWithoutIncorrectResponseInput {
+  where: QuestionWhereUniqueInput!
+  data: QuestionUpdateWithoutIncorrectResponseDataInput!
 }
 
 input QuestionUpdateWithWhereUniqueWithoutPanelInput {
@@ -5988,6 +6202,18 @@ input QuestionUpsertWithWhereUniqueWithoutAddedByInput {
   where: QuestionWhereUniqueInput!
   update: QuestionUpdateWithoutAddedByDataInput!
   create: QuestionCreateWithoutAddedByInput!
+}
+
+input QuestionUpsertWithWhereUniqueWithoutCorrectResponseInput {
+  where: QuestionWhereUniqueInput!
+  update: QuestionUpdateWithoutCorrectResponseDataInput!
+  create: QuestionCreateWithoutCorrectResponseInput!
+}
+
+input QuestionUpsertWithWhereUniqueWithoutIncorrectResponseInput {
+  where: QuestionWhereUniqueInput!
+  update: QuestionUpdateWithoutIncorrectResponseDataInput!
+  create: QuestionCreateWithoutIncorrectResponseInput!
 }
 
 input QuestionUpsertWithWhereUniqueWithoutPanelInput {
@@ -6191,6 +6417,28 @@ input QuestionWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
+  sentDate: DateTime
+
+  """All values that are not equal to given value."""
+  sentDate_not: DateTime
+
+  """All values that are contained in given list."""
+  sentDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  sentDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  sentDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  sentDate_lte: DateTime
+
+  """All values greater than the given value."""
+  sentDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  sentDate_gte: DateTime
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   panel: PanelWhereInput
@@ -6205,9 +6453,293 @@ input QuestionWhereInput {
   questionAnswers_every: AnswerWhereInput
   questionAnswers_some: AnswerWhereInput
   questionAnswers_none: AnswerWhereInput
+  correctResponse: ResponseImageWhereInput
+  incorrectResponse: ResponseImageWhereInput
 }
 
 input QuestionWhereUniqueInput {
+  id: ID
+}
+
+type ResponseImage implements Node {
+  id: ID!
+  link: String!
+  type: ResponseImageType!
+  correctQuestionResponses(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+  incorrectQuestionResponses(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+}
+
+"""A connection to a list of items."""
+type ResponseImageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ResponseImageEdge]!
+  aggregate: AggregateResponseImage!
+}
+
+input ResponseImageCreateInput {
+  link: String!
+  type: ResponseImageType!
+  correctQuestionResponses: QuestionCreateManyWithoutCorrectResponseInput
+  incorrectQuestionResponses: QuestionCreateManyWithoutIncorrectResponseInput
+}
+
+input ResponseImageCreateOneWithoutCorrectQuestionResponsesInput {
+  create: ResponseImageCreateWithoutCorrectQuestionResponsesInput
+  connect: ResponseImageWhereUniqueInput
+}
+
+input ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput {
+  create: ResponseImageCreateWithoutIncorrectQuestionResponsesInput
+  connect: ResponseImageWhereUniqueInput
+}
+
+input ResponseImageCreateWithoutCorrectQuestionResponsesInput {
+  link: String!
+  type: ResponseImageType!
+  incorrectQuestionResponses: QuestionCreateManyWithoutIncorrectResponseInput
+}
+
+input ResponseImageCreateWithoutIncorrectQuestionResponsesInput {
+  link: String!
+  type: ResponseImageType!
+  correctQuestionResponses: QuestionCreateManyWithoutCorrectResponseInput
+}
+
+"""An edge in a connection."""
+type ResponseImageEdge {
+  """The item at the end of the edge."""
+  node: ResponseImage!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ResponseImageOrderByInput {
+  id_ASC
+  id_DESC
+  link_ASC
+  link_DESC
+  type_ASC
+  type_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ResponseImagePreviousValues {
+  id: ID!
+  link: String!
+  type: ResponseImageType!
+}
+
+type ResponseImageSubscriptionPayload {
+  mutation: MutationType!
+  node: ResponseImage
+  updatedFields: [String!]
+  previousValues: ResponseImagePreviousValues
+}
+
+input ResponseImageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ResponseImageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ResponseImageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ResponseImageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ResponseImageWhereInput
+}
+
+enum ResponseImageType {
+  CORRECT
+  INCORRECT
+}
+
+input ResponseImageUpdateInput {
+  link: String
+  type: ResponseImageType
+  correctQuestionResponses: QuestionUpdateManyWithoutCorrectResponseInput
+  incorrectQuestionResponses: QuestionUpdateManyWithoutIncorrectResponseInput
+}
+
+input ResponseImageUpdateManyMutationInput {
+  link: String
+  type: ResponseImageType
+}
+
+input ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput {
+  create: ResponseImageCreateWithoutCorrectQuestionResponsesInput
+  connect: ResponseImageWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ResponseImageUpdateWithoutCorrectQuestionResponsesDataInput
+  upsert: ResponseImageUpsertWithoutCorrectQuestionResponsesInput
+}
+
+input ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput {
+  create: ResponseImageCreateWithoutIncorrectQuestionResponsesInput
+  connect: ResponseImageWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ResponseImageUpdateWithoutIncorrectQuestionResponsesDataInput
+  upsert: ResponseImageUpsertWithoutIncorrectQuestionResponsesInput
+}
+
+input ResponseImageUpdateWithoutCorrectQuestionResponsesDataInput {
+  link: String
+  type: ResponseImageType
+  incorrectQuestionResponses: QuestionUpdateManyWithoutIncorrectResponseInput
+}
+
+input ResponseImageUpdateWithoutIncorrectQuestionResponsesDataInput {
+  link: String
+  type: ResponseImageType
+  correctQuestionResponses: QuestionUpdateManyWithoutCorrectResponseInput
+}
+
+input ResponseImageUpsertWithoutCorrectQuestionResponsesInput {
+  update: ResponseImageUpdateWithoutCorrectQuestionResponsesDataInput!
+  create: ResponseImageCreateWithoutCorrectQuestionResponsesInput!
+}
+
+input ResponseImageUpsertWithoutIncorrectQuestionResponsesInput {
+  update: ResponseImageUpdateWithoutIncorrectQuestionResponsesDataInput!
+  create: ResponseImageCreateWithoutIncorrectQuestionResponsesInput!
+}
+
+input ResponseImageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ResponseImageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ResponseImageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ResponseImageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  link: String
+
+  """All values that are not equal to given value."""
+  link_not: String
+
+  """All values that are contained in given list."""
+  link_in: [String!]
+
+  """All values that are not contained in given list."""
+  link_not_in: [String!]
+
+  """All values less than the given value."""
+  link_lt: String
+
+  """All values less than or equal the given value."""
+  link_lte: String
+
+  """All values greater than the given value."""
+  link_gt: String
+
+  """All values greater than or equal the given value."""
+  link_gte: String
+
+  """All values containing the given string."""
+  link_contains: String
+
+  """All values not containing the given string."""
+  link_not_contains: String
+
+  """All values starting with the given string."""
+  link_starts_with: String
+
+  """All values not starting with the given string."""
+  link_not_starts_with: String
+
+  """All values ending with the given string."""
+  link_ends_with: String
+
+  """All values not ending with the given string."""
+  link_not_ends_with: String
+  type: ResponseImageType
+
+  """All values that are not equal to given value."""
+  type_not: ResponseImageType
+
+  """All values that are contained in given list."""
+  type_in: [ResponseImageType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [ResponseImageType!]
+  correctQuestionResponses_every: QuestionWhereInput
+  correctQuestionResponses_some: QuestionWhereInput
+  correctQuestionResponses_none: QuestionWhereInput
+  incorrectQuestionResponses_every: QuestionWhereInput
+  incorrectQuestionResponses_some: QuestionWhereInput
+  incorrectQuestionResponses_none: QuestionWhereInput
+}
+
+input ResponseImageWhereUniqueInput {
   id: ID
 }
 
@@ -6695,6 +7227,7 @@ type Subscription {
   department(where: DepartmentSubscriptionWhereInput): DepartmentSubscriptionPayload
   course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
+  responseImage(where: ResponseImageSubscriptionWhereInput): ResponseImageSubscriptionPayload
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionChoice(where: QuestionChoiceSubscriptionWhereInput): QuestionChoiceSubscriptionPayload
   challenge(where: ChallengeSubscriptionWhereInput): ChallengeSubscriptionPayload

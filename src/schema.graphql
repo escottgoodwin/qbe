@@ -1,4 +1,4 @@
-# import User,Institution,Course, CourseOrderByInput, CourseWhereInput, AnswerWhereInput, ChallengeWhereInput, QuestionChoiceWhereInput, PanelWhereInput,  TestWhereInput, DepartmentWhereInput, UserOrderByInput, UserWhereInput, InstitutionWhereInput, InstitutionOrderByInput, DepartmentOrderByInput, TestOrderByInput, PanelOrderByInput, QuestionWhereInput, QuestionOrderByInput, QuestionChoice, ChallengeOrderByInput, AnswerOrderByInput, Test, Question, QuestionChoice, Challenge, Answer,Sequence from "./generated/prisma.graphql"
+# import User,Institution,Course, UserWhereUniqueInput, CourseOrderByInput, ResponseImageWhereInput, CourseWhereInput, AnswerWhereInput, ChallengeWhereInput, ResponseImageOrderByInput,  QuestionChoiceWhereInput, PanelWhereInput,  TestWhereInput, DepartmentWhereInput, UserOrderByInput, UserWhereInput, InstitutionWhereInput, InstitutionOrderByInput, DepartmentOrderByInput, TestOrderByInput, PanelOrderByInput, QuestionWhereInput, QuestionOrderByInput, QuestionChoice, ChallengeOrderByInput, AnswerOrderByInput, Test, Question, QuestionChoice, Challenge, Answer,Sequence from "./generated/prisma.graphql"
 
 directive @isAuthenticated on QUERY | FIELD_DEFINITION  | MUTATION
 directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION
@@ -7,18 +7,27 @@ directive @isOwner(type: String) on QUERY | FIELD_DEFINITION  | MUTATION
 type Query {
 
   institutions(filter: String, where: InstitutionWhereInput, skip: Int, first: Int, orderBy: InstitutionOrderByInput): InstitutionSearch! @isAuthenticated
+  institution(id: ID!): Institution! @isAuthenticated
   courses(filter: String, where: CourseWhereInput, skip: Int, first: Int, orderBy: CourseOrderByInput): CourseSearch! @isAuthenticated
+  course(id: ID!): Course! @isAuthenticated
   users(filter: String, where: UserWhereInput, skip: Int, first: Int, orderBy: UserOrderByInput): UserSearch! @isAuthenticated
+  user(id: ID!): User! @isAuthenticated
   departments(filter: String, where: DepartmentWhereInput,  skip: Int, first: Int, orderBy: DepartmentOrderByInput): DepartmentSearch! @isAuthenticated
+  department(id: ID!): Department! @isAuthenticated
   tests(filter: String, where: TestWhereInput, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
+  test(id: ID!): Test! @isAuthenticated
   testStats(testId: String): PercentCorrect! @isAuthenticated
   userTestStats(testId: String, userId: String): PercentCorrect! @isAuthenticated
+  responseImages(filter: String, where: ResponseImageWhereInput,  skip: Int, first: Int, orderBy: ResponseImageOrderByInput): ResponseImageSearch! @isAuthenticated
   panels(filter: String, where: PanelWhereInput, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated
   questions(filter: String, where: QuestionWhereInput, skip: Int, first: Int, orderBy: QuestionOrderByInput): QuestionSearch! @isAuthenticated
+  question(id: ID!): Question! @isAuthenticated
   questionStats(questionId: String): PercentCorrect! @isAuthenticated
   questionchoices(filter: String, where: QuestionChoiceWhereInput, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
   challenges(filter: String, where: ChallengeWhereInput, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
+  challenge(id: ID!): Challenge! @isAuthenticated
   answers(filter: String, where: AnswerWhereInput, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated
+  answer(id: ID!): Answer! @isAuthenticated
   sequences(filter: String): [Sequence!]! @isAuthenticated
 
   me: User
@@ -64,9 +73,17 @@ type Mutation {
 
   deletePanel(id: ID!): Panel! @hasRole(roles: ["TEACHER","ADMIN"])
 
-  addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+  link: String!, type: String!
 
-  updateQuestion(id: ID!, question: String!, sentToId: ID): Question! @hasRole(roles: ["STUDENT"])
+  addResponseImage(link: String!, type: String!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
+
+  updateResponseImage(id: ID!, link: String!, type: String!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
+
+  deleteResponseImage(id: ID!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
+
+  addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID!, correctResponseId: ID!, incorrectResponseId: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  updateQuestion(id: ID!, question: String!, sentToId: ID, correctResponseId: ID, incorrectResponseId: ID): Question! @hasRole(roles: ["STUDENT"])
 
   deleteQuestion(id: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
@@ -136,6 +153,11 @@ type TestSearch {
 
 type PanelSearch {
   panels: [Panel!]!
+  count: Int!
+}
+
+type ResponseImageSearch {
+  panels: [ResponseImage!]!
   count: Int!
 }
 

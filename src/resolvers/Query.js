@@ -38,6 +38,11 @@ async function users(parent, args, ctx, info) {
 
 }
 
+async function user(parent, args, ctx, info) {
+
+    return await ctx.db.query.user( { where: { id: args.id } },info,)
+}
+
 async function institutions(parent, args, ctx, info) {
 
   const where = args.where
@@ -71,6 +76,12 @@ async function institutions(parent, args, ctx, info) {
         institutionIds: queriedInstitutions.map(institution => institution.id),
         args1: args
       }
+
+}
+
+async function institution(parent, args, ctx, info) {
+
+      return await ctx.db.query.institution( { where: { id: args.id } },info,)
 
 }
 
@@ -109,6 +120,12 @@ async function departments(parent, args, ctx, info) {
       }
 }
 
+async function department(parent, args, ctx, info) {
+
+      return await ctx.db.query.department( { where: { id: args.id } },info,)
+
+}
+
 async function courses(parent, args, ctx, info) {
 
     const where = args.where
@@ -142,6 +159,12 @@ async function courses(parent, args, ctx, info) {
       courseIds: queriedCourses.map(course => course.id),
       args1: args
     }
+}
+
+async function course(parent, args, ctx, info) {
+
+      return await ctx.db.query.course( { where: { id: args.id } },info,)
+
 }
 
 async function testStats(parent, args, ctx, info) {
@@ -226,6 +249,12 @@ async function tests(parent, args, ctx, info) {
       }
 }
 
+async function test(parent, args, ctx, info) {
+
+      return await ctx.db.query.test( { where: { id: args.id } },info,)
+
+}
+
 async function panels(parent, args, ctx, info) {
 
   const where = args.where
@@ -281,6 +310,41 @@ async function questionStats(parent, args, ctx, info) {
       }
 }
 
+async function responseImages(parent, args, ctx, info) {
+
+  const where = args.where
+
+  const where1 = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { question_contains: args.filter },
+          ],
+        }
+      : {}
+
+      const queriedResponseImages = await ctx.db.query.responseImages(
+      { where },
+      `{ id }`,
+    )
+
+      const countSelectionSet = `
+        {
+          aggregate {
+            count
+          }
+        }
+      `
+
+      const responseImages = await ctx.db.query.responseImagesConnection({ where }, countSelectionSet)
+
+      return {
+        count: responseImages.aggregate.count,
+        responseImageIds: queriedResponseImages.map(question => question.id),
+        args1: args
+      }
+}
+
 async function questions(parent, args, ctx, info) {
 
   const where = args.where
@@ -314,6 +378,12 @@ async function questions(parent, args, ctx, info) {
         questionIds: queriedQuestions.map(question => question.id),
         args1: args
       }
+}
+
+async function question(parent, args, ctx, info) {
+
+      return await ctx.db.query.question( { where: { id: args.id } },info,)
+
 }
 
 async function questionchoices(parent, args, ctx, info) {
@@ -384,6 +454,12 @@ async function challenges(parent, args, ctx, info) {
       }
 }
 
+async function challenge(parent, args, ctx, info) {
+
+      return await ctx.db.query.challenge( { where: { id: args.id } },info,)
+
+}
+
 async function answers(parent, args, ctx, info) {
 
   const where = args.where
@@ -417,6 +493,12 @@ async function answers(parent, args, ctx, info) {
       }
 }
 
+async function answer(parent, args, ctx, info) {
+
+      return await ctx.db.query.answer( { where: { id: args.id } },info,)
+
+}
+
 async function sequences(parent, args, ctx, info) {
 
   const where = args.where
@@ -435,17 +517,26 @@ async function sequences(parent, args, ctx, info) {
 
 module.exports = {
   users,
+  user,
   institutions,
+  institution,
   departments,
+  department,
   courses,
+  course,
   tests,
+  test,
   testStats,
   userTestStats,
   panels,
+  responseImages,
   questions,
+  question,
   questionStats,
   questionchoices,
   challenges,
+  challenge,
   answers,
+  answer,
   sequences
 }

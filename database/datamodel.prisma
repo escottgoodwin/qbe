@@ -147,10 +147,26 @@ type Question {
   updatedBy: User @relation(name: "QuestionUpdatesByUser")
   panel: Panel @relation(name: "PanelByQuestion")
   sentTo: User @relation(name: "QuestionSentTotByUser")
+  sentDate: DateTime
   test: Test! @relation(name: "QuestionsByTest")
   choices: [QuestionChoice!]! @relation(name: "QuestionChoicesByQuestion" onDelete: CASCADE)
   challenges: [Challenge!]! @relation(name: "ChallengesByQuestion" onDelete: CASCADE)
   questionAnswers: [Answer!]! @relation(name: "AnswerByQuestion" onDelete: CASCADE)
+  correctResponse: ResponseImage @relation(name: "CorrectResponseByQuestion")
+  incorrectResponse: ResponseImage @relation(name: "IncorrectResponseByQuestion")
+}
+
+enum ResponseImageType {
+  CORRECT
+  INCORRECT
+}
+
+type ResponseImage {
+  id: ID! @unique
+  link: String!
+  type: ResponseImageType!
+  correctQuestionResponses: [Question!]! @relation(name: "CorrectResponseByQuestion")
+  incorrectQuestionResponses: [Question!]!@relation(name: "IncorrectResponseByQuestion")
 }
 
 type Answer {
