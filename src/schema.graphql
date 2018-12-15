@@ -65,7 +65,7 @@ type Mutation {
 
   addTest(subject: String!, testNumber: String, testDate: DateTime, courseId: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
 
-  updateTest(id: ID!, subject: String!, testNumber: String, testDate: DateTime, published: Boolean, publishDate: DateTime, release: Boolean, releaseDate: DateTime): Test! @hasRole(roles: ["TEACHER","ADMIN"])
+  updateTest(id: ID!, subject: String, testNumber: String, testDate: DateTime, published: Boolean, publishDate: DateTime, release: Boolean, releaseDate: DateTime): Test! @hasRole(roles: ["TEACHER","ADMIN"])
 
   deleteTest(id: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
 
@@ -77,13 +77,13 @@ type Mutation {
 
   addResponseImage(link: String!, type: String!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
 
-  updateResponseImage(id: ID!, link: String!, type: String!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
+  updateResponseImage(id: ID!, link: String, type: String): ResponseImage! @hasRole(roles: ["QUANDRIA"])
 
   deleteResponseImage(id: ID!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
 
   addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID!, correctResponseId: ID!, incorrectResponseId: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
-  updateQuestion(id: ID!, question: String!, sentToId: ID, correctResponseId: ID, incorrectResponseId: ID): Question! @hasRole(roles: ["STUDENT"])
+  updateQuestion(id: ID!, question: String, sentToId: ID, correctResponseId: ID, incorrectResponseId: ID): Question! @hasRole(roles: ["STUDENT"])
 
   deleteQuestion(id: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
@@ -95,7 +95,7 @@ type Mutation {
 
   addChallenge(challenge: String!, questionId: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
-  updateChallenge(id: ID!, challenge: String!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+  updateChallenge(id: ID!, challenge: String): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   deleteChallenge(id: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
