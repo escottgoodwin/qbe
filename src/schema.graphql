@@ -39,6 +39,8 @@ type Mutation {
 
   login(email: String!, password: String!): AuthPayload
 
+  logout(userId: ID!): signUpPayload
+
   newPasswordRequest(email: String!): signUpPayload
 
   resetPassword(email: String!, resetToken: String!, resetPassword: String!): signUpPayload
@@ -190,6 +192,7 @@ type AnswerSearch {
 type AuthPayload {
   token: String
   user: User
+  authMsg: String
 }
 
 type signUpPayload {

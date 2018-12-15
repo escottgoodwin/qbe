@@ -311,7 +311,7 @@ async function login(parent, args, ctx, info) {
     throw new Error('Invalid password')
   }
 
-  const userupdate = await ctx.db.mutation.updateUser(
+  const updateUser = await ctx.db.mutation.updateUser(
     {
       data: {
         lastLogin,
@@ -321,13 +321,45 @@ async function login(parent, args, ctx, info) {
         id: user.id,
       },
     },
-    ` { id password firstName lastName role } `
+    ` { id password firstName lastName role online } `
   )
 
+  loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
 
   return {
+    authMsg: loginMsg,
     token: jwt.sign({ userId: user.id }, APP_SECRET),
-    user,
+    user: updateUser,
+  }
+}
+
+async function logout(parent, args, ctx, info) {
+  //prevents unauthorized user from logging out - checks authorization token to get current userId
+  const userId = await getUserId(ctx)
+
+  if (!userId) {
+    throw new Error('There has been a problem logging out.')
+  }
+
+  const updateUser = await ctx.db.mutation.updateUser(
+    {
+      data: {
+        online:false
+      },
+      where: {
+        id: userId,
+      },
+    },
+    ` { id firstName lastName online } `
+  )
+
+  //Be sure to remove the authorization token that you stored locally or in a session cookie.
+
+  logoutRequestMsg = `${updateUser.firstName} ${updateUser.lastName}, you have logged out. Login again: <a href="https://example.com/login">Login</a>.`
+
+  return {
+    authMsg: logoutRequestMsg,
+    user: updateUser
   }
 }
 
@@ -1241,6 +1273,7 @@ module.exports = {
   resetPassword,
   confirmEmail,
   login,
+  logout,
   addInstitution,
   updateInstitution,
   deleteInstitution,
