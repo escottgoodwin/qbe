@@ -354,7 +354,7 @@ async function logout(parent, {userId}, ctx, info) {
 
   //Be sure to remove the authorization token that you stored locally or in a session cookie.
 
-  logoutRequestMsg = `${updateUser.firstName} ${updateUser.lastName}, you have logged out. Login again: <a href="https://example.com/login">Login</a>.`
+  logoutRequestMsg = `${updateUser.firstName} ${updateUser.lastName}, you have logged out.`
 
   return {
     authMsg: logoutRequestMsg,
