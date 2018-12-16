@@ -333,7 +333,7 @@ async function login(parent, args, ctx, info) {
   }
 }
 
-async function logout(parent, args, ctx, info) {
+async function logout(parent, {userId}, ctx, info) {
   //prevents unauthorized user from logging out - checks authorization token to get current userId
 
   if (!userId) {
@@ -346,7 +346,7 @@ async function logout(parent, args, ctx, info) {
         online:false
       },
       where: {
-        id: args.userId,
+        id: userId,
       },
     },
     ` { id firstName lastName online } `
