@@ -99,6 +99,7 @@ type Course {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   department: Department @relation(name: "CoursesByDepartment" onDelete: CASCADE)
   institution: Institution! @relation(name: "CoursesByInstitution")
   teachers: [User!]! @relation(name: "TeachersByCourse")

@@ -59,7 +59,7 @@ type Mutation {
 
   deleteDepartment(id: ID!): Department! @hasRole(roles: ["ADMIN"])
 
-  addCourse(name: String!, courseNumber: String, time: String, institutionId: ID!, departmentId: ID): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+  addCourse(name: String!, department1: String, courseNumber: String, time: String, institutionId: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
   updateCourse(id: ID!, name: String, courseNumber: String, time: String, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 

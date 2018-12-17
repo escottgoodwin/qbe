@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Thu Dec 06 2018 19:28:00 GMT-0800 (Pacific Standard Time)
+# timestamp: Sun Dec 16 2018 19:28:06 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -1108,6 +1108,7 @@ type Course implements Node {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   department: Department
   institution: Institution!
   teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -1131,6 +1132,7 @@ input CourseCreateInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1181,6 +1183,7 @@ input CourseCreateWithoutAddedByInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1195,6 +1198,7 @@ input CourseCreateWithoutDepartmentInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1209,6 +1213,7 @@ input CourseCreateWithoutInstitutionInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1223,6 +1228,7 @@ input CourseCreateWithoutStudentsInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1237,6 +1243,7 @@ input CourseCreateWithoutTeachersInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1251,6 +1258,7 @@ input CourseCreateWithoutTestsInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1265,6 +1273,7 @@ input CourseCreateWithoutUpdatedByInput {
   name: String!
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   department: DepartmentCreateOneWithoutCoursesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1295,6 +1304,8 @@ enum CourseOrderByInput {
   courseNumber_DESC
   time_ASC
   time_DESC
+  department1_ASC
+  department1_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1308,6 +1319,7 @@ type CoursePreviousValues {
   name: String!
   courseNumber: String
   time: String
+  department1: String
 }
 
 input CourseScalarWhereInput {
@@ -1523,6 +1535,46 @@ input CourseScalarWhereInput {
 
   """All values not ending with the given string."""
   time_not_ends_with: String
+  department1: String
+
+  """All values that are not equal to given value."""
+  department1_not: String
+
+  """All values that are contained in given list."""
+  department1_in: [String!]
+
+  """All values that are not contained in given list."""
+  department1_not_in: [String!]
+
+  """All values less than the given value."""
+  department1_lt: String
+
+  """All values less than or equal the given value."""
+  department1_lte: String
+
+  """All values greater than the given value."""
+  department1_gt: String
+
+  """All values greater than or equal the given value."""
+  department1_gte: String
+
+  """All values containing the given string."""
+  department1_contains: String
+
+  """All values not containing the given string."""
+  department1_not_contains: String
+
+  """All values starting with the given string."""
+  department1_starts_with: String
+
+  """All values not starting with the given string."""
+  department1_not_starts_with: String
+
+  """All values ending with the given string."""
+  department1_ends_with: String
+
+  """All values not ending with the given string."""
+  department1_not_ends_with: String
 }
 
 type CourseSubscriptionPayload {
@@ -1570,6 +1622,7 @@ input CourseUpdateInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1585,6 +1638,7 @@ input CourseUpdateManyDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
 }
 
 input CourseUpdateManyMutationInput {
@@ -1593,6 +1647,7 @@ input CourseUpdateManyMutationInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
 }
 
 input CourseUpdateManyWithoutAddedByInput {
@@ -1679,6 +1734,7 @@ input CourseUpdateWithoutAddedByDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -1693,6 +1749,7 @@ input CourseUpdateWithoutDepartmentDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -1707,6 +1764,7 @@ input CourseUpdateWithoutInstitutionDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1721,6 +1779,7 @@ input CourseUpdateWithoutStudentsDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1735,6 +1794,7 @@ input CourseUpdateWithoutTeachersDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1749,6 +1809,7 @@ input CourseUpdateWithoutTestsDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1763,6 +1824,7 @@ input CourseUpdateWithoutUpdatedByDataInput {
   name: String
   courseNumber: String
   time: String
+  department1: String
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   department: DepartmentUpdateOneWithoutCoursesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -2055,6 +2117,46 @@ input CourseWhereInput {
 
   """All values not ending with the given string."""
   time_not_ends_with: String
+  department1: String
+
+  """All values that are not equal to given value."""
+  department1_not: String
+
+  """All values that are contained in given list."""
+  department1_in: [String!]
+
+  """All values that are not contained in given list."""
+  department1_not_in: [String!]
+
+  """All values less than the given value."""
+  department1_lt: String
+
+  """All values less than or equal the given value."""
+  department1_lte: String
+
+  """All values greater than the given value."""
+  department1_gt: String
+
+  """All values greater than or equal the given value."""
+  department1_gte: String
+
+  """All values containing the given string."""
+  department1_contains: String
+
+  """All values not containing the given string."""
+  department1_not_contains: String
+
+  """All values starting with the given string."""
+  department1_starts_with: String
+
+  """All values not starting with the given string."""
+  department1_not_starts_with: String
+
+  """All values ending with the given string."""
+  department1_ends_with: String
+
+  """All values not ending with the given string."""
+  department1_not_ends_with: String
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   department: DepartmentWhereInput

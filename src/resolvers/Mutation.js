@@ -507,7 +507,7 @@ async function deleteDepartment(parent, { id }, ctx, info) {
   throw new Error(`Unauthorized, must be a admin for this department`)
 }
 
-async function addCourse(parent, { name, courseNumber, time, institutionId, departmentId }, ctx, info) {
+async function addCourse(parent, { name, department1, courseNumber, time, institutionId, }, ctx, info) {
   const userId = await getUserId(ctx)
   const addedDate = new Date()
 
@@ -515,14 +515,12 @@ async function addCourse(parent, { name, courseNumber, time, institutionId, depa
     {
       data: {
         name,
+        department1,
         courseNumber,
         time,
         addedDate,
         institution: {
           connect: { id: institutionId  }
-        },
-        department: {
-          connect: { id: departmentId  }
         },
         addedBy: {
           connect: { id: userId },
