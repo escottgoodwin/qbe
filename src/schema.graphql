@@ -39,7 +39,7 @@ type Mutation {
 
   login(email: String!, password: String!): AuthPayload
 
-  logout(userId: ID!): signUpPayload
+  logout: signUpPayload
 
   newPasswordRequest(email: String!): signUpPayload
 
