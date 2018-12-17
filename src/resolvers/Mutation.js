@@ -335,7 +335,7 @@ async function login(parent, args, ctx, info) {
 
 async function logout(parent, {userId}, ctx, info) {
   //prevents unauthorized user from logging out - checks authorization token to get current userId
-
+  const userId = await getUserId(ctx)
   if (!userId) {
     throw new Error('There has been a problem logging out.')
   }
