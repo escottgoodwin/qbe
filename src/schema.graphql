@@ -61,11 +61,11 @@ type Mutation {
 
   addCourse(name: String!, department1: String, courseNumber: String, time: String, institutionId: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
-  updateCourse(id: ID!, name: String, courseNumber: String, time: String, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+  updateCourse(id: ID!, name: String, courseNumber: String, time: String, deleted: Boolean, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
   deleteCourse(id: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
-  addTest(subject: String!, testNumber: String, testDate: DateTime, courseId: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
+  addTest(subject: String!, testNumber: String, testDate: DateTime, deleted: Boolean, courseId: ID!): Test! @hasRole(roles: ["TEACHER","ADMIN"])
 
   updateTest(id: ID!, subject: String, testNumber: String, testDate: DateTime, published: Boolean, publishDate: DateTime, release: Boolean, releaseDate: DateTime): Test! @hasRole(roles: ["TEACHER","ADMIN"])
 
