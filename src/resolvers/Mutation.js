@@ -555,6 +555,7 @@ async function updateCourse(parent, { id, name, courseNumber, time, teacherIds, 
             teachers,
             students,
             updateDate,
+            deleted,
             updatedBy: {
               connect: {
                 id: userId
