@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Sun Dec 16 2018 19:28:06 GMT-0800 (Pacific Standard Time)
+# timestamp: Tue Dec 18 2018 14:19:14 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -1109,6 +1109,7 @@ type Course implements Node {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   department: Department
   institution: Institution!
   teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -1133,6 +1134,7 @@ input CourseCreateInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1184,6 +1186,7 @@ input CourseCreateWithoutAddedByInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1199,6 +1202,7 @@ input CourseCreateWithoutDepartmentInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1214,6 +1218,7 @@ input CourseCreateWithoutInstitutionInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1229,6 +1234,7 @@ input CourseCreateWithoutStudentsInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1244,6 +1250,7 @@ input CourseCreateWithoutTeachersInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1259,6 +1266,7 @@ input CourseCreateWithoutTestsInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
   department: DepartmentCreateOneWithoutCoursesInput
@@ -1274,6 +1282,7 @@ input CourseCreateWithoutUpdatedByInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   department: DepartmentCreateOneWithoutCoursesInput
   institution: InstitutionCreateOneWithoutCoursesInput!
@@ -1306,6 +1315,8 @@ enum CourseOrderByInput {
   time_DESC
   department1_ASC
   department1_DESC
+  deleted_ASC
+  deleted_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1320,6 +1331,7 @@ type CoursePreviousValues {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
 }
 
 input CourseScalarWhereInput {
@@ -1575,6 +1587,10 @@ input CourseScalarWhereInput {
 
   """All values not ending with the given string."""
   department1_not_ends_with: String
+  deleted: Boolean
+
+  """All values that are not equal to given value."""
+  deleted_not: Boolean
 }
 
 type CourseSubscriptionPayload {
@@ -1623,6 +1639,7 @@ input CourseUpdateInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1639,6 +1656,7 @@ input CourseUpdateManyDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
 }
 
 input CourseUpdateManyMutationInput {
@@ -1648,6 +1666,7 @@ input CourseUpdateManyMutationInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
 }
 
 input CourseUpdateManyWithoutAddedByInput {
@@ -1735,6 +1754,7 @@ input CourseUpdateWithoutAddedByDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -1750,6 +1770,7 @@ input CourseUpdateWithoutDepartmentDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -1765,6 +1786,7 @@ input CourseUpdateWithoutInstitutionDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1780,6 +1802,7 @@ input CourseUpdateWithoutStudentsDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1795,6 +1818,7 @@ input CourseUpdateWithoutTeachersDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1810,6 +1834,7 @@ input CourseUpdateWithoutTestsDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
   department: DepartmentUpdateOneWithoutCoursesInput
@@ -1825,6 +1850,7 @@ input CourseUpdateWithoutUpdatedByDataInput {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   department: DepartmentUpdateOneWithoutCoursesInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
@@ -2157,6 +2183,10 @@ input CourseWhereInput {
 
   """All values not ending with the given string."""
   department1_not_ends_with: String
+  deleted: Boolean
+
+  """All values that are not equal to given value."""
+  deleted_not: Boolean
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   department: DepartmentWhereInput
@@ -7351,6 +7381,7 @@ type Test implements Node {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   course: Course!
   panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
   questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
@@ -7377,6 +7408,7 @@ input TestCreateInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
@@ -7425,6 +7457,7 @@ input TestCreateWithoutAddedByInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
   panels: PanelCreateManyWithoutTestInput
@@ -7442,6 +7475,7 @@ input TestCreateWithoutCourseInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   panels: PanelCreateManyWithoutTestInput
@@ -7459,6 +7493,7 @@ input TestCreateWithoutPanelsInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
@@ -7476,6 +7511,7 @@ input TestCreateWithoutQuestionsInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
@@ -7493,6 +7529,7 @@ input TestCreateWithoutSequencesInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
@@ -7510,6 +7547,7 @@ input TestCreateWithoutUpdatedByInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   course: CourseCreateOneWithoutTestsInput!
   panels: PanelCreateManyWithoutTestInput
@@ -7547,6 +7585,8 @@ enum TestOrderByInput {
   release_DESC
   releaseDate_ASC
   releaseDate_DESC
+  deleted_ASC
+  deleted_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -7564,6 +7604,7 @@ type TestPreviousValues {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
 }
 
 input TestScalarWhereInput {
@@ -7813,6 +7854,10 @@ input TestScalarWhereInput {
 
   """All values greater than or equal the given value."""
   releaseDate_gte: DateTime
+  deleted: Boolean
+
+  """All values that are not equal to given value."""
+  deleted_not: Boolean
 }
 
 type TestSubscriptionPayload {
@@ -7864,6 +7909,7 @@ input TestUpdateInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -7882,6 +7928,7 @@ input TestUpdateManyDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
 }
 
 input TestUpdateManyMutationInput {
@@ -7894,6 +7941,7 @@ input TestUpdateManyMutationInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
 }
 
 input TestUpdateManyWithoutAddedByInput {
@@ -7965,6 +8013,7 @@ input TestUpdateWithoutAddedByDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
   panels: PanelUpdateManyWithoutTestInput
@@ -7982,6 +8031,7 @@ input TestUpdateWithoutCourseDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   panels: PanelUpdateManyWithoutTestInput
@@ -7999,6 +8049,7 @@ input TestUpdateWithoutPanelsDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -8016,6 +8067,7 @@ input TestUpdateWithoutQuestionsDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -8033,6 +8085,7 @@ input TestUpdateWithoutSequencesDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -8050,6 +8103,7 @@ input TestUpdateWithoutUpdatedByDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   course: CourseUpdateOneRequiredWithoutTestsInput
   panels: PanelUpdateManyWithoutTestInput
@@ -8352,6 +8406,10 @@ input TestWhereInput {
 
   """All values greater than or equal the given value."""
   releaseDate_gte: DateTime
+  deleted: Boolean
+
+  """All values that are not equal to given value."""
+  deleted_not: Boolean
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   course: CourseWhereInput

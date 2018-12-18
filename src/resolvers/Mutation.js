@@ -534,7 +534,7 @@ async function addCourse(parent, { name, department1, courseNumber, time, instit
   )
 }
 
-async function updateCourse(parent, { id, name, courseNumber, time, teacherIds, studentIds }, ctx, info) {
+async function updateCourse(parent, { id, name, courseNumber, time, teacherIds, studentIds, deleted }, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
 

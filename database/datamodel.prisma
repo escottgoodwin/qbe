@@ -100,6 +100,7 @@ type Course {
   courseNumber: String
   time: String
   department1: String
+  deleted: Boolean
   department: Department @relation(name: "CoursesByDepartment" onDelete: CASCADE)
   institution: Institution! @relation(name: "CoursesByInstitution")
   teachers: [User!]! @relation(name: "TeachersByCourse")
@@ -120,6 +121,7 @@ type Test {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  deleted: Boolean
   course: Course! @relation(name: "TestsByCourse")
   panels: [Panel!]! @relation(name: "PanelsByTest" onDelete: CASCADE)
   questions: [Question!]! @relation(name: "QuestionsByTest" onDelete: CASCADE)
