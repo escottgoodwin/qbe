@@ -652,7 +652,7 @@ async function publishTest(parent, { testId, courseId }, ctx, info) {
 }
 
 
-async function updateTest(parent, { id, subject, testNumber, testDate, published, publishDate, release, releaseDate }, ctx, info) {
+async function updateTest(parent, { id, deleted, subject, testNumber, testDate, published, publishDate, release, releaseDate }, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
 
@@ -664,6 +664,7 @@ async function updateTest(parent, { id, subject, testNumber, testDate, published
     return await ctx.db.mutation.updateTest(
       {
         data: {
+          deleted,
           subject,
           testNumber,
           testDate,
