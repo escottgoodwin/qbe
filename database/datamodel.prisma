@@ -24,12 +24,10 @@ type User {
   confirmationToken: String
   tokenExpirationTime: DateTime
   confirmed: Boolean
+  institution: Institution @relation(name: "UsersByInstitution")
   updatedBy: User @relation(name: "UserUpdatesByUser" onDelete: CASCADE)
   role: UserType @default(value: "STUDENT")
   institutionContact: [Institution!]! @relation(name: "ContactsByInstitution")
-  teacherInstitution: [Institution!]! @relation(name: "TeachersByInstitution" )
-  studentInstitution: [Institution!]! @relation(name: "StudentsByInstitution")
-  institutionAdmins: [Institution!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
   teacherCourses: [Course!]! @relation(name: "TeachersByCourse" )
   studentCourses: [Course!]! @relation(name: "StudentsByCourse" )
   answers: [Answer!]! @relation(name: "AnswersByUser" onDelete: CASCADE)
@@ -52,43 +50,20 @@ type User {
   challengeUpdates: [Challenge!]! @relation(name: "ChallengeUpdatesByUser" )
   userUpdates: [User!]! @relation(name: "UserUpdatesByUser" )
   questionsSentTo: [Question!]! @relation(name: "QuestionSentTotByUser")
-  departmentsAdded: [Department!]! @relation(name: "AddedByDepartment")
-  departmentsUpdated: [Department!]! @relation(name: "DepartmentUpdatesByUser")
-  departmentTeachers: [Department!]! @relation(name: "TeachersByDepartment")
-  departmentAdmins: [Department!]! @relation(name: "AdminsByDepartment")
-  departmentStudents: [Department!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
-}
+  }
 
 type Institution {
   id: ID! @unique
   name: String!
   type: String
+  users: [User!]! @relation(name: "UsersByInstitution")
   addedDate: DateTime
   addedBy: User! @relation(name: "InstitutionsAddedByUser")
   updateDate: DateTime
   updatedBy: User @relation(name: "InstitutionUpdatesByUser")
   contacts: [User!]! @relation(name: "ContactsByInstitution" onDelete: CASCADE)
-  admins: [User!]! @relation(name: "AdminsByInstitution" onDelete: CASCADE)
-  teachers: [User!]! @relation(name: "TeachersByInstitution" onDelete: CASCADE)
-  students: [User!]! @relation(name: "StudentsByInstitution" onDelete: CASCADE)
   courses: [Course!]! @relation(name: "CoursesByInstitution" onDelete: CASCADE)
-  departments: [Department!]! @relation(name: "DepartmentsByInstitution" onDelete: CASCADE)
-}
-
-type Department {
-  id: ID! @unique
-  institution: Institution! @relation(name: "DepartmentsByInstitution")
-  name: String!
-  type: String
-  addedBy: User! @relation(name: "AddedByDepartment")
-  addedDate: DateTime
-  updateDate: DateTime
-  updatedBy: User @relation(name: "DepartmentUpdatesByUser")
-  students: [User!]! @relation(name: "StudentsByDepartment" onDelete: CASCADE)
-  teachers: [User!]! @relation(name: "TeachersByDepartment" onDelete: CASCADE)
-  admins: [User!]! @relation(name: "AdminsByDepartment" onDelete: CASCADE)
-  courses: [Course!]! @relation(name: "CoursesByDepartment" onDelete: CASCADE)
-}
+  }
 
 type Course {
   id: ID! @unique
@@ -101,7 +76,6 @@ type Course {
   time: String
   department1: String
   deleted: Boolean
-  department: Department @relation(name: "CoursesByDepartment" onDelete: CASCADE)
   institution: Institution! @relation(name: "CoursesByInstitution")
   teachers: [User!]! @relation(name: "TeachersByCourse")
   students: [User!]! @relation(name: "StudentsByCourse")

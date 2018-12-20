@@ -12,8 +12,6 @@ type Query {
   course(id: ID!): Course! @isAuthenticated
   users(filter: String, where: UserWhereInput, skip: Int, first: Int, orderBy: UserOrderByInput): UserSearch! @isAuthenticated
   user(id: ID!): User! @isAuthenticated
-  departments(filter: String, where: DepartmentWhereInput,  skip: Int, first: Int, orderBy: DepartmentOrderByInput): DepartmentSearch! @isAuthenticated
-  department(id: ID!): Department! @isAuthenticated
   tests(filter: String, where: TestWhereInput, skip: Int, first: Int, orderBy: TestOrderByInput): TestSearch! @isAuthenticated
   test(id: ID!): Test! @isAuthenticated
   testStats(testId: String): PercentCorrect! @isAuthenticated
@@ -35,7 +33,7 @@ type Query {
 
 type Mutation {
 
-  signup(email: String!, password: String!, firstName: String!,lastName: String!, role: String): signUpPayload
+  signup(email: String!, password: String!, firstName: String!,lastName: String!, role: String, institution: ID): signUpPayload
 
   login(email: String!, password: String!): AuthPayload
 
@@ -52,12 +50,6 @@ type Mutation {
   updateInstitution(id: ID!, name: String, type: String, contactIds: [ID], teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution! @hasRole(roles: ["QUANDRIA"])
 
   deleteInstitution(id: ID!): Institution! @hasRole(roles: ["QUANDRIA"])
-
-  addDepartment(name: String!, type: String, institutionId: ID!): Department @hasRole(roles: ["ADMIN"])
-
-  updateDepartment(id: ID!, name: String, type: String, adminIds:[ID], teacherIds: [ID], courseIds: [ID], adminIds: [ID]): Department @hasRole(roles: ["ADMIN"])
-
-  deleteDepartment(id: ID!): Department! @hasRole(roles: ["ADMIN"])
 
   addCourse(name: String!, department1: String, courseNumber: String, time: String, institutionId: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
@@ -115,12 +107,7 @@ type Mutation {
   salutation: String,
   firstName: String,
   lastName: String,
-  studentInstitutionIds: [ID],
-  teacherInstitutionIds: [ID],
-  adminInstitutionIds: [ID],
-  teacherDepartmentIds: [ID],
-  studentDepartmentIds: [ID],
-  adminDepartmentIds: [ID],
+  institution: ID,
   studentIds:[String],
   teacherIds: [String],
   phone: String,
@@ -140,11 +127,6 @@ type CourseSearch {
 
 type InstitutionSearch {
   institutions: [Institution!]!
-  count: Int!
-}
-
-type DepartmentSearch {
-  departments: [Department!]!
   count: Int!
 }
 

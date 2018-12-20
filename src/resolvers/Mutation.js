@@ -321,7 +321,7 @@ async function login(parent, args, ctx, info) {
         id: user.id,
       },
     },
-    ` { id password firstName lastName role online } `
+    ` { id password firstName lastName role online  } `
   )
 
   loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
@@ -332,6 +332,7 @@ async function login(parent, args, ctx, info) {
     user: updateUser,
   }
 }
+
 
 async function logout(parent, args, ctx, info) {
   //prevents unauthorized user from logging out - checks authorization token to get current userId
@@ -426,88 +427,7 @@ async function deleteInstitution(parent, { id }, ctx, info) {
   )
 }
 
-async function addDepartment(parent, { name, type, institutionId }, ctx, info) {
-  const userId = await getUserId(ctx)
-  const addedDate = new Date()
-
-  return await ctx.db.mutation.createDepartment(
-    {
-      data: {
-        name,
-        type,
-        addedDate,
-        addedBy: {
-          connect: { id: userId },
-        },
-        institution: {
-          connect: { id: institutionId },
-        },
-        admins: {
-          connect: [{ id: userId  }]
-        },
-      },
-    },
-    info
-  )
-
-}
-
-async function updateDepartment(parent, { id, name, type, teacherIds, courseIds, adminIds }, ctx, info) {
-  const userId = await getUserId(ctx)
-  const updateDate = new Date()
-
-  const admins = await checkField(adminIds)
-  const teachers = await checkField(teacherIds)
-  const courses = await checkField(courseIds)
-
-  const department = await ctx.db.query.department({where: { id: id } },`{ admins { id } }`)
-  const departmentAdmins = JSON.stringify(department.admins)
-
-  if (departmentAdmins.includes(userId)){
-
-    return await ctx.db.mutation.updateDepartment(
-      {
-        data: {
-          name,
-          type,
-          updateDate,
-          updatedBy: {
-            connect: { id: userId  }
-          },
-          admins,
-          teachers,
-          courses,
-        },
-        where: {
-          id: id
-        },
-      },
-      info
-    )
-  }
-  throw new Error(`Unauthorized, must be a admin for this department`)
-}
-
-async function deleteDepartment(parent, { id }, ctx, info) {
-  const userId = await getUserId(ctx)
-  const department = await ctx.db.query.department({where: { id: id } },`{ admins { id } }`)
-  const departmentAdmins = JSON.stringify(department.admins)
-
-  if (departmentAdmins.includes(userId)){
-
-    return await ctx.db.mutation.deleteDepartment(
-      {
-        where: {
-          id: id
-        }
-      },
-      info
-    )
-  }
-  throw new Error(`Unauthorized, must be a admin for this department`)
-}
-
-async function addCourse(parent, { name, department1, courseNumber, time, institutionId, }, ctx, info) {
+async function addCourse(parent, { name, department1, courseNumber, time, institutionId }, ctx, info) {
   const userId = await getUserId(ctx)
   const addedDate = new Date()
 
@@ -1213,12 +1133,7 @@ email,
 salutation,
 firstName,
 lastName,
-studentInstitutionIds,
-teacherInstitutionIds,
-adminInstitutionIds,
-teacherDepartmentIds,
-studentDepartmentIds,
-adminDepartmentIds,
+institution,
 studentIds,
 teacherIds,
 phone,
@@ -1226,14 +1141,6 @@ online,
 }, ctx, info) {
 
   const userId = await getUserId(ctx)
-
-  const departmentTeachers = await checkField(teacherDepartmentIds)
-  const departmentStudents = await checkField(studentDepartmentIds)
-  const departmentAdmins = await checkField(adminDepartmentIds)
-
-  const teacherInstitution = await checkField(teacherInstitutionIds)
-  const studentInstitution = await checkField(studentInstitutionIds)
-  const institutionAdmins = await checkField(adminInstitutionIds)
 
   const updateDate = new Date()
 
@@ -1244,12 +1151,9 @@ online,
         salutation,
         firstName,
         lastName,
-        departmentTeachers,
-        departmentAdmins,
-        departmentStudents,
-        teacherInstitution,
-        studentInstitution,
-        institutionAdmins,
+        institution: {
+          connect: { id: institution }
+        },
         studentIds,
         teacherIds,
         phone,
@@ -1276,9 +1180,6 @@ module.exports = {
   addInstitution,
   updateInstitution,
   deleteInstitution,
-  addDepartment,
-  updateDepartment,
-  deleteDepartment,
   addCourse,
   updateCourse,
   deleteCourse,

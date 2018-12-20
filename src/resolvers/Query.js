@@ -40,7 +40,7 @@ async function users(parent, args, ctx, info) {
 
 async function user(parent, args, ctx, info) {
 
-    return await ctx.db.query.user( { where: { id: args.id } },info,)
+    return await ctx.db.query.user( { where: { id: args.id } },info )
 }
 
 async function institutions(parent, args, ctx, info) {
@@ -82,47 +82,6 @@ async function institutions(parent, args, ctx, info) {
 async function institution(parent, args, ctx, info) {
 
       return await ctx.db.query.institution( { where: { id: args.id } },info,)
-
-}
-
-async function departments(parent, args, ctx, info) {
-
-  const where = args.where
-
-  const where1 = args.filter
-      ? {
-          OR: [
-            { id: args.filter },
-            { name_contains: args.filter },
-            { type_contains: args.filter },
-          ],
-        }
-      : {}
-
-      const queriedDepartments = await ctx.db.query.departments(
-      { where },
-      `{ id }`,
-    )
-
-      const countSelectionSet = `
-        {
-          aggregate {
-            count
-          }
-        }
-      `
-      const departmentsConnection = await ctx.db.query.departmentsConnection( { where }, countSelectionSet)
-
-      return {
-        count: departmentsConnection.aggregate.count,
-        departmentIds: queriedDepartments.map(department => department.id),
-        args1: args
-      }
-}
-
-async function department(parent, args, ctx, info) {
-
-      return await ctx.db.query.department( { where: { id: args.id } },info,)
 
 }
 
@@ -520,8 +479,6 @@ module.exports = {
   user,
   institutions,
   institution,
-  departments,
-  department,
   courses,
   course,
   tests,

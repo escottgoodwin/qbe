@@ -6,7 +6,6 @@ const Query = require('./resolvers/Query')
 const CourseSearch = require('./resolvers/CourseSearch')
 const UserSearch = require('./resolvers/UserSearch')
 const InstitutionSearch = require('./resolvers/InstitutionSearch')
-const DepartmentSearch = require('./resolvers/DepartmentSearch')
 const TestSearch = require('./resolvers/TestSearch')
 const PanelSearch = require('./resolvers/PanelSearch')
 const ResponseImageSearch = require('./resolvers/ResponseImageSearch')
@@ -23,7 +22,6 @@ const resolvers = {
   CourseSearch,
   UserSearch,
   InstitutionSearch,
-  DepartmentSearch,
   TestSearch,
   PanelSearch,
   QuestionSearch,
