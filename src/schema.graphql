@@ -53,7 +53,7 @@ type Mutation {
 
   addCourse(name: String!, department1: String, courseNumber: String, time: String, deleted: Boolean, institutionId: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
-  updateCourse(id: ID!, name: String, courseNumber: String, time: String, deleted: Boolean, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
+  updateCourse(id: ID!, name: String, department1: String, courseNumber: String, time: String, deleted: Boolean, teacherIds: [ID], studentIds: [ID]): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
   deleteCourse(id: ID!): Course! @hasRole(roles: ["TEACHER","ADMIN"])
 
