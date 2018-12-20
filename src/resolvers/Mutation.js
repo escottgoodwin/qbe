@@ -321,7 +321,7 @@ async function login(parent, args, ctx, info) {
         id: user.id,
       },
     },
-    ` { id password firstName lastName role online  } `
+    ` { id password firstName lastName role online institution { id name } } `
   )
 
   loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
@@ -427,7 +427,7 @@ async function deleteInstitution(parent, { id }, ctx, info) {
   )
 }
 
-async function addCourse(parent, { name, department1, courseNumber, time, institutionId }, ctx, info) {
+async function addCourse(parent, { name, department1, courseNumber, time, deleted, institutionId }, ctx, info) {
   const userId = await getUserId(ctx)
   const addedDate = new Date()
 
@@ -439,6 +439,7 @@ async function addCourse(parent, { name, department1, courseNumber, time, instit
         courseNumber,
         time,
         addedDate,
+        deleted,
         institution: {
           connect: { id: institutionId  }
         },
