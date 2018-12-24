@@ -732,7 +732,7 @@ async function deleteResponseImage(parent, { id }, ctx, info) {
   )
 }
 
-async function addQuestion(parent, { question, testId, panelId, sentToId, correctResponseId, incorrectResponseId,  }, ctx, info) {
+async function addQuestion(parent, { question, testId, panelId, sentToId, correctResponseImageId, incorrectResponseImageId,  }, ctx, info) {
 
   const userId = await getUserId(ctx)
   const addedDate = new Date()
@@ -743,7 +743,6 @@ async function addQuestion(parent, { question, testId, panelId, sentToId, correc
   const testStudents = JSON.stringify(test.course.students)
 
   if (testStudents.includes(userId)){
-correctResponseImage
     return await ctx.db.mutation.createQuestion(
       {
         data: {
@@ -758,12 +757,6 @@ correctResponseImage
           },
           sentTo: {
             connect: { id: sentToId  }
-          },
-          correctResponseImage: {
-            connect: { id: correctResponseImageId  }
-          },
-          incorrectResponseImage: {
-            connect: { id: incorrectResponseImageId  }
           },
           addedBy: {
             connect: { id: userId },

@@ -75,7 +75,7 @@ type Mutation {
 
   deleteResponseImage(id: ID!): ResponseImage! @hasRole(roles: ["QUANDRIA"])
 
-  addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID!, correctResponseId: ID!, incorrectResponseId: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+  addQuestion(question: String!, testId: ID!, panelId: ID!, sentToId: ID, correctResponseImageId: ID, incorrectResponseImageId: ID): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   updateQuestion(id: ID!, question: String, sentToId: ID, correctResponseId: ID, incorrectResponseId: ID): Question! @hasRole(roles: ["STUDENT"])
 
