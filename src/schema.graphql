@@ -45,9 +45,11 @@ type Mutation {
 
   confirmEmail(email: String!, confirmationToken: String!): signUpPayload
 
+  sendInvite(emails:[String!], courseId: ID!): signUpPayload
+
   addInstitution(name: String!, type: String, contactIds: ID, teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution ! @hasRole(roles: ["QUANDRIA"])
 
-  updateInstitution(id: ID!, name: String, type: String, contactIds: [ID], teacherIds: [ID], studentIds: [ID], courseIds: [ID]): Institution! @hasRole(roles: ["QUANDRIA"])
+  updateInstitution(id: ID!, name: String, type: String, contactIds: [ID], teacherIds: [ID], studentIds: [ID], adminIds: [ID] courseIds: [ID]): Institution! @hasRole(roles: ["QUANDRIA","ADMIN"])
 
   deleteInstitution(id: ID!): Institution! @hasRole(roles: ["QUANDRIA"])
 
@@ -103,16 +105,24 @@ type Mutation {
 
   deleteSequence(id: ID!): Sequence!
 
+  publishTest(id: ID!, startHour: String, endHour: String, testEndDate: DateTime): Test!
+
+  sendQuestion(id: ID!): Sequence
+
+  joinCourse(courseId: ID!): JoinCourse
+
   updateUser(email: String,
   salutation: String,
   firstName: String,
   lastName: String,
   institution: ID,
+  adminInstitution: ID,
+  teacherInstitutions: [ID],
+  studentInstitutions: [ID],
   studentIds:[String],
   teacherIds: [String],
   phone: String,
-  online: Boolean): User! @isAuthenticated
-
+  online: Boolean): User!
 }
 
 type UserSearch {
@@ -180,4 +190,14 @@ type AuthPayload {
 type signUpPayload {
   authMsg: String
   user: User
+}
+
+type SentQuestion {
+  sentTo: User!
+  sentPanel: Panel!
+}
+
+type JoinCourse {
+  authMsg: String!
+  course: Course!
 }

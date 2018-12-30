@@ -24,6 +24,9 @@ type User {
   confirmationToken: String
   tokenExpirationTime: DateTime
   confirmed: Boolean
+  invites: [Course!]! @relation(name: "UsersByInvitation")
+  teacherInstitutions: [Institution!]! @relation(name: "TeachersByInstitutions")
+  studentInstitutions: [Institution!]! @relation(name: "StudentsByInstitutions")
   institution: Institution @relation(name: "UsersByInstitution")
   updatedBy: User @relation(name: "UserUpdatesByUser" onDelete: CASCADE)
   role: UserType @default(value: "STUDENT")
@@ -50,13 +53,20 @@ type User {
   challengeUpdates: [Challenge!]! @relation(name: "ChallengeUpdatesByUser" )
   userUpdates: [User!]! @relation(name: "UserUpdatesByUser" )
   questionsSentTo: [Question!]! @relation(name: "QuestionSentTotByUser")
+  sequencesAdded: [Sequence!]! @relation(name: "SequencesByUser")
+  sentToSequences: [Sequence!]! @relation(name: "SentToBySequence")
+  invitesSent: [Course!]! @relation(name: "InvitesSentByUser")
+  adminInstitution: Institution @relation(name: "AdminsByInstitution")
   }
 
 type Institution {
   id: ID! @unique
   name: String!
   type: String
+  admins: [User!]! @relation(name: "AdminsByInstitution")
   users: [User!]! @relation(name: "UsersByInstitution")
+  teachers: [User!]! @relation(name: "TeachersByInstitutions")
+  students: [User!]! @relation(name: "StudentsByInstitutions")
   addedDate: DateTime
   addedBy: User! @relation(name: "InstitutionsAddedByUser")
   updateDate: DateTime
@@ -76,10 +86,13 @@ type Course {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
+  invitesSentBy: User @relation(name: "InvitesSentByUser")
   institution: Institution! @relation(name: "CoursesByInstitution")
   teachers: [User!]! @relation(name: "TeachersByCourse")
   students: [User!]! @relation(name: "StudentsByCourse")
   tests: [Test!]! @relation(name: "TestsByCourse" onDelete: CASCADE)
+  invitesSent: [User!]! @relation(name: "UsersByInvitation")
 }
 
 type Test {
@@ -95,6 +108,9 @@ type Test {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   course: Course! @relation(name: "TestsByCourse")
   panels: [Panel!]! @relation(name: "PanelsByTest" onDelete: CASCADE)
@@ -111,6 +127,7 @@ type Panel {
   sequences: [Sequence!]! @relation(name: "PanelSequenceByTest")
   usedSequence: [Sequence!]! @relation(name: "UsedPanelBySequence")
   questions: [Question!]! @relation(name: "PanelByQuestion")
+  sentPanels: [Sequence!]! @relation(name: "SentPanelBySequence")
 }
 
 type Question {
@@ -181,10 +198,17 @@ type Challenge {
 
 type Sequence {
   id: ID! @unique
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  addedBy: User! @relation(name: "SequencesByUser")
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
   test: Test! @relation(name: "SequencesByTest")
-  students: [User!]! @relation(name: "UserBySequence")
+  sentTo: User @relation(name: "SentToBySequence")
+  sentPanel: Panel @relation(name: "SentPanelBySequence")
   usedStudents: [User!]! @relation(name: "UsedUserBySequence")
-  panels: [Panel!]! @relation(name: "PanelBySequence")
   usedPanels: [Panel!]! @relation(name: "UsedPanelBySequence")
+  students: [User!]! @relation(name: "UserBySequence")
+  panels: [Panel!]! @relation(name: "PanelSequenceByTest")
+
 }

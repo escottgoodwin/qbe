@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Wed Dec 19 2018 16:52:20 GMT-0800 (Pacific Standard Time)
+# timestamp: Sun Dec 30 2018 11:58:00 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -1106,10 +1106,13 @@ type Course implements Node {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
+  invitesSentBy: User
   institution: Institution!
   teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+  invitesSent(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 """A connection to a list of items."""
@@ -1130,12 +1133,15 @@ input CourseCreateInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   students: UserCreateManyWithoutStudentCoursesInput
   tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 input CourseCreateManyWithoutAddedByInput {
@@ -1145,6 +1151,16 @@ input CourseCreateManyWithoutAddedByInput {
 
 input CourseCreateManyWithoutInstitutionInput {
   create: [CourseCreateWithoutInstitutionInput!]
+  connect: [CourseWhereUniqueInput!]
+}
+
+input CourseCreateManyWithoutInvitesSentByInput {
+  create: [CourseCreateWithoutInvitesSentByInput!]
+  connect: [CourseWhereUniqueInput!]
+}
+
+input CourseCreateManyWithoutInvitesSentInput {
+  create: [CourseCreateWithoutInvitesSentInput!]
   connect: [CourseWhereUniqueInput!]
 }
 
@@ -1176,11 +1192,14 @@ input CourseCreateWithoutAddedByInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   students: UserCreateManyWithoutStudentCoursesInput
   tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 input CourseCreateWithoutInstitutionInput {
@@ -1191,8 +1210,47 @@ input CourseCreateWithoutInstitutionInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
+  teachers: UserCreateManyWithoutTeacherCoursesInput
+  students: UserCreateManyWithoutStudentCoursesInput
+  tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
+}
+
+input CourseCreateWithoutInvitesSentByInput {
+  addedDate: DateTime
+  updateDate: DateTime
+  name: String!
+  courseNumber: String
+  time: String
+  department1: String
+  deleted: Boolean
+  invitesSentDate: DateTime
+  addedBy: UserCreateOneWithoutCoursesAddedInput!
+  updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  institution: InstitutionCreateOneWithoutCoursesInput!
+  teachers: UserCreateManyWithoutTeacherCoursesInput
+  students: UserCreateManyWithoutStudentCoursesInput
+  tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
+}
+
+input CourseCreateWithoutInvitesSentInput {
+  addedDate: DateTime
+  updateDate: DateTime
+  name: String!
+  courseNumber: String
+  time: String
+  department1: String
+  deleted: Boolean
+  invitesSentDate: DateTime
+  addedBy: UserCreateOneWithoutCoursesAddedInput!
+  updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
+  institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   students: UserCreateManyWithoutStudentCoursesInput
   tests: TestCreateManyWithoutCourseInput
@@ -1206,11 +1264,14 @@ input CourseCreateWithoutStudentsInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 input CourseCreateWithoutTeachersInput {
@@ -1221,11 +1282,14 @@ input CourseCreateWithoutTeachersInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   students: UserCreateManyWithoutStudentCoursesInput
   tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 input CourseCreateWithoutTestsInput {
@@ -1236,11 +1300,14 @@ input CourseCreateWithoutTestsInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
   updatedBy: UserCreateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   students: UserCreateManyWithoutStudentCoursesInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 input CourseCreateWithoutUpdatedByInput {
@@ -1251,11 +1318,14 @@ input CourseCreateWithoutUpdatedByInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserCreateOneWithoutCoursesAddedInput!
+  invitesSentBy: UserCreateOneWithoutInvitesSentInput
   institution: InstitutionCreateOneWithoutCoursesInput!
   teachers: UserCreateManyWithoutTeacherCoursesInput
   students: UserCreateManyWithoutStudentCoursesInput
   tests: TestCreateManyWithoutCourseInput
+  invitesSent: UserCreateManyWithoutInvitesInput
 }
 
 """An edge in a connection."""
@@ -1284,6 +1354,8 @@ enum CourseOrderByInput {
   department1_DESC
   deleted_ASC
   deleted_DESC
+  invitesSentDate_ASC
+  invitesSentDate_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1299,6 +1371,7 @@ type CoursePreviousValues {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
 }
 
 input CourseScalarWhereInput {
@@ -1558,6 +1631,28 @@ input CourseScalarWhereInput {
 
   """All values that are not equal to given value."""
   deleted_not: Boolean
+  invitesSentDate: DateTime
+
+  """All values that are not equal to given value."""
+  invitesSentDate_not: DateTime
+
+  """All values that are contained in given list."""
+  invitesSentDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  invitesSentDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  invitesSentDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  invitesSentDate_lte: DateTime
+
+  """All values greater than the given value."""
+  invitesSentDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  invitesSentDate_gte: DateTime
 }
 
 type CourseSubscriptionPayload {
@@ -1607,12 +1702,15 @@ input CourseUpdateInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
   tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateManyDataInput {
@@ -1623,6 +1721,7 @@ input CourseUpdateManyDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
 }
 
 input CourseUpdateManyMutationInput {
@@ -1633,6 +1732,7 @@ input CourseUpdateManyMutationInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
 }
 
 input CourseUpdateManyWithoutAddedByInput {
@@ -1655,6 +1755,28 @@ input CourseUpdateManyWithoutInstitutionInput {
   updateMany: [CourseUpdateManyWithWhereNestedInput!]
   deleteMany: [CourseScalarWhereInput!]
   upsert: [CourseUpsertWithWhereUniqueWithoutInstitutionInput!]
+}
+
+input CourseUpdateManyWithoutInvitesSentByInput {
+  create: [CourseCreateWithoutInvitesSentByInput!]
+  connect: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  delete: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutInvitesSentByInput!]
+  updateMany: [CourseUpdateManyWithWhereNestedInput!]
+  deleteMany: [CourseScalarWhereInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutInvitesSentByInput!]
+}
+
+input CourseUpdateManyWithoutInvitesSentInput {
+  create: [CourseCreateWithoutInvitesSentInput!]
+  connect: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  delete: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutInvitesSentInput!]
+  updateMany: [CourseUpdateManyWithWhereNestedInput!]
+  deleteMany: [CourseScalarWhereInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutInvitesSentInput!]
 }
 
 input CourseUpdateManyWithoutStudentsInput {
@@ -1710,11 +1832,14 @@ input CourseUpdateWithoutAddedByDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
   tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateWithoutInstitutionDataInput {
@@ -1725,8 +1850,47 @@ input CourseUpdateWithoutInstitutionDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
+  teachers: UserUpdateManyWithoutTeacherCoursesInput
+  students: UserUpdateManyWithoutStudentCoursesInput
+  tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
+}
+
+input CourseUpdateWithoutInvitesSentByDataInput {
+  addedDate: DateTime
+  updateDate: DateTime
+  name: String
+  courseNumber: String
+  time: String
+  department1: String
+  deleted: Boolean
+  invitesSentDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
+  updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  institution: InstitutionUpdateOneRequiredWithoutCoursesInput
+  teachers: UserUpdateManyWithoutTeacherCoursesInput
+  students: UserUpdateManyWithoutStudentCoursesInput
+  tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
+}
+
+input CourseUpdateWithoutInvitesSentDataInput {
+  addedDate: DateTime
+  updateDate: DateTime
+  name: String
+  courseNumber: String
+  time: String
+  department1: String
+  deleted: Boolean
+  invitesSentDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
+  updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
+  institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
   tests: TestUpdateManyWithoutCourseInput
@@ -1740,11 +1904,14 @@ input CourseUpdateWithoutStudentsDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateWithoutTeachersDataInput {
@@ -1755,11 +1922,14 @@ input CourseUpdateWithoutTeachersDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
   tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateWithoutTestsDataInput {
@@ -1770,11 +1940,14 @@ input CourseUpdateWithoutTestsDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
   updatedBy: UserUpdateOneWithoutCourseUpdatesInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateWithoutUpdatedByDataInput {
@@ -1785,11 +1958,14 @@ input CourseUpdateWithoutUpdatedByDataInput {
   time: String
   department1: String
   deleted: Boolean
+  invitesSentDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutCoursesAddedInput
+  invitesSentBy: UserUpdateOneWithoutInvitesSentInput
   institution: InstitutionUpdateOneRequiredWithoutCoursesInput
   teachers: UserUpdateManyWithoutTeacherCoursesInput
   students: UserUpdateManyWithoutStudentCoursesInput
   tests: TestUpdateManyWithoutCourseInput
+  invitesSent: UserUpdateManyWithoutInvitesInput
 }
 
 input CourseUpdateWithWhereUniqueWithoutAddedByInput {
@@ -1800,6 +1976,16 @@ input CourseUpdateWithWhereUniqueWithoutAddedByInput {
 input CourseUpdateWithWhereUniqueWithoutInstitutionInput {
   where: CourseWhereUniqueInput!
   data: CourseUpdateWithoutInstitutionDataInput!
+}
+
+input CourseUpdateWithWhereUniqueWithoutInvitesSentByInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutInvitesSentByDataInput!
+}
+
+input CourseUpdateWithWhereUniqueWithoutInvitesSentInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutInvitesSentDataInput!
 }
 
 input CourseUpdateWithWhereUniqueWithoutStudentsInput {
@@ -1832,6 +2018,18 @@ input CourseUpsertWithWhereUniqueWithoutInstitutionInput {
   where: CourseWhereUniqueInput!
   update: CourseUpdateWithoutInstitutionDataInput!
   create: CourseCreateWithoutInstitutionInput!
+}
+
+input CourseUpsertWithWhereUniqueWithoutInvitesSentByInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutInvitesSentByDataInput!
+  create: CourseCreateWithoutInvitesSentByInput!
+}
+
+input CourseUpsertWithWhereUniqueWithoutInvitesSentInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutInvitesSentDataInput!
+  create: CourseCreateWithoutInvitesSentInput!
 }
 
 input CourseUpsertWithWhereUniqueWithoutStudentsInput {
@@ -2109,8 +2307,31 @@ input CourseWhereInput {
 
   """All values that are not equal to given value."""
   deleted_not: Boolean
+  invitesSentDate: DateTime
+
+  """All values that are not equal to given value."""
+  invitesSentDate_not: DateTime
+
+  """All values that are contained in given list."""
+  invitesSentDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  invitesSentDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  invitesSentDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  invitesSentDate_lte: DateTime
+
+  """All values greater than the given value."""
+  invitesSentDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  invitesSentDate_gte: DateTime
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
+  invitesSentBy: UserWhereInput
   institution: InstitutionWhereInput
   teachers_every: UserWhereInput
   teachers_some: UserWhereInput
@@ -2121,6 +2342,9 @@ input CourseWhereInput {
   tests_every: TestWhereInput
   tests_some: TestWhereInput
   tests_none: TestWhereInput
+  invitesSent_every: UserWhereInput
+  invitesSent_some: UserWhereInput
+  invitesSent_none: UserWhereInput
 }
 
 input CourseWhereUniqueInput {
@@ -2133,7 +2357,10 @@ type Institution implements Node {
   id: ID!
   name: String!
   type: String
+  admins(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  teachers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   addedDate: DateTime
   addedBy: User!
   updateDate: DateTime
@@ -2157,7 +2384,10 @@ input InstitutionCreateInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
   users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
   addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
   contacts: UserCreateManyWithoutInstitutionContactInput
@@ -2174,9 +2404,24 @@ input InstitutionCreateManyWithoutContactsInput {
   connect: [InstitutionWhereUniqueInput!]
 }
 
+input InstitutionCreateManyWithoutStudentsInput {
+  create: [InstitutionCreateWithoutStudentsInput!]
+  connect: [InstitutionWhereUniqueInput!]
+}
+
+input InstitutionCreateManyWithoutTeachersInput {
+  create: [InstitutionCreateWithoutTeachersInput!]
+  connect: [InstitutionWhereUniqueInput!]
+}
+
 input InstitutionCreateManyWithoutUpdatedByInput {
   create: [InstitutionCreateWithoutUpdatedByInput!]
   connect: [InstitutionWhereUniqueInput!]
+}
+
+input InstitutionCreateOneWithoutAdminsInput {
+  create: InstitutionCreateWithoutAdminsInput
+  connect: InstitutionWhereUniqueInput
 }
 
 input InstitutionCreateOneWithoutCoursesInput {
@@ -2194,7 +2439,24 @@ input InstitutionCreateWithoutAddedByInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
   users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
+  updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
+  contacts: UserCreateManyWithoutInstitutionContactInput
+  courses: CourseCreateManyWithoutInstitutionInput
+}
+
+input InstitutionCreateWithoutAdminsInput {
+  name: String!
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
+  addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
   contacts: UserCreateManyWithoutInstitutionContactInput
   courses: CourseCreateManyWithoutInstitutionInput
@@ -2205,7 +2467,10 @@ input InstitutionCreateWithoutContactsInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
   users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
   addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
   courses: CourseCreateManyWithoutInstitutionInput
@@ -2216,10 +2481,41 @@ input InstitutionCreateWithoutCoursesInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
   users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
   addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
   contacts: UserCreateManyWithoutInstitutionContactInput
+}
+
+input InstitutionCreateWithoutStudentsInput {
+  name: String!
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
+  users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  addedBy: UserCreateOneWithoutInstitutionsAddedInput!
+  updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
+  contacts: UserCreateManyWithoutInstitutionContactInput
+  courses: CourseCreateManyWithoutInstitutionInput
+}
+
+input InstitutionCreateWithoutTeachersInput {
+  name: String!
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
+  users: UserCreateManyWithoutInstitutionInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
+  addedBy: UserCreateOneWithoutInstitutionsAddedInput!
+  updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
+  contacts: UserCreateManyWithoutInstitutionContactInput
+  courses: CourseCreateManyWithoutInstitutionInput
 }
 
 input InstitutionCreateWithoutUpdatedByInput {
@@ -2227,7 +2523,10 @@ input InstitutionCreateWithoutUpdatedByInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
   users: UserCreateManyWithoutInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
   addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   contacts: UserCreateManyWithoutInstitutionContactInput
   courses: CourseCreateManyWithoutInstitutionInput
@@ -2238,6 +2537,9 @@ input InstitutionCreateWithoutUsersInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserCreateManyWithoutAdminInstitutionInput
+  teachers: UserCreateManyWithoutTeacherInstitutionsInput
+  students: UserCreateManyWithoutStudentInstitutionsInput
   addedBy: UserCreateOneWithoutInstitutionsAddedInput!
   updatedBy: UserCreateOneWithoutInstitutionUpdatesInput
   contacts: UserCreateManyWithoutInstitutionContactInput
@@ -2497,7 +2799,10 @@ input InstitutionUpdateInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
   users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
   addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
   contacts: UserUpdateManyWithoutInstitutionContactInput
@@ -2540,6 +2845,28 @@ input InstitutionUpdateManyWithoutContactsInput {
   upsert: [InstitutionUpsertWithWhereUniqueWithoutContactsInput!]
 }
 
+input InstitutionUpdateManyWithoutStudentsInput {
+  create: [InstitutionCreateWithoutStudentsInput!]
+  connect: [InstitutionWhereUniqueInput!]
+  disconnect: [InstitutionWhereUniqueInput!]
+  delete: [InstitutionWhereUniqueInput!]
+  update: [InstitutionUpdateWithWhereUniqueWithoutStudentsInput!]
+  updateMany: [InstitutionUpdateManyWithWhereNestedInput!]
+  deleteMany: [InstitutionScalarWhereInput!]
+  upsert: [InstitutionUpsertWithWhereUniqueWithoutStudentsInput!]
+}
+
+input InstitutionUpdateManyWithoutTeachersInput {
+  create: [InstitutionCreateWithoutTeachersInput!]
+  connect: [InstitutionWhereUniqueInput!]
+  disconnect: [InstitutionWhereUniqueInput!]
+  delete: [InstitutionWhereUniqueInput!]
+  update: [InstitutionUpdateWithWhereUniqueWithoutTeachersInput!]
+  updateMany: [InstitutionUpdateManyWithWhereNestedInput!]
+  deleteMany: [InstitutionScalarWhereInput!]
+  upsert: [InstitutionUpsertWithWhereUniqueWithoutTeachersInput!]
+}
+
 input InstitutionUpdateManyWithoutUpdatedByInput {
   create: [InstitutionCreateWithoutUpdatedByInput!]
   connect: [InstitutionWhereUniqueInput!]
@@ -2563,6 +2890,15 @@ input InstitutionUpdateOneRequiredWithoutCoursesInput {
   upsert: InstitutionUpsertWithoutCoursesInput
 }
 
+input InstitutionUpdateOneWithoutAdminsInput {
+  create: InstitutionCreateWithoutAdminsInput
+  connect: InstitutionWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: InstitutionUpdateWithoutAdminsDataInput
+  upsert: InstitutionUpsertWithoutAdminsInput
+}
+
 input InstitutionUpdateOneWithoutUsersInput {
   create: InstitutionCreateWithoutUsersInput
   connect: InstitutionWhereUniqueInput
@@ -2577,7 +2913,24 @@ input InstitutionUpdateWithoutAddedByDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
   users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
+  updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
+  contacts: UserUpdateManyWithoutInstitutionContactInput
+  courses: CourseUpdateManyWithoutInstitutionInput
+}
+
+input InstitutionUpdateWithoutAdminsDataInput {
+  name: String
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
+  addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
   contacts: UserUpdateManyWithoutInstitutionContactInput
   courses: CourseUpdateManyWithoutInstitutionInput
@@ -2588,7 +2941,10 @@ input InstitutionUpdateWithoutContactsDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
   users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
   addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
   courses: CourseUpdateManyWithoutInstitutionInput
@@ -2599,10 +2955,41 @@ input InstitutionUpdateWithoutCoursesDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
   users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
   addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
   contacts: UserUpdateManyWithoutInstitutionContactInput
+}
+
+input InstitutionUpdateWithoutStudentsDataInput {
+  name: String
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
+  users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
+  updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
+  contacts: UserUpdateManyWithoutInstitutionContactInput
+  courses: CourseUpdateManyWithoutInstitutionInput
+}
+
+input InstitutionUpdateWithoutTeachersDataInput {
+  name: String
+  type: String
+  addedDate: DateTime
+  updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
+  users: UserUpdateManyWithoutInstitutionInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
+  addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
+  updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
+  contacts: UserUpdateManyWithoutInstitutionContactInput
+  courses: CourseUpdateManyWithoutInstitutionInput
 }
 
 input InstitutionUpdateWithoutUpdatedByDataInput {
@@ -2610,7 +2997,10 @@ input InstitutionUpdateWithoutUpdatedByDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
   users: UserUpdateManyWithoutInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
   addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   contacts: UserUpdateManyWithoutInstitutionContactInput
   courses: CourseUpdateManyWithoutInstitutionInput
@@ -2621,6 +3011,9 @@ input InstitutionUpdateWithoutUsersDataInput {
   type: String
   addedDate: DateTime
   updateDate: DateTime
+  admins: UserUpdateManyWithoutAdminInstitutionInput
+  teachers: UserUpdateManyWithoutTeacherInstitutionsInput
+  students: UserUpdateManyWithoutStudentInstitutionsInput
   addedBy: UserUpdateOneRequiredWithoutInstitutionsAddedInput
   updatedBy: UserUpdateOneWithoutInstitutionUpdatesInput
   contacts: UserUpdateManyWithoutInstitutionContactInput
@@ -2637,9 +3030,24 @@ input InstitutionUpdateWithWhereUniqueWithoutContactsInput {
   data: InstitutionUpdateWithoutContactsDataInput!
 }
 
+input InstitutionUpdateWithWhereUniqueWithoutStudentsInput {
+  where: InstitutionWhereUniqueInput!
+  data: InstitutionUpdateWithoutStudentsDataInput!
+}
+
+input InstitutionUpdateWithWhereUniqueWithoutTeachersInput {
+  where: InstitutionWhereUniqueInput!
+  data: InstitutionUpdateWithoutTeachersDataInput!
+}
+
 input InstitutionUpdateWithWhereUniqueWithoutUpdatedByInput {
   where: InstitutionWhereUniqueInput!
   data: InstitutionUpdateWithoutUpdatedByDataInput!
+}
+
+input InstitutionUpsertWithoutAdminsInput {
+  update: InstitutionUpdateWithoutAdminsDataInput!
+  create: InstitutionCreateWithoutAdminsInput!
 }
 
 input InstitutionUpsertWithoutCoursesInput {
@@ -2662,6 +3070,18 @@ input InstitutionUpsertWithWhereUniqueWithoutContactsInput {
   where: InstitutionWhereUniqueInput!
   update: InstitutionUpdateWithoutContactsDataInput!
   create: InstitutionCreateWithoutContactsInput!
+}
+
+input InstitutionUpsertWithWhereUniqueWithoutStudentsInput {
+  where: InstitutionWhereUniqueInput!
+  update: InstitutionUpdateWithoutStudentsDataInput!
+  create: InstitutionCreateWithoutStudentsInput!
+}
+
+input InstitutionUpsertWithWhereUniqueWithoutTeachersInput {
+  where: InstitutionWhereUniqueInput!
+  update: InstitutionUpdateWithoutTeachersDataInput!
+  create: InstitutionCreateWithoutTeachersInput!
 }
 
 input InstitutionUpsertWithWhereUniqueWithoutUpdatedByInput {
@@ -2843,9 +3263,18 @@ input InstitutionWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
+  admins_every: UserWhereInput
+  admins_some: UserWhereInput
+  admins_none: UserWhereInput
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput
+  teachers_every: UserWhereInput
+  teachers_some: UserWhereInput
+  teachers_none: UserWhereInput
+  students_every: UserWhereInput
+  students_some: UserWhereInput
+  students_none: UserWhereInput
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   contacts_every: UserWhereInput
@@ -2871,68 +3300,68 @@ type Mutation {
   createInstitution(data: InstitutionCreateInput!): Institution!
   createCourse(data: CourseCreateInput!): Course!
   createTest(data: TestCreateInput!): Test!
+  createPanel(data: PanelCreateInput!): Panel!
   createResponseImage(data: ResponseImageCreateInput!): ResponseImage!
   createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionChoice(data: QuestionChoiceCreateInput!): QuestionChoice!
   createChallenge(data: ChallengeCreateInput!): Challenge!
-  createPanel(data: PanelCreateInput!): Panel!
-  createQuestion(data: QuestionCreateInput!): Question!
   createSequence(data: SequenceCreateInput!): Sequence!
+  createQuestion(data: QuestionCreateInput!): Question!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateInstitution(data: InstitutionUpdateInput!, where: InstitutionWhereUniqueInput!): Institution
   updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
   updateTest(data: TestUpdateInput!, where: TestWhereUniqueInput!): Test
+  updatePanel(data: PanelUpdateInput!, where: PanelWhereUniqueInput!): Panel
   updateResponseImage(data: ResponseImageUpdateInput!, where: ResponseImageWhereUniqueInput!): ResponseImage
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionChoice(data: QuestionChoiceUpdateInput!, where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   updateChallenge(data: ChallengeUpdateInput!, where: ChallengeWhereUniqueInput!): Challenge
-  updatePanel(data: PanelUpdateInput!, where: PanelWhereUniqueInput!): Panel
-  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
   updateSequence(data: SequenceUpdateInput!, where: SequenceWhereUniqueInput!): Sequence
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
   deleteUser(where: UserWhereUniqueInput!): User
   deleteInstitution(where: InstitutionWhereUniqueInput!): Institution
   deleteCourse(where: CourseWhereUniqueInput!): Course
   deleteTest(where: TestWhereUniqueInput!): Test
+  deletePanel(where: PanelWhereUniqueInput!): Panel
   deleteResponseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   deleteChallenge(where: ChallengeWhereUniqueInput!): Challenge
-  deletePanel(where: PanelWhereUniqueInput!): Panel
-  deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteSequence(where: SequenceWhereUniqueInput!): Sequence
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertInstitution(where: InstitutionWhereUniqueInput!, create: InstitutionCreateInput!, update: InstitutionUpdateInput!): Institution!
   upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
   upsertTest(where: TestWhereUniqueInput!, create: TestCreateInput!, update: TestUpdateInput!): Test!
+  upsertPanel(where: PanelWhereUniqueInput!, create: PanelCreateInput!, update: PanelUpdateInput!): Panel!
   upsertResponseImage(where: ResponseImageWhereUniqueInput!, create: ResponseImageCreateInput!, update: ResponseImageUpdateInput!): ResponseImage!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionChoice(where: QuestionChoiceWhereUniqueInput!, create: QuestionChoiceCreateInput!, update: QuestionChoiceUpdateInput!): QuestionChoice!
   upsertChallenge(where: ChallengeWhereUniqueInput!, create: ChallengeCreateInput!, update: ChallengeUpdateInput!): Challenge!
-  upsertPanel(where: PanelWhereUniqueInput!, create: PanelCreateInput!, update: PanelUpdateInput!): Panel!
-  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   upsertSequence(where: SequenceWhereUniqueInput!, create: SequenceCreateInput!, update: SequenceUpdateInput!): Sequence!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyInstitutions(data: InstitutionUpdateManyMutationInput!, where: InstitutionWhereInput): BatchPayload!
   updateManyCourses(data: CourseUpdateManyMutationInput!, where: CourseWhereInput): BatchPayload!
   updateManyTests(data: TestUpdateManyMutationInput!, where: TestWhereInput): BatchPayload!
+  updateManyPanels(data: PanelUpdateManyMutationInput!, where: PanelWhereInput): BatchPayload!
   updateManyResponseImages(data: ResponseImageUpdateManyMutationInput!, where: ResponseImageWhereInput): BatchPayload!
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestionChoices(data: QuestionChoiceUpdateManyMutationInput!, where: QuestionChoiceWhereInput): BatchPayload!
   updateManyChallenges(data: ChallengeUpdateManyMutationInput!, where: ChallengeWhereInput): BatchPayload!
-  updateManyPanels(data: PanelUpdateManyMutationInput!, where: PanelWhereInput): BatchPayload!
-  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
   updateManySequences(data: SequenceUpdateManyMutationInput!, where: SequenceWhereInput): BatchPayload!
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyInstitutions(where: InstitutionWhereInput): BatchPayload!
   deleteManyCourses(where: CourseWhereInput): BatchPayload!
   deleteManyTests(where: TestWhereInput): BatchPayload!
+  deleteManyPanels(where: PanelWhereInput): BatchPayload!
   deleteManyResponseImages(where: ResponseImageWhereInput): BatchPayload!
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionChoices(where: QuestionChoiceWhereInput): BatchPayload!
   deleteManyChallenges(where: ChallengeWhereInput): BatchPayload!
-  deleteManyPanels(where: PanelWhereInput): BatchPayload!
-  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   deleteManySequences(where: SequenceWhereInput): BatchPayload!
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2971,6 +3400,7 @@ type Panel implements Node {
   sequences(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
   usedSequence(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
   questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+  sentPanels(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
 }
 
 """A connection to a list of items."""
@@ -2988,18 +3418,19 @@ input PanelCreateInput {
   link: String!
   addedBy: UserCreateOneWithoutPanelsAddedInput!
   test: TestCreateOneWithoutPanelsInput!
-  sequences: SequenceCreateManyInput
+  sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
-}
-
-input PanelCreateManyInput {
-  create: [PanelCreateInput!]
-  connect: [PanelWhereUniqueInput!]
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 input PanelCreateManyWithoutAddedByInput {
   create: [PanelCreateWithoutAddedByInput!]
+  connect: [PanelWhereUniqueInput!]
+}
+
+input PanelCreateManyWithoutSequencesInput {
+  create: [PanelCreateWithoutSequencesInput!]
   connect: [PanelWhereUniqueInput!]
 }
 
@@ -3018,13 +3449,19 @@ input PanelCreateOneWithoutQuestionsInput {
   connect: PanelWhereUniqueInput
 }
 
+input PanelCreateOneWithoutSentPanelsInput {
+  create: PanelCreateWithoutSentPanelsInput
+  connect: PanelWhereUniqueInput
+}
+
 input PanelCreateWithoutAddedByInput {
   addedDate: DateTime
   link: String!
   test: TestCreateOneWithoutPanelsInput!
-  sequences: SequenceCreateManyInput
+  sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 input PanelCreateWithoutQuestionsInput {
@@ -3032,17 +3469,39 @@ input PanelCreateWithoutQuestionsInput {
   link: String!
   addedBy: UserCreateOneWithoutPanelsAddedInput!
   test: TestCreateOneWithoutPanelsInput!
-  sequences: SequenceCreateManyInput
+  sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
+}
+
+input PanelCreateWithoutSentPanelsInput {
+  addedDate: DateTime
+  link: String!
+  addedBy: UserCreateOneWithoutPanelsAddedInput!
+  test: TestCreateOneWithoutPanelsInput!
+  sequences: SequenceCreateManyWithoutPanelsInput
+  usedSequence: SequenceCreateManyWithoutUsedPanelsInput
+  questions: QuestionCreateManyWithoutPanelInput
+}
+
+input PanelCreateWithoutSequencesInput {
+  addedDate: DateTime
+  link: String!
+  addedBy: UserCreateOneWithoutPanelsAddedInput!
+  test: TestCreateOneWithoutPanelsInput!
+  usedSequence: SequenceCreateManyWithoutUsedPanelsInput
+  questions: QuestionCreateManyWithoutPanelInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 input PanelCreateWithoutTestInput {
   addedDate: DateTime
   link: String!
   addedBy: UserCreateOneWithoutPanelsAddedInput!
-  sequences: SequenceCreateManyInput
+  sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 input PanelCreateWithoutUsedSequenceInput {
@@ -3050,8 +3509,9 @@ input PanelCreateWithoutUsedSequenceInput {
   link: String!
   addedBy: UserCreateOneWithoutPanelsAddedInput!
   test: TestCreateOneWithoutPanelsInput!
-  sequences: SequenceCreateManyInput
+  sequences: SequenceCreateManyWithoutPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 """An edge in a connection."""
@@ -3234,40 +3694,20 @@ input PanelSubscriptionWhereInput {
   node: PanelWhereInput
 }
 
-input PanelUpdateDataInput {
-  addedDate: DateTime
-  link: String
-  addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
-  test: TestUpdateOneRequiredWithoutPanelsInput
-  sequences: SequenceUpdateManyInput
-  usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
-  questions: QuestionUpdateManyWithoutPanelInput
-}
-
 input PanelUpdateInput {
   addedDate: DateTime
   link: String
   addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
   test: TestUpdateOneRequiredWithoutPanelsInput
-  sequences: SequenceUpdateManyInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateManyDataInput {
   addedDate: DateTime
   link: String
-}
-
-input PanelUpdateManyInput {
-  create: [PanelCreateInput!]
-  connect: [PanelWhereUniqueInput!]
-  disconnect: [PanelWhereUniqueInput!]
-  delete: [PanelWhereUniqueInput!]
-  update: [PanelUpdateWithWhereUniqueNestedInput!]
-  updateMany: [PanelUpdateManyWithWhereNestedInput!]
-  deleteMany: [PanelScalarWhereInput!]
-  upsert: [PanelUpsertWithWhereUniqueNestedInput!]
 }
 
 input PanelUpdateManyMutationInput {
@@ -3284,6 +3724,17 @@ input PanelUpdateManyWithoutAddedByInput {
   updateMany: [PanelUpdateManyWithWhereNestedInput!]
   deleteMany: [PanelScalarWhereInput!]
   upsert: [PanelUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input PanelUpdateManyWithoutSequencesInput {
+  create: [PanelCreateWithoutSequencesInput!]
+  connect: [PanelWhereUniqueInput!]
+  disconnect: [PanelWhereUniqueInput!]
+  delete: [PanelWhereUniqueInput!]
+  update: [PanelUpdateWithWhereUniqueWithoutSequencesInput!]
+  updateMany: [PanelUpdateManyWithWhereNestedInput!]
+  deleteMany: [PanelScalarWhereInput!]
+  upsert: [PanelUpsertWithWhereUniqueWithoutSequencesInput!]
 }
 
 input PanelUpdateManyWithoutTestInput {
@@ -3322,13 +3773,23 @@ input PanelUpdateOneWithoutQuestionsInput {
   upsert: PanelUpsertWithoutQuestionsInput
 }
 
+input PanelUpdateOneWithoutSentPanelsInput {
+  create: PanelCreateWithoutSentPanelsInput
+  connect: PanelWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: PanelUpdateWithoutSentPanelsDataInput
+  upsert: PanelUpsertWithoutSentPanelsInput
+}
+
 input PanelUpdateWithoutAddedByDataInput {
   addedDate: DateTime
   link: String
   test: TestUpdateOneRequiredWithoutPanelsInput
-  sequences: SequenceUpdateManyInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutQuestionsDataInput {
@@ -3336,17 +3797,39 @@ input PanelUpdateWithoutQuestionsDataInput {
   link: String
   addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
   test: TestUpdateOneRequiredWithoutPanelsInput
-  sequences: SequenceUpdateManyInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
+}
+
+input PanelUpdateWithoutSentPanelsDataInput {
+  addedDate: DateTime
+  link: String
+  addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
+  test: TestUpdateOneRequiredWithoutPanelsInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
+  usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
+  questions: QuestionUpdateManyWithoutPanelInput
+}
+
+input PanelUpdateWithoutSequencesDataInput {
+  addedDate: DateTime
+  link: String
+  addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
+  test: TestUpdateOneRequiredWithoutPanelsInput
+  usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
+  questions: QuestionUpdateManyWithoutPanelInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutTestDataInput {
   addedDate: DateTime
   link: String
   addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
-  sequences: SequenceUpdateManyInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutUsedSequenceDataInput {
@@ -3354,18 +3837,19 @@ input PanelUpdateWithoutUsedSequenceDataInput {
   link: String
   addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
   test: TestUpdateOneRequiredWithoutPanelsInput
-  sequences: SequenceUpdateManyInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
-}
-
-input PanelUpdateWithWhereUniqueNestedInput {
-  where: PanelWhereUniqueInput!
-  data: PanelUpdateDataInput!
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateWithWhereUniqueWithoutAddedByInput {
   where: PanelWhereUniqueInput!
   data: PanelUpdateWithoutAddedByDataInput!
+}
+
+input PanelUpdateWithWhereUniqueWithoutSequencesInput {
+  where: PanelWhereUniqueInput!
+  data: PanelUpdateWithoutSequencesDataInput!
 }
 
 input PanelUpdateWithWhereUniqueWithoutTestInput {
@@ -3383,16 +3867,21 @@ input PanelUpsertWithoutQuestionsInput {
   create: PanelCreateWithoutQuestionsInput!
 }
 
-input PanelUpsertWithWhereUniqueNestedInput {
-  where: PanelWhereUniqueInput!
-  update: PanelUpdateDataInput!
-  create: PanelCreateInput!
+input PanelUpsertWithoutSentPanelsInput {
+  update: PanelUpdateWithoutSentPanelsDataInput!
+  create: PanelCreateWithoutSentPanelsInput!
 }
 
 input PanelUpsertWithWhereUniqueWithoutAddedByInput {
   where: PanelWhereUniqueInput!
   update: PanelUpdateWithoutAddedByDataInput!
   create: PanelCreateWithoutAddedByInput!
+}
+
+input PanelUpsertWithWhereUniqueWithoutSequencesInput {
+  where: PanelWhereUniqueInput!
+  update: PanelUpdateWithoutSequencesDataInput!
+  create: PanelCreateWithoutSequencesInput!
 }
 
 input PanelUpsertWithWhereUniqueWithoutTestInput {
@@ -3529,6 +4018,9 @@ input PanelWhereInput {
   questions_every: QuestionWhereInput
   questions_some: QuestionWhereInput
   questions_none: QuestionWhereInput
+  sentPanels_every: SequenceWhereInput
+  sentPanels_some: SequenceWhereInput
+  sentPanels_none: SequenceWhereInput
 }
 
 input PanelWhereUniqueInput {
@@ -3540,35 +4032,35 @@ type Query {
   institutions(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution]!
   courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course]!
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
+  panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel]!
   responseImages(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ResponseImage]!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionChoices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice]!
   challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge]!
-  panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel]!
-  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
   sequences(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence]!
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
   user(where: UserWhereUniqueInput!): User
   institution(where: InstitutionWhereUniqueInput!): Institution
   course(where: CourseWhereUniqueInput!): Course
   test(where: TestWhereUniqueInput!): Test
+  panel(where: PanelWhereUniqueInput!): Panel
   responseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   answer(where: AnswerWhereUniqueInput!): Answer
   questionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   challenge(where: ChallengeWhereUniqueInput!): Challenge
-  panel(where: PanelWhereUniqueInput!): Panel
-  question(where: QuestionWhereUniqueInput!): Question
   sequence(where: SequenceWhereUniqueInput!): Sequence
+  question(where: QuestionWhereUniqueInput!): Question
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   institutionsConnection(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InstitutionConnection!
   coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
+  panelsConnection(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PanelConnection!
   responseImagesConnection(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResponseImageConnection!
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionChoicesConnection(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionChoiceConnection!
   challengesConnection(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeConnection!
-  panelsConnection(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PanelConnection!
-  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   sequencesConnection(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SequenceConnection!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -5701,12 +6193,18 @@ input ResponseImageWhereUniqueInput {
 
 type Sequence implements Node {
   id: ID!
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  addedBy: User!
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
   test: Test!
-  students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  sentTo: User
+  sentPanel: Panel
   usedStudents(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
   usedPanels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
+  students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
 }
 
 """A connection to a list of items."""
@@ -5720,16 +6218,37 @@ type SequenceConnection {
 }
 
 input SequenceCreateInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
-  students: UserCreateManyWithoutTestSequenceInput
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
   usedStudents: UserCreateManyWithoutUsedTestSequenceInput
-  panels: PanelCreateManyInput
   usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
 }
 
-input SequenceCreateManyInput {
-  create: [SequenceCreateInput!]
+input SequenceCreateManyWithoutAddedByInput {
+  create: [SequenceCreateWithoutAddedByInput!]
+  connect: [SequenceWhereUniqueInput!]
+}
+
+input SequenceCreateManyWithoutPanelsInput {
+  create: [SequenceCreateWithoutPanelsInput!]
+  connect: [SequenceWhereUniqueInput!]
+}
+
+input SequenceCreateManyWithoutSentPanelInput {
+  create: [SequenceCreateWithoutSentPanelInput!]
+  connect: [SequenceWhereUniqueInput!]
+}
+
+input SequenceCreateManyWithoutSentToInput {
+  create: [SequenceCreateWithoutSentToInput!]
   connect: [SequenceWhereUniqueInput!]
 }
 
@@ -5753,36 +6272,116 @@ input SequenceCreateOneWithoutTestInput {
   connect: SequenceWhereUniqueInput
 }
 
-input SequenceCreateWithoutStudentsInput {
-  sequenceAdded: DateTime
+input SequenceCreateWithoutAddedByInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
   test: TestCreateOneWithoutSequencesInput!
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
   usedStudents: UserCreateManyWithoutUsedTestSequenceInput
-  panels: PanelCreateManyInput
   usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
+}
+
+input SequenceCreateWithoutPanelsInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
+  test: TestCreateOneWithoutSequencesInput!
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
+  usedStudents: UserCreateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+}
+
+input SequenceCreateWithoutSentPanelInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
+  test: TestCreateOneWithoutSequencesInput!
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  usedStudents: UserCreateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
+}
+
+input SequenceCreateWithoutSentToInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
+  test: TestCreateOneWithoutSequencesInput!
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
+  usedStudents: UserCreateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
+}
+
+input SequenceCreateWithoutStudentsInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
+  test: TestCreateOneWithoutSequencesInput!
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
+  usedStudents: UserCreateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
 }
 
 input SequenceCreateWithoutTestInput {
-  sequenceAdded: DateTime
-  students: UserCreateManyWithoutTestSequenceInput
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
   usedStudents: UserCreateManyWithoutUsedTestSequenceInput
-  panels: PanelCreateManyInput
   usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
 }
 
 input SequenceCreateWithoutUsedPanelsInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
-  students: UserCreateManyWithoutTestSequenceInput
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
   usedStudents: UserCreateManyWithoutUsedTestSequenceInput
-  panels: PanelCreateManyInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
 }
 
 input SequenceCreateWithoutUsedStudentsInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
-  students: UserCreateManyWithoutTestSequenceInput
-  panels: PanelCreateManyInput
+  sentTo: UserCreateOneWithoutSentToSequencesInput
+  sentPanel: PanelCreateOneWithoutSentPanelsInput
   usedPanels: PanelCreateManyWithoutUsedSequenceInput
+  students: UserCreateManyWithoutTestSequenceInput
+  panels: PanelCreateManyWithoutSequencesInput
 }
 
 """An edge in a connection."""
@@ -5797,8 +6396,14 @@ type SequenceEdge {
 enum SequenceOrderByInput {
   id_ASC
   id_DESC
-  sequenceAdded_ASC
-  sequenceAdded_DESC
+  sequenceAddedDate_ASC
+  sequenceAddedDate_DESC
+  startHour_ASC
+  startHour_DESC
+  endHour_ASC
+  endHour_DESC
+  testEndDate_ASC
+  testEndDate_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -5807,7 +6412,10 @@ enum SequenceOrderByInput {
 
 type SequencePreviousValues {
   id: ID!
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
 }
 
 input SequenceScalarWhereInput {
@@ -5859,28 +6467,130 @@ input SequenceScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
 
   """All values that are not equal to given value."""
-  sequenceAdded_not: DateTime
+  sequenceAddedDate_not: DateTime
 
   """All values that are contained in given list."""
-  sequenceAdded_in: [DateTime!]
+  sequenceAddedDate_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  sequenceAdded_not_in: [DateTime!]
+  sequenceAddedDate_not_in: [DateTime!]
 
   """All values less than the given value."""
-  sequenceAdded_lt: DateTime
+  sequenceAddedDate_lt: DateTime
 
   """All values less than or equal the given value."""
-  sequenceAdded_lte: DateTime
+  sequenceAddedDate_lte: DateTime
 
   """All values greater than the given value."""
-  sequenceAdded_gt: DateTime
+  sequenceAddedDate_gt: DateTime
 
   """All values greater than or equal the given value."""
-  sequenceAdded_gte: DateTime
+  sequenceAddedDate_gte: DateTime
+  startHour: String
+
+  """All values that are not equal to given value."""
+  startHour_not: String
+
+  """All values that are contained in given list."""
+  startHour_in: [String!]
+
+  """All values that are not contained in given list."""
+  startHour_not_in: [String!]
+
+  """All values less than the given value."""
+  startHour_lt: String
+
+  """All values less than or equal the given value."""
+  startHour_lte: String
+
+  """All values greater than the given value."""
+  startHour_gt: String
+
+  """All values greater than or equal the given value."""
+  startHour_gte: String
+
+  """All values containing the given string."""
+  startHour_contains: String
+
+  """All values not containing the given string."""
+  startHour_not_contains: String
+
+  """All values starting with the given string."""
+  startHour_starts_with: String
+
+  """All values not starting with the given string."""
+  startHour_not_starts_with: String
+
+  """All values ending with the given string."""
+  startHour_ends_with: String
+
+  """All values not ending with the given string."""
+  startHour_not_ends_with: String
+  endHour: String
+
+  """All values that are not equal to given value."""
+  endHour_not: String
+
+  """All values that are contained in given list."""
+  endHour_in: [String!]
+
+  """All values that are not contained in given list."""
+  endHour_not_in: [String!]
+
+  """All values less than the given value."""
+  endHour_lt: String
+
+  """All values less than or equal the given value."""
+  endHour_lte: String
+
+  """All values greater than the given value."""
+  endHour_gt: String
+
+  """All values greater than or equal the given value."""
+  endHour_gte: String
+
+  """All values containing the given string."""
+  endHour_contains: String
+
+  """All values not containing the given string."""
+  endHour_not_contains: String
+
+  """All values starting with the given string."""
+  endHour_starts_with: String
+
+  """All values not starting with the given string."""
+  endHour_not_starts_with: String
+
+  """All values ending with the given string."""
+  endHour_ends_with: String
+
+  """All values not ending with the given string."""
+  endHour_not_ends_with: String
+  testEndDate: DateTime
+
+  """All values that are not equal to given value."""
+  testEndDate_not: DateTime
+
+  """All values that are contained in given list."""
+  testEndDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  testEndDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  testEndDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  testEndDate_lte: DateTime
+
+  """All values greater than the given value."""
+  testEndDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  testEndDate_gte: DateTime
 }
 
 type SequenceSubscriptionPayload {
@@ -5922,41 +6632,77 @@ input SequenceSubscriptionWhereInput {
   node: SequenceWhereInput
 }
 
-input SequenceUpdateDataInput {
-  sequenceAdded: DateTime
-  test: TestUpdateOneRequiredWithoutSequencesInput
-  students: UserUpdateManyWithoutTestSequenceInput
-  usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
-  panels: PanelUpdateManyInput
-  usedPanels: PanelUpdateManyWithoutUsedSequenceInput
-}
-
 input SequenceUpdateInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
-  students: UserUpdateManyWithoutTestSequenceInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
   usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
-  panels: PanelUpdateManyInput
   usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
 }
 
 input SequenceUpdateManyDataInput {
-  sequenceAdded: DateTime
-}
-
-input SequenceUpdateManyInput {
-  create: [SequenceCreateInput!]
-  connect: [SequenceWhereUniqueInput!]
-  disconnect: [SequenceWhereUniqueInput!]
-  delete: [SequenceWhereUniqueInput!]
-  update: [SequenceUpdateWithWhereUniqueNestedInput!]
-  updateMany: [SequenceUpdateManyWithWhereNestedInput!]
-  deleteMany: [SequenceScalarWhereInput!]
-  upsert: [SequenceUpsertWithWhereUniqueNestedInput!]
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
 }
 
 input SequenceUpdateManyMutationInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+}
+
+input SequenceUpdateManyWithoutAddedByInput {
+  create: [SequenceCreateWithoutAddedByInput!]
+  connect: [SequenceWhereUniqueInput!]
+  disconnect: [SequenceWhereUniqueInput!]
+  delete: [SequenceWhereUniqueInput!]
+  update: [SequenceUpdateWithWhereUniqueWithoutAddedByInput!]
+  updateMany: [SequenceUpdateManyWithWhereNestedInput!]
+  deleteMany: [SequenceScalarWhereInput!]
+  upsert: [SequenceUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input SequenceUpdateManyWithoutPanelsInput {
+  create: [SequenceCreateWithoutPanelsInput!]
+  connect: [SequenceWhereUniqueInput!]
+  disconnect: [SequenceWhereUniqueInput!]
+  delete: [SequenceWhereUniqueInput!]
+  update: [SequenceUpdateWithWhereUniqueWithoutPanelsInput!]
+  updateMany: [SequenceUpdateManyWithWhereNestedInput!]
+  deleteMany: [SequenceScalarWhereInput!]
+  upsert: [SequenceUpsertWithWhereUniqueWithoutPanelsInput!]
+}
+
+input SequenceUpdateManyWithoutSentPanelInput {
+  create: [SequenceCreateWithoutSentPanelInput!]
+  connect: [SequenceWhereUniqueInput!]
+  disconnect: [SequenceWhereUniqueInput!]
+  delete: [SequenceWhereUniqueInput!]
+  update: [SequenceUpdateWithWhereUniqueWithoutSentPanelInput!]
+  updateMany: [SequenceUpdateManyWithWhereNestedInput!]
+  deleteMany: [SequenceScalarWhereInput!]
+  upsert: [SequenceUpsertWithWhereUniqueWithoutSentPanelInput!]
+}
+
+input SequenceUpdateManyWithoutSentToInput {
+  create: [SequenceCreateWithoutSentToInput!]
+  connect: [SequenceWhereUniqueInput!]
+  disconnect: [SequenceWhereUniqueInput!]
+  delete: [SequenceWhereUniqueInput!]
+  update: [SequenceUpdateWithWhereUniqueWithoutSentToInput!]
+  updateMany: [SequenceUpdateManyWithWhereNestedInput!]
+  deleteMany: [SequenceScalarWhereInput!]
+  upsert: [SequenceUpsertWithWhereUniqueWithoutSentToInput!]
 }
 
 input SequenceUpdateManyWithoutStudentsInput {
@@ -6006,41 +6752,136 @@ input SequenceUpdateOneWithoutTestInput {
   upsert: SequenceUpsertWithoutTestInput
 }
 
-input SequenceUpdateWithoutStudentsDataInput {
-  sequenceAdded: DateTime
+input SequenceUpdateWithoutAddedByDataInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
   test: TestUpdateOneRequiredWithoutSequencesInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
   usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
-  panels: PanelUpdateManyInput
   usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
+}
+
+input SequenceUpdateWithoutPanelsDataInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
+  test: TestUpdateOneRequiredWithoutSequencesInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
+  usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+}
+
+input SequenceUpdateWithoutSentPanelDataInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
+  test: TestUpdateOneRequiredWithoutSequencesInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
+}
+
+input SequenceUpdateWithoutSentToDataInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
+  test: TestUpdateOneRequiredWithoutSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
+  usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
+}
+
+input SequenceUpdateWithoutStudentsDataInput {
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
+  test: TestUpdateOneRequiredWithoutSequencesInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
+  usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
+  usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
 }
 
 input SequenceUpdateWithoutTestDataInput {
-  sequenceAdded: DateTime
-  students: UserUpdateManyWithoutTestSequenceInput
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
   usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
-  panels: PanelUpdateManyInput
   usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
 }
 
 input SequenceUpdateWithoutUsedPanelsDataInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
-  students: UserUpdateManyWithoutTestSequenceInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
   usedStudents: UserUpdateManyWithoutUsedTestSequenceInput
-  panels: PanelUpdateManyInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
 }
 
 input SequenceUpdateWithoutUsedStudentsDataInput {
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
+  startHour: String
+  endHour: String
+  testEndDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
-  students: UserUpdateManyWithoutTestSequenceInput
-  panels: PanelUpdateManyInput
+  sentTo: UserUpdateOneWithoutSentToSequencesInput
+  sentPanel: PanelUpdateOneWithoutSentPanelsInput
   usedPanels: PanelUpdateManyWithoutUsedSequenceInput
+  students: UserUpdateManyWithoutTestSequenceInput
+  panels: PanelUpdateManyWithoutSequencesInput
 }
 
-input SequenceUpdateWithWhereUniqueNestedInput {
+input SequenceUpdateWithWhereUniqueWithoutAddedByInput {
   where: SequenceWhereUniqueInput!
-  data: SequenceUpdateDataInput!
+  data: SequenceUpdateWithoutAddedByDataInput!
+}
+
+input SequenceUpdateWithWhereUniqueWithoutPanelsInput {
+  where: SequenceWhereUniqueInput!
+  data: SequenceUpdateWithoutPanelsDataInput!
+}
+
+input SequenceUpdateWithWhereUniqueWithoutSentPanelInput {
+  where: SequenceWhereUniqueInput!
+  data: SequenceUpdateWithoutSentPanelDataInput!
+}
+
+input SequenceUpdateWithWhereUniqueWithoutSentToInput {
+  where: SequenceWhereUniqueInput!
+  data: SequenceUpdateWithoutSentToDataInput!
 }
 
 input SequenceUpdateWithWhereUniqueWithoutStudentsInput {
@@ -6063,10 +6904,28 @@ input SequenceUpsertWithoutTestInput {
   create: SequenceCreateWithoutTestInput!
 }
 
-input SequenceUpsertWithWhereUniqueNestedInput {
+input SequenceUpsertWithWhereUniqueWithoutAddedByInput {
   where: SequenceWhereUniqueInput!
-  update: SequenceUpdateDataInput!
-  create: SequenceCreateInput!
+  update: SequenceUpdateWithoutAddedByDataInput!
+  create: SequenceCreateWithoutAddedByInput!
+}
+
+input SequenceUpsertWithWhereUniqueWithoutPanelsInput {
+  where: SequenceWhereUniqueInput!
+  update: SequenceUpdateWithoutPanelsDataInput!
+  create: SequenceCreateWithoutPanelsInput!
+}
+
+input SequenceUpsertWithWhereUniqueWithoutSentPanelInput {
+  where: SequenceWhereUniqueInput!
+  update: SequenceUpdateWithoutSentPanelDataInput!
+  create: SequenceCreateWithoutSentPanelInput!
+}
+
+input SequenceUpsertWithWhereUniqueWithoutSentToInput {
+  where: SequenceWhereUniqueInput!
+  update: SequenceUpdateWithoutSentToDataInput!
+  create: SequenceCreateWithoutSentToInput!
 }
 
 input SequenceUpsertWithWhereUniqueWithoutStudentsInput {
@@ -6136,41 +6995,146 @@ input SequenceWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  sequenceAdded: DateTime
+  sequenceAddedDate: DateTime
 
   """All values that are not equal to given value."""
-  sequenceAdded_not: DateTime
+  sequenceAddedDate_not: DateTime
 
   """All values that are contained in given list."""
-  sequenceAdded_in: [DateTime!]
+  sequenceAddedDate_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  sequenceAdded_not_in: [DateTime!]
+  sequenceAddedDate_not_in: [DateTime!]
 
   """All values less than the given value."""
-  sequenceAdded_lt: DateTime
+  sequenceAddedDate_lt: DateTime
 
   """All values less than or equal the given value."""
-  sequenceAdded_lte: DateTime
+  sequenceAddedDate_lte: DateTime
 
   """All values greater than the given value."""
-  sequenceAdded_gt: DateTime
+  sequenceAddedDate_gt: DateTime
 
   """All values greater than or equal the given value."""
-  sequenceAdded_gte: DateTime
+  sequenceAddedDate_gte: DateTime
+  startHour: String
+
+  """All values that are not equal to given value."""
+  startHour_not: String
+
+  """All values that are contained in given list."""
+  startHour_in: [String!]
+
+  """All values that are not contained in given list."""
+  startHour_not_in: [String!]
+
+  """All values less than the given value."""
+  startHour_lt: String
+
+  """All values less than or equal the given value."""
+  startHour_lte: String
+
+  """All values greater than the given value."""
+  startHour_gt: String
+
+  """All values greater than or equal the given value."""
+  startHour_gte: String
+
+  """All values containing the given string."""
+  startHour_contains: String
+
+  """All values not containing the given string."""
+  startHour_not_contains: String
+
+  """All values starting with the given string."""
+  startHour_starts_with: String
+
+  """All values not starting with the given string."""
+  startHour_not_starts_with: String
+
+  """All values ending with the given string."""
+  startHour_ends_with: String
+
+  """All values not ending with the given string."""
+  startHour_not_ends_with: String
+  endHour: String
+
+  """All values that are not equal to given value."""
+  endHour_not: String
+
+  """All values that are contained in given list."""
+  endHour_in: [String!]
+
+  """All values that are not contained in given list."""
+  endHour_not_in: [String!]
+
+  """All values less than the given value."""
+  endHour_lt: String
+
+  """All values less than or equal the given value."""
+  endHour_lte: String
+
+  """All values greater than the given value."""
+  endHour_gt: String
+
+  """All values greater than or equal the given value."""
+  endHour_gte: String
+
+  """All values containing the given string."""
+  endHour_contains: String
+
+  """All values not containing the given string."""
+  endHour_not_contains: String
+
+  """All values starting with the given string."""
+  endHour_starts_with: String
+
+  """All values not starting with the given string."""
+  endHour_not_starts_with: String
+
+  """All values ending with the given string."""
+  endHour_ends_with: String
+
+  """All values not ending with the given string."""
+  endHour_not_ends_with: String
+  testEndDate: DateTime
+
+  """All values that are not equal to given value."""
+  testEndDate_not: DateTime
+
+  """All values that are contained in given list."""
+  testEndDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  testEndDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  testEndDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  testEndDate_lte: DateTime
+
+  """All values greater than the given value."""
+  testEndDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  testEndDate_gte: DateTime
+  addedBy: UserWhereInput
   test: TestWhereInput
-  students_every: UserWhereInput
-  students_some: UserWhereInput
-  students_none: UserWhereInput
+  sentTo: UserWhereInput
+  sentPanel: PanelWhereInput
   usedStudents_every: UserWhereInput
   usedStudents_some: UserWhereInput
   usedStudents_none: UserWhereInput
-  panels_every: PanelWhereInput
-  panels_some: PanelWhereInput
-  panels_none: PanelWhereInput
   usedPanels_every: PanelWhereInput
   usedPanels_some: PanelWhereInput
   usedPanels_none: PanelWhereInput
+  students_every: UserWhereInput
+  students_some: UserWhereInput
+  students_none: UserWhereInput
+  panels_every: PanelWhereInput
+  panels_some: PanelWhereInput
+  panels_none: PanelWhereInput
 }
 
 input SequenceWhereUniqueInput {
@@ -6182,13 +7146,13 @@ type Subscription {
   institution(where: InstitutionSubscriptionWhereInput): InstitutionSubscriptionPayload
   course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
+  panel(where: PanelSubscriptionWhereInput): PanelSubscriptionPayload
   responseImage(where: ResponseImageSubscriptionWhereInput): ResponseImageSubscriptionPayload
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionChoice(where: QuestionChoiceSubscriptionWhereInput): QuestionChoiceSubscriptionPayload
   challenge(where: ChallengeSubscriptionWhereInput): ChallengeSubscriptionPayload
-  panel(where: PanelSubscriptionWhereInput): PanelSubscriptionPayload
-  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   sequence(where: SequenceSubscriptionWhereInput): SequenceSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
 }
 
 type Test implements Node {
@@ -6204,6 +7168,9 @@ type Test implements Node {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   course: Course!
   panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
@@ -6231,6 +7198,9 @@ input TestCreateInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
@@ -6280,6 +7250,9 @@ input TestCreateWithoutAddedByInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   updatedBy: UserCreateOneWithoutTestUpdatesInput
   course: CourseCreateOneWithoutTestsInput!
@@ -6298,6 +7271,9 @@ input TestCreateWithoutCourseInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
@@ -6316,6 +7292,9 @@ input TestCreateWithoutPanelsInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
@@ -6334,6 +7313,9 @@ input TestCreateWithoutQuestionsInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
@@ -6352,6 +7334,9 @@ input TestCreateWithoutSequencesInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   updatedBy: UserCreateOneWithoutTestUpdatesInput
@@ -6370,6 +7355,9 @@ input TestCreateWithoutUpdatedByInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserCreateOneWithoutTestsAddedInput!
   course: CourseCreateOneWithoutTestsInput!
@@ -6408,6 +7396,12 @@ enum TestOrderByInput {
   release_DESC
   releaseDate_ASC
   releaseDate_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  endDate_ASC
+  endDate_DESC
   deleted_ASC
   deleted_DESC
   updatedAt_ASC
@@ -6427,6 +7421,9 @@ type TestPreviousValues {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
 }
 
@@ -6677,6 +7674,72 @@ input TestScalarWhereInput {
 
   """All values greater than or equal the given value."""
   releaseDate_gte: DateTime
+  startTime: DateTime
+
+  """All values that are not equal to given value."""
+  startTime_not: DateTime
+
+  """All values that are contained in given list."""
+  startTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startTime_lte: DateTime
+
+  """All values greater than the given value."""
+  startTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startTime_gte: DateTime
+  endTime: DateTime
+
+  """All values that are not equal to given value."""
+  endTime_not: DateTime
+
+  """All values that are contained in given list."""
+  endTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endTime_lte: DateTime
+
+  """All values greater than the given value."""
+  endTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endTime_gte: DateTime
+  endDate: DateTime
+
+  """All values that are not equal to given value."""
+  endDate_not: DateTime
+
+  """All values that are contained in given list."""
+  endDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endDate_lte: DateTime
+
+  """All values greater than the given value."""
+  endDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endDate_gte: DateTime
   deleted: Boolean
 
   """All values that are not equal to given value."""
@@ -6732,6 +7795,9 @@ input TestUpdateInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
@@ -6751,6 +7817,9 @@ input TestUpdateManyDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
 }
 
@@ -6764,6 +7833,9 @@ input TestUpdateManyMutationInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
 }
 
@@ -6836,6 +7908,9 @@ input TestUpdateWithoutAddedByDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -6854,6 +7929,9 @@ input TestUpdateWithoutCourseDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
@@ -6872,6 +7950,9 @@ input TestUpdateWithoutPanelsDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
@@ -6890,6 +7971,9 @@ input TestUpdateWithoutQuestionsDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
@@ -6908,6 +7992,9 @@ input TestUpdateWithoutSequencesDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   updatedBy: UserUpdateOneWithoutTestUpdatesInput
@@ -6926,6 +8013,9 @@ input TestUpdateWithoutUpdatedByDataInput {
   publishDate: DateTime
   release: Boolean
   releaseDate: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  endDate: DateTime
   deleted: Boolean
   addedBy: UserUpdateOneRequiredWithoutTestsAddedInput
   course: CourseUpdateOneRequiredWithoutTestsInput
@@ -7229,6 +8319,72 @@ input TestWhereInput {
 
   """All values greater than or equal the given value."""
   releaseDate_gte: DateTime
+  startTime: DateTime
+
+  """All values that are not equal to given value."""
+  startTime_not: DateTime
+
+  """All values that are contained in given list."""
+  startTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startTime_lte: DateTime
+
+  """All values greater than the given value."""
+  startTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startTime_gte: DateTime
+  endTime: DateTime
+
+  """All values that are not equal to given value."""
+  endTime_not: DateTime
+
+  """All values that are contained in given list."""
+  endTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endTime_lte: DateTime
+
+  """All values greater than the given value."""
+  endTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endTime_gte: DateTime
+  endDate: DateTime
+
+  """All values that are not equal to given value."""
+  endDate_not: DateTime
+
+  """All values that are contained in given list."""
+  endDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endDate_lte: DateTime
+
+  """All values greater than the given value."""
+  endDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endDate_gte: DateTime
   deleted: Boolean
 
   """All values that are not equal to given value."""
@@ -7268,6 +8424,9 @@ type User implements Node {
   confirmationToken: String
   tokenExpirationTime: DateTime
   confirmed: Boolean
+  invites(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
+  teacherInstitutions(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
+  studentInstitutions(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution!]
   institution: Institution
   updatedBy: User
   role: UserType
@@ -7294,6 +8453,10 @@ type User implements Node {
   challengeUpdates(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge!]
   userUpdates(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   questionsSentTo(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+  sequencesAdded(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
+  sentToSequences(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
+  invitesSent(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
+  adminInstitution: Institution
 }
 
 """A connection to a list of items."""
@@ -7325,6 +8488,9 @@ input UserCreateInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7350,6 +8516,15 @@ input UserCreateInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateManyWithoutAdminInstitutionInput {
+  create: [UserCreateWithoutAdminInstitutionInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutInstitutionContactInput {
@@ -7362,13 +8537,28 @@ input UserCreateManyWithoutInstitutionInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateManyWithoutInvitesInput {
+  create: [UserCreateWithoutInvitesInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateManyWithoutStudentCoursesInput {
   create: [UserCreateWithoutStudentCoursesInput!]
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateManyWithoutStudentInstitutionsInput {
+  create: [UserCreateWithoutStudentInstitutionsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateManyWithoutTeacherCoursesInput {
   create: [UserCreateWithoutTeacherCoursesInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutTeacherInstitutionsInput {
+  create: [UserCreateWithoutTeacherInstitutionsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -7427,6 +8617,11 @@ input UserCreateOneWithoutInstitutionUpdatesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutInvitesSentInput {
+  create: UserCreateWithoutInvitesSentInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPanelsAddedInput {
   create: UserCreateWithoutPanelsAddedInput
   connect: UserWhereUniqueInput
@@ -7457,6 +8652,16 @@ input UserCreateOneWithoutQuestionUpdatesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSentToSequencesInput {
+  create: UserCreateWithoutSentToSequencesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutSequencesAddedInput {
+  create: UserCreateWithoutSequencesAddedInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutTestsAddedInput {
   create: UserCreateWithoutTestsAddedInput
   connect: UserWhereUniqueInput
@@ -7480,6 +8685,58 @@ input UserCreateteacherIdsInput {
   set: [String!]
 }
 
+input UserCreateWithoutAdminInstitutionInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+}
+
 input UserCreateWithoutAnswersInput {
   email: String!
   password: String!
@@ -7499,6 +8756,9 @@ input UserCreateWithoutAnswersInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7523,6 +8783,10 @@ input UserCreateWithoutAnswersInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutAnswerUpdatesInput {
@@ -7544,6 +8808,9 @@ input UserCreateWithoutAnswerUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7568,6 +8835,10 @@ input UserCreateWithoutAnswerUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutChallengesInput {
@@ -7589,6 +8860,9 @@ input UserCreateWithoutChallengesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7613,6 +8887,10 @@ input UserCreateWithoutChallengesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutChallengeUpdatesInput {
@@ -7634,6 +8912,9 @@ input UserCreateWithoutChallengeUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7658,6 +8939,10 @@ input UserCreateWithoutChallengeUpdatesInput {
   questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutCoursesAddedInput {
@@ -7679,6 +8964,9 @@ input UserCreateWithoutCoursesAddedInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7703,6 +8991,10 @@ input UserCreateWithoutCoursesAddedInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutCourseUpdatesInput {
@@ -7724,6 +9016,9 @@ input UserCreateWithoutCourseUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7748,6 +9043,10 @@ input UserCreateWithoutCourseUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutInstitutionContactInput {
@@ -7769,6 +9068,9 @@ input UserCreateWithoutInstitutionContactInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
@@ -7793,6 +9095,10 @@ input UserCreateWithoutInstitutionContactInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutInstitutionInput {
@@ -7814,6 +9120,9 @@ input UserCreateWithoutInstitutionInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
@@ -7838,6 +9147,10 @@ input UserCreateWithoutInstitutionInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutInstitutionsAddedInput {
@@ -7859,6 +9172,9 @@ input UserCreateWithoutInstitutionsAddedInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7883,6 +9199,10 @@ input UserCreateWithoutInstitutionsAddedInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutInstitutionUpdatesInput {
@@ -7904,6 +9224,9 @@ input UserCreateWithoutInstitutionUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7928,6 +9251,114 @@ input UserCreateWithoutInstitutionUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutInvitesInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutInvitesSentInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutPanelsAddedInput {
@@ -7949,6 +9380,9 @@ input UserCreateWithoutPanelsAddedInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -7973,6 +9407,10 @@ input UserCreateWithoutPanelsAddedInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutQuestionChoiceAddedByInput {
@@ -7994,6 +9432,9 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8018,6 +9459,10 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutQuestionChoiceUpdatesInput {
@@ -8039,6 +9484,9 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8063,6 +9511,10 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutQuestionsAddedByInput {
@@ -8084,6 +9536,9 @@ input UserCreateWithoutQuestionsAddedByInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8108,6 +9563,10 @@ input UserCreateWithoutQuestionsAddedByInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutQuestionsSentToInput {
@@ -8129,6 +9588,9 @@ input UserCreateWithoutQuestionsSentToInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8153,6 +9615,10 @@ input UserCreateWithoutQuestionsSentToInput {
   questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutQuestionUpdatesInput {
@@ -8174,6 +9640,9 @@ input UserCreateWithoutQuestionUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8198,6 +9667,114 @@ input UserCreateWithoutQuestionUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutSentToSequencesInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutSequencesAddedInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutStudentCoursesInput {
@@ -8219,6 +9796,9 @@ input UserCreateWithoutStudentCoursesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8243,6 +9823,62 @@ input UserCreateWithoutStudentCoursesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutStudentInstitutionsInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutTeacherCoursesInput {
@@ -8264,6 +9900,9 @@ input UserCreateWithoutTeacherCoursesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8288,6 +9927,62 @@ input UserCreateWithoutTeacherCoursesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
+}
+
+input UserCreateWithoutTeacherInstitutionsInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutTestsAddedInput {
@@ -8309,6 +10004,9 @@ input UserCreateWithoutTestsAddedInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8333,6 +10031,10 @@ input UserCreateWithoutTestsAddedInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutTestSequenceInput {
@@ -8354,6 +10056,9 @@ input UserCreateWithoutTestSequenceInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8378,6 +10083,10 @@ input UserCreateWithoutTestSequenceInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutTestUpdatesInput {
@@ -8399,6 +10108,9 @@ input UserCreateWithoutTestUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8423,6 +10135,10 @@ input UserCreateWithoutTestUpdatesInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutUpdatedByInput {
@@ -8444,6 +10160,9 @@ input UserCreateWithoutUpdatedByInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
   teacherCourses: CourseCreateManyWithoutTeachersInput
@@ -8468,6 +10187,10 @@ input UserCreateWithoutUpdatedByInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutUsedTestSequenceInput {
@@ -8489,6 +10212,9 @@ input UserCreateWithoutUsedTestSequenceInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8513,6 +10239,10 @@ input UserCreateWithoutUsedTestSequenceInput {
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   userUpdates: UserCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 input UserCreateWithoutUserUpdatesInput {
@@ -8534,6 +10264,9 @@ input UserCreateWithoutUserUpdatesInput {
   role: UserType
   studentIds: UserCreatestudentIdsInput
   teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
   institution: InstitutionCreateOneWithoutUsersInput
   updatedBy: UserCreateOneWithoutUserUpdatesInput
   institutionContact: InstitutionCreateManyWithoutContactsInput
@@ -8558,6 +10291,10 @@ input UserCreateWithoutUserUpdatesInput {
   questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
   questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneWithoutAdminsInput
 }
 
 """An edge in a connection."""
@@ -9214,6 +10951,9 @@ input UserUpdateInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9239,6 +10979,10 @@ input UserUpdateInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateManyDataInput {
@@ -9283,6 +11027,17 @@ input UserUpdateManyMutationInput {
   teacherIds: UserUpdateteacherIdsInput
 }
 
+input UserUpdateManyWithoutAdminInstitutionInput {
+  create: [UserCreateWithoutAdminInstitutionInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutAdminInstitutionInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutAdminInstitutionInput!]
+}
+
 input UserUpdateManyWithoutInstitutionContactInput {
   create: [UserCreateWithoutInstitutionContactInput!]
   connect: [UserWhereUniqueInput!]
@@ -9305,6 +11060,17 @@ input UserUpdateManyWithoutInstitutionInput {
   upsert: [UserUpsertWithWhereUniqueWithoutInstitutionInput!]
 }
 
+input UserUpdateManyWithoutInvitesInput {
+  create: [UserCreateWithoutInvitesInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutInvitesInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutInvitesInput!]
+}
+
 input UserUpdateManyWithoutStudentCoursesInput {
   create: [UserCreateWithoutStudentCoursesInput!]
   connect: [UserWhereUniqueInput!]
@@ -9316,6 +11082,17 @@ input UserUpdateManyWithoutStudentCoursesInput {
   upsert: [UserUpsertWithWhereUniqueWithoutStudentCoursesInput!]
 }
 
+input UserUpdateManyWithoutStudentInstitutionsInput {
+  create: [UserCreateWithoutStudentInstitutionsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutStudentInstitutionsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutStudentInstitutionsInput!]
+}
+
 input UserUpdateManyWithoutTeacherCoursesInput {
   create: [UserCreateWithoutTeacherCoursesInput!]
   connect: [UserWhereUniqueInput!]
@@ -9325,6 +11102,17 @@ input UserUpdateManyWithoutTeacherCoursesInput {
   updateMany: [UserUpdateManyWithWhereNestedInput!]
   deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutTeacherCoursesInput!]
+}
+
+input UserUpdateManyWithoutTeacherInstitutionsInput {
+  create: [UserCreateWithoutTeacherInstitutionsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutTeacherInstitutionsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutTeacherInstitutionsInput!]
 }
 
 input UserUpdateManyWithoutTestSequenceInput {
@@ -9414,6 +11202,13 @@ input UserUpdateOneRequiredWithoutQuestionsAddedByInput {
   upsert: UserUpsertWithoutQuestionsAddedByInput
 }
 
+input UserUpdateOneRequiredWithoutSequencesAddedInput {
+  create: UserCreateWithoutSequencesAddedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutSequencesAddedDataInput
+  upsert: UserUpsertWithoutSequencesAddedInput
+}
+
 input UserUpdateOneRequiredWithoutTestsAddedInput {
   create: UserCreateWithoutTestsAddedInput
   connect: UserWhereUniqueInput
@@ -9457,6 +11252,15 @@ input UserUpdateOneWithoutInstitutionUpdatesInput {
   upsert: UserUpsertWithoutInstitutionUpdatesInput
 }
 
+input UserUpdateOneWithoutInvitesSentInput {
+  create: UserCreateWithoutInvitesSentInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutInvitesSentDataInput
+  upsert: UserUpsertWithoutInvitesSentInput
+}
+
 input UserUpdateOneWithoutQuestionChoiceUpdatesInput {
   create: UserCreateWithoutQuestionChoiceUpdatesInput
   connect: UserWhereUniqueInput
@@ -9482,6 +11286,15 @@ input UserUpdateOneWithoutQuestionUpdatesInput {
   delete: Boolean
   update: UserUpdateWithoutQuestionUpdatesDataInput
   upsert: UserUpsertWithoutQuestionUpdatesInput
+}
+
+input UserUpdateOneWithoutSentToSequencesInput {
+  create: UserCreateWithoutSentToSequencesInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutSentToSequencesDataInput
+  upsert: UserUpsertWithoutSentToSequencesInput
 }
 
 input UserUpdateOneWithoutTestUpdatesInput {
@@ -9510,6 +11323,58 @@ input UserUpdateteacherIdsInput {
   set: [String!]
 }
 
+input UserUpdateWithoutAdminInstitutionDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+}
+
 input UserUpdateWithoutAnswersDataInput {
   email: String
   password: String
@@ -9529,6 +11394,9 @@ input UserUpdateWithoutAnswersDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9553,6 +11421,10 @@ input UserUpdateWithoutAnswersDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutAnswerUpdatesDataInput {
@@ -9574,6 +11446,9 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9598,6 +11473,10 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutChallengesDataInput {
@@ -9619,6 +11498,9 @@ input UserUpdateWithoutChallengesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9643,6 +11525,10 @@ input UserUpdateWithoutChallengesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutChallengeUpdatesDataInput {
@@ -9664,6 +11550,9 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9688,6 +11577,10 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutCoursesAddedDataInput {
@@ -9709,6 +11602,9 @@ input UserUpdateWithoutCoursesAddedDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9733,6 +11629,10 @@ input UserUpdateWithoutCoursesAddedDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutCourseUpdatesDataInput {
@@ -9754,6 +11654,9 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9778,6 +11681,10 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutInstitutionContactDataInput {
@@ -9799,6 +11706,9 @@ input UserUpdateWithoutInstitutionContactDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
@@ -9823,6 +11733,10 @@ input UserUpdateWithoutInstitutionContactDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutInstitutionDataInput {
@@ -9844,6 +11758,9 @@ input UserUpdateWithoutInstitutionDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
@@ -9868,6 +11785,10 @@ input UserUpdateWithoutInstitutionDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutInstitutionsAddedDataInput {
@@ -9889,6 +11810,9 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9913,6 +11837,10 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutInstitutionUpdatesDataInput {
@@ -9934,6 +11862,9 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -9958,6 +11889,114 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutInvitesDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutInvitesSentDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutPanelsAddedDataInput {
@@ -9979,6 +12018,9 @@ input UserUpdateWithoutPanelsAddedDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10003,6 +12045,10 @@ input UserUpdateWithoutPanelsAddedDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutQuestionChoiceAddedByDataInput {
@@ -10024,6 +12070,9 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10048,6 +12097,10 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
@@ -10069,6 +12122,9 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10093,6 +12149,10 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutQuestionsAddedByDataInput {
@@ -10114,6 +12174,9 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10138,6 +12201,10 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutQuestionsSentToDataInput {
@@ -10159,6 +12226,9 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10183,6 +12253,10 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutQuestionUpdatesDataInput {
@@ -10204,6 +12278,9 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10228,6 +12305,114 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutSentToSequencesDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutSequencesAddedDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutStudentCoursesDataInput {
@@ -10249,6 +12434,9 @@ input UserUpdateWithoutStudentCoursesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10273,6 +12461,62 @@ input UserUpdateWithoutStudentCoursesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutStudentInstitutionsDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutTeacherCoursesDataInput {
@@ -10294,6 +12538,9 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10318,6 +12565,62 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithoutTeacherInstitutionsDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutTestsAddedDataInput {
@@ -10339,6 +12642,9 @@ input UserUpdateWithoutTestsAddedDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10363,6 +12669,10 @@ input UserUpdateWithoutTestsAddedDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutTestSequenceDataInput {
@@ -10384,6 +12694,9 @@ input UserUpdateWithoutTestSequenceDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10408,6 +12721,10 @@ input UserUpdateWithoutTestSequenceDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutTestUpdatesDataInput {
@@ -10429,6 +12746,9 @@ input UserUpdateWithoutTestUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10453,6 +12773,10 @@ input UserUpdateWithoutTestUpdatesDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutUpdatedByDataInput {
@@ -10474,6 +12798,9 @@ input UserUpdateWithoutUpdatedByDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
   teacherCourses: CourseUpdateManyWithoutTeachersInput
@@ -10498,6 +12825,10 @@ input UserUpdateWithoutUpdatedByDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutUsedTestSequenceDataInput {
@@ -10519,6 +12850,9 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10543,6 +12877,10 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   userUpdates: UserUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
 }
 
 input UserUpdateWithoutUserUpdatesDataInput {
@@ -10564,6 +12902,9 @@ input UserUpdateWithoutUserUpdatesDataInput {
   role: UserType
   studentIds: UserUpdatestudentIdsInput
   teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
   institution: InstitutionUpdateOneWithoutUsersInput
   updatedBy: UserUpdateOneWithoutUserUpdatesInput
   institutionContact: InstitutionUpdateManyWithoutContactsInput
@@ -10588,6 +12929,15 @@ input UserUpdateWithoutUserUpdatesDataInput {
   questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
   questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneWithoutAdminsInput
+}
+
+input UserUpdateWithWhereUniqueWithoutAdminInstitutionInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutAdminInstitutionDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutInstitutionContactInput {
@@ -10600,14 +12950,29 @@ input UserUpdateWithWhereUniqueWithoutInstitutionInput {
   data: UserUpdateWithoutInstitutionDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutInvitesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutInvitesDataInput!
+}
+
 input UserUpdateWithWhereUniqueWithoutStudentCoursesInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutStudentCoursesDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutStudentInstitutionsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutStudentInstitutionsDataInput!
+}
+
 input UserUpdateWithWhereUniqueWithoutTeacherCoursesInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutTeacherCoursesDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutTeacherInstitutionsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutTeacherInstitutionsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutTestSequenceInput {
@@ -10665,6 +13030,11 @@ input UserUpsertWithoutInstitutionUpdatesInput {
   create: UserCreateWithoutInstitutionUpdatesInput!
 }
 
+input UserUpsertWithoutInvitesSentInput {
+  update: UserUpdateWithoutInvitesSentDataInput!
+  create: UserCreateWithoutInvitesSentInput!
+}
+
 input UserUpsertWithoutPanelsAddedInput {
   update: UserUpdateWithoutPanelsAddedDataInput!
   create: UserCreateWithoutPanelsAddedInput!
@@ -10695,6 +13065,16 @@ input UserUpsertWithoutQuestionUpdatesInput {
   create: UserCreateWithoutQuestionUpdatesInput!
 }
 
+input UserUpsertWithoutSentToSequencesInput {
+  update: UserUpdateWithoutSentToSequencesDataInput!
+  create: UserCreateWithoutSentToSequencesInput!
+}
+
+input UserUpsertWithoutSequencesAddedInput {
+  update: UserUpdateWithoutSequencesAddedDataInput!
+  create: UserCreateWithoutSequencesAddedInput!
+}
+
 input UserUpsertWithoutTestsAddedInput {
   update: UserUpdateWithoutTestsAddedDataInput!
   create: UserCreateWithoutTestsAddedInput!
@@ -10710,6 +13090,12 @@ input UserUpsertWithoutUserUpdatesInput {
   create: UserCreateWithoutUserUpdatesInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutAdminInstitutionInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutAdminInstitutionDataInput!
+  create: UserCreateWithoutAdminInstitutionInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutInstitutionContactInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutInstitutionContactDataInput!
@@ -10722,16 +13108,34 @@ input UserUpsertWithWhereUniqueWithoutInstitutionInput {
   create: UserCreateWithoutInstitutionInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutInvitesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutInvitesDataInput!
+  create: UserCreateWithoutInvitesInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutStudentCoursesInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutStudentCoursesDataInput!
   create: UserCreateWithoutStudentCoursesInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutStudentInstitutionsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutStudentInstitutionsDataInput!
+  create: UserCreateWithoutStudentInstitutionsInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutTeacherCoursesInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutTeacherCoursesDataInput!
   create: UserCreateWithoutTeacherCoursesInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutTeacherInstitutionsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutTeacherInstitutionsDataInput!
+  create: UserCreateWithoutTeacherInstitutionsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutTestSequenceInput {
@@ -11267,6 +13671,15 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [UserType!]
+  invites_every: CourseWhereInput
+  invites_some: CourseWhereInput
+  invites_none: CourseWhereInput
+  teacherInstitutions_every: InstitutionWhereInput
+  teacherInstitutions_some: InstitutionWhereInput
+  teacherInstitutions_none: InstitutionWhereInput
+  studentInstitutions_every: InstitutionWhereInput
+  studentInstitutions_some: InstitutionWhereInput
+  studentInstitutions_none: InstitutionWhereInput
   institution: InstitutionWhereInput
   updatedBy: UserWhereInput
   institutionContact_every: InstitutionWhereInput
@@ -11338,6 +13751,16 @@ input UserWhereInput {
   questionsSentTo_every: QuestionWhereInput
   questionsSentTo_some: QuestionWhereInput
   questionsSentTo_none: QuestionWhereInput
+  sequencesAdded_every: SequenceWhereInput
+  sequencesAdded_some: SequenceWhereInput
+  sequencesAdded_none: SequenceWhereInput
+  sentToSequences_every: SequenceWhereInput
+  sentToSequences_some: SequenceWhereInput
+  sentToSequences_none: SequenceWhereInput
+  invitesSent_every: CourseWhereInput
+  invitesSent_some: CourseWhereInput
+  invitesSent_none: CourseWhereInput
+  adminInstitution: InstitutionWhereInput
 }
 
 input UserWhereUniqueInput {

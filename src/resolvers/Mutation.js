@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const { APP_SECRET, getUserId, getUser } = require('../utils')
 const util = require('util');
+const moment = require('moment')
 
 function checkField(itemIds) {
     if (itemIds) {
@@ -146,7 +147,7 @@ async function newPasswordRequest(parent, args, ctx, info) {
   const msg = {
     to: userResetUpdate.email,
     subject: 'Reset password request',
-    text: `Click on this link to resent your password https://example.com/reset?token=${resetToken}&email=${userResetUpdate.email} This token will expire in 2 hours.`,
+    text: `Click on this link to reset your password https://example.com/reset?token=${resetToken}&email=${userResetUpdate.email} This token will expire in 2 hours.`,
     html: htmlEmail,
   };
 
@@ -288,6 +289,122 @@ async function confirmEmail(parent, args, ctx, info) {
 
 }
 
+async function sendInvite(parent, args, ctx, info) {
+
+  const userId = await getUserId(ctx)
+  const invitesSentDate = new Date()
+
+  const course = await ctx.db.query.course({where: { id: args.courseId } },`{ teachers { id } }`)
+  const courseTeachers = JSON.stringify(course.teachers)
+
+  if (courseTeachers.includes(userId)){
+
+  async function sendInvite(emails) {
+
+      const inviteUser = await ctx.db.mutation.updateUser(
+        {
+          data: {
+            invites:
+            {
+              connect: [args.courseId]
+            }
+          },
+          where: {
+            email: args.email
+          },
+        },
+        `{ id firstName lastName email role  }`
+      )
+
+      if (!inviteUser) {
+        throw new Error(`No such user found`)
+      }
+
+      const htmlEmail =
+        `<html>
+        <head>
+          <title>Join Course</title>
+        </head>
+        <body>
+          <p>Hi ${inviteUser.firstName} ${inviteUser.lastName},</p>
+          <p><a href="https://example.com/login">Login</a> and accept invitation to join the course.</p>
+
+        </body>
+        </html>`
+
+      const msg = {
+        to: args.email,
+        subject: 'Join Course',
+        text: `Login and accept invitation to join the course. https://example.com/login`,
+        html: htmlEmail,
+      };
+
+      sendGridSend(msg)
+    }
+
+  }
+
+    const email_arr = emails.str.split("\n")
+
+    email_arr.map(email => sendInvite(email))
+
+    const inviteCourse = await ctx.db.mutation.updateCourse(
+      {
+        data: {
+          invitesSentDate,
+          invitesSentBy: {
+            connect: userId
+          },
+        where: {
+          id: args.courseId
+        },
+      },
+    },
+      `{ id firstName lastName email role  }`
+
+    )
+
+    invitationSentMsg = `${args.emails.length} course invitations sent.`
+
+  return {
+    authMsg: invitationSentMsg,
+    user: 'userResetUpdate'
+  }
+
+}
+
+async function joinCourse(parent, args, ctx, info) {
+  //prevents unauthorized user from logging out - checks authorization token to get current userId
+  const userId = await getUserId(ctx)
+
+  if (!userId) {
+    throw new Error('There has been a problem joining the course.')
+  }
+
+  const joinCourse = await ctx.db.mutation.updateCourse(
+    {
+      data: {
+        students: {
+          connect: [userId]
+        }
+      },
+      where: {
+        id: args.courseId,
+      },
+    },
+    ` { id name courseNumber } `
+  )
+
+  //Be sure to remove the authorization token that you stored locally or in a session cookie.
+
+  joinCourseMsg = `${joinUser.firstName} ${joinUser.lastName}, you have joined ${name} - ${courseNumber}.`
+
+  return {
+    authMsg: joinCourseMsg,
+    course: joinCourse
+  }
+}
+
 async function login(parent, args, ctx, info) {
   const lastLogin = new Date()
 
@@ -321,7 +438,7 @@ async function login(parent, args, ctx, info) {
         id: user.id,
       },
     },
-    ` { id password firstName lastName role online institution { id name } } `
+    ` { id password firstName lastName role online teacherInstitutions { id name } studentInstitutions { id name } } `
   )
 
   loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
@@ -332,7 +449,6 @@ async function login(parent, args, ctx, info) {
     user: updateUser,
   }
 }
-
 
 async function logout(parent, args, ctx, info) {
   //prevents unauthorized user from logging out - checks authorization token to get current userId
@@ -383,7 +499,7 @@ async function addInstitution(parent, { name, type }, ctx, info) {
 
 }
 
-async function updateInstitution(parent, { id, name, type, contactIds, teacherIds, studentIds, courseIds }, ctx, info) {
+async function updateInstitution(parent, { id, name, type, contactIds, teacherIds, studentIds, adminIds, courseIds }, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
 
@@ -391,28 +507,36 @@ async function updateInstitution(parent, { id, name, type, contactIds, teacherId
   const teachers = await checkField(teacherIds)
   const courses = await checkField(courseIds)
   const students = await checkField(studentIds)
+  const admins = await checkField(adminIds)
 
-  return await ctx.db.mutation.updateInstitution(
-    {
-      data: {
-        name,
-        type,
-        updateDate,
-        updatedBy: {
-          connect: { id: userId  }
+
+  const course = await ctx.db.query.institution({where: { id: id } },`{ admins { id } }`)
+  const institutionAdmins = JSON.stringify(course.admins)
+
+  if (institutionAdmins.includes(userId)){
+
+      return await ctx.db.mutation.updateInstitution(
+        {
+          data: {
+            name,
+            type,
+            updateDate,
+            updatedBy: {
+              connect: { id: userId  }
+            },
+            contacts,
+            teachers,
+            students,
+            admins,
+            courses,
+          },
+          where: {
+            id: id
+          },
         },
-        contacts,
-        teachers,
-        students,
-        courses,
-      },
-      where: {
-        id: id
-      },
-    },
-    info
-  )
-
+        info
+      )
+  }
 }
 
 async function deleteInstitution(parent, { id }, ctx, info) {
@@ -539,38 +663,147 @@ async function addTest(parent, { subject, testNumber, testDate, courseId }, ctx,
   )
 }
 
-async function publishTest(parent, { testId, courseId }, ctx, info) {
+async function publishTest(parent, args, ctx, info) {
   const userId = await getUserId(ctx)
   const publishDate = new Date()
+  const sequenceAddedDate = new Date()
+  const testEndDate = moment(args.testEndDate).format()
 
-  const course = ctx.db.query.course({ where: { id: courseId } }, info)
-  const courseStudents = course.students
-  const studentSequence = shuffleIds(courseStudents)
-
-  const test = ctx.db.query.test({ where: { id: testId } }, info)
-  const coursePanels = course.panels
-  const panelSequence = shuffleIds(coursePanels)
-
-  return await ctx.db.mutation.updateTest(
+  const test = await ctx.db.mutation.updateTest(
     {
       data: {
-        studentSequence,
-        panelSequence,
+        published: true,
         publishDate,
-        published:true,
-        publishedBy: {
+        updateDate: publishDate,
+        updatedBy: {
           connect: {
             id: userId
           },
         },
       },
       where: {
-        id: testId
+        id: args.id
     },
   },
+  `{ id panels { id } course { students { id } } }`
+  )
+    // get all students for a course
+  const studentIds = test.course.students
+  const panelIds = test.panels
+  const studentShuffle = shuffleArray(studentIds)
+  const panelShuffle = shuffleArray(panelIds)
+  const studentShuffleIds = studentShuffle.map(student => student.id)
+  const panelShuffleIds = panelShuffle.map(panel => panel.id)
+
+
+  return ctx.db.mutation.createSequence(
+    {
+      data: {
+        sequenceAddedDate,
+        addedBy:{
+          connect: { id: userId  }
+        },
+        startHour:args.startHour,
+        endHour:args.endHour,
+        testEndDate,
+        test: {
+          connect: { id: args.id }
+        },
+        students: {
+          connect: studentShuffle
+        },
+        panels: {
+          connect: panelShuffle
+          }
+      },
+    },
     info
   )
-  // get all students for a course
+
+  return test
+
+}
+
+async function sendQuestion(parent, args, ctx, info) {
+  const userId = await getUserId(ctx)
+  const sequenceUpdateDate = new Date()
+
+  const testSequence = await ctx.db.query.sequences({where:{test:{id:args.id}}},`{ id students { id } panels { id } usedStudents { id } usedPanels { id } } `)
+
+  let students = testSequence[0].students.map(student => student)
+  let panels = testSequence[0].panels.map(panel => panel)
+  const testId = testSequence[0].id
+  var usedStudents = testSequence[0].usedStudents.map(student => student)
+  var usedPanels = testSequence[0].usedPanels.map(panel => panel)
+
+  var studentShuffle = null
+  var sendToStudent = null
+
+  var sendToPanel = null
+  var panelShuffle = null
+
+  if (students.length > 0) {
+    var sendToStudent = students.pop()
+    var studentShuffle = students
+      console.log('sent to', sendToStudent)
+      console.log('rest of students',studentShuffle)
+      console.log('no shuffle')
+  } else {
+
+    var studentShuffle = shuffleArray(usedStudents)
+    var sendToStudent = studentShuffle.pop()
+    console.log('sent to',sendToStudent)
+    console.log('rest of students',students)
+    console.log('shuffled')
+  }
+
+  if (panels.length > 0) {
+      var sendToPanel = panels.pop()
+      var panelShuffle = panels
+      console.log('send panel',sendToPanel)
+      console.log('rest of panels',panelShuffle)
+      console.log('no shuffle')
+
+  } else {
+
+      var panelShuffle = shuffleArray(usedPanels)
+      var sendToPanel = studentPanel.pop()
+      console.log('send panel',sendToPanel)
+      console.log('rest of panels',panelShuffle)
+      console.log('shuffled')
+    }
+
+    const sequence = ctx.db.mutation.updateSequence(
+    {
+      data: {
+        students: {
+          connect: studentShuffle
+        },
+        panels: {
+          connect: panelShuffle
+        },
+        usedStudents: {
+          connect: [sendToStudent]
+        },
+        usedPanels: {
+          connect: [sendToPanel]
+        },
+        sentTo: {
+          connect: sendToStudent
+        },
+        sentPanel: {
+          connect: sendToPanel
+        }
+      },
+      where: {
+        id: testId
+    },
+    },
+    `{ sentPanel { link } sentTo { firstName lastName email pushToken }  }`
+  )
+
+  console.log(sequence)
+  return sequence
 
 }
 
@@ -1124,18 +1357,24 @@ async function deleteSequence(parent, { id }, ctx, info) {
 }
 
 async function updateUser(parent,  {
-email,
-salutation,
-firstName,
-lastName,
-institution,
-studentIds,
-teacherIds,
-phone,
-online,
-}, ctx, info) {
+      email,
+      salutation,
+      firstName,
+      lastName,
+      institution,
+      adminInstitution,
+      teacherInstitutions,
+      studentInstitutions,
+      studentIds,
+      teacherIds,
+      phone,
+      online,
+      }, ctx, info) {
 
   const userId = await getUserId(ctx)
+
+  const teacherInstitutions1 = await checkField(teacherInstitutions)
+  const studentInstitutions1 = await checkField(studentInstitutions)
 
   const updateDate = new Date()
 
@@ -1146,6 +1385,11 @@ online,
         salutation,
         firstName,
         lastName,
+        adminInstitution:{
+          connect: { id: adminInstitution }
+        },
+        teacherInstitutions: teacherInstitutions1,
+        studentInstitutions: studentInstitutions1,
         institution: {
           connect: { id: institution }
         },
@@ -1178,6 +1422,8 @@ module.exports = {
   addCourse,
   updateCourse,
   deleteCourse,
+  joinCourse,
+  sendInvite,
   addTest,
   updateTest,
   deleteTest,
@@ -1200,5 +1446,7 @@ module.exports = {
   addSequence,
   updateSequence,
   deleteSequence,
+  publishTest,
+  sendQuestion,
   updateUser
 }
