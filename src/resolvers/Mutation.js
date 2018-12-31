@@ -296,29 +296,26 @@ async function sendInvite(parent, args, ctx, info) {
 
   const course = await ctx.db.query.course({where: { id: args.courseId } },`{ teachers { id } }`)
   const courseTeachers = JSON.stringify(course.teachers)
+  console.log(userId, courseTeachers)
 
   if (courseTeachers.includes(userId)){
 
-  async function sendInvite(emails) {
+  async function sendInvite(email) {
 
       const inviteUser = await ctx.db.mutation.updateUser(
         {
           data: {
             invites:
             {
-              connect: [args.courseId]
+              connect: [{id: args.courseId}]
             }
           },
           where: {
-            email: args.email
+            email: email
           },
         },
         `{ id firstName lastName email role  }`
       )
-
-      if (!inviteUser) {
-        throw new Error(`No such user found`)
-      }
 
       const htmlEmail =
         `<html>
@@ -333,44 +330,50 @@ async function sendInvite(parent, args, ctx, info) {
         </html>`
 
       const msg = {
-        to: args.email,
+        to: email,
         subject: 'Join Course',
         text: `Login and accept invitation to join the course. https://example.com/login`,
         html: htmlEmail,
       };
 
       sendGridSend(msg)
+
     }
 
-  }
+    //const email_arr = args.emails.str.split("\n")
 
-    const email_arr = emails.str.split("\n")
-
-    email_arr.map(email => sendInvite(email))
+    args.emails.map(email => (sendInvite(email)))
 
     const inviteCourse = await ctx.db.mutation.updateCourse(
       {
-        data: {
-          invitesSentDate,
-          invitesSentBy: {
-            connect: userId
-          },
-        where: {
+        where:{
           id: args.courseId
         },
-      },
+        data:{
+          invitesSentDate,
+          invitesSentBy:{
+            connect:{
+              id:userId
+            }
+          }
+        }
     },
-      `{ id firstName lastName email role  }`
-
+      `{ id name courseNumber }`
     )
 
-    invitationSentMsg = `${args.emails.length} course invitations sent.`
+
+
+    invitationSentMsg = `${args.emails.length} course invitations were sent for ${inviteCourse.name} ${inviteCourse.courseNumber}.`
 
   return {
     authMsg: invitationSentMsg,
     user: 'userResetUpdate'
   }
-
+}
+  else
+{
+  throw new Error('You are not an authorized administrator for this course.')
+}
 }
 
 async function joinCourse(parent, args, ctx, info) {
