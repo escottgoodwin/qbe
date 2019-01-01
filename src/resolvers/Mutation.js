@@ -340,9 +340,10 @@ async function sendInvite(parent, args, ctx, info) {
 
     }
 
-    //const email_arr = args.emails.str.split("\n")
-
-    args.emails.map(email => (sendInvite(email)))
+    const email_arr = args.emails.split("\n")
+    console.log(args.emails)
+    console.log(email_arr)
+    email_arr.map(email => (sendInvite(email)))
 
     const inviteCourse = await ctx.db.mutation.updateCourse(
       {
