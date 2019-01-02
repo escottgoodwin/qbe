@@ -149,28 +149,45 @@ async function testStats(parent, args, ctx, info) {
 
 async function userTestStats(parent, args, ctx, info) {
 
-      const countSelectionSet = `
-        {
-          aggregate {
-            count
-          }
-        }
-      `
+  const countSelectionSet = `
+    {
+      aggregate {
+        count
+      }
+    }
+  `
 
-      const answersConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: args.userId }, answer: { question: { test: { id: args.testId } } } } },
-        countSelectionSet )
+  async function userStat(userId, testId, firstName, lastName){
 
-      const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: args.userId }, answer: { question: { test: { id: args.testId } } }, answerCorrect: true } },
-        countSelectionSet )
+      const answersConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: userId }, answer: { question: { test: { id: testId } } } } },
+        countSelectionSet)
+
+      const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: userId }, answer: { question: { test: { id: testId } } }, answerCorrect: true } },
+        countSelectionSet)
 
       const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
 
+      function qpercent(qpercent){
+        if (qpercent > 0){ return qpercent } else { return 0.0 }
+      }
+
+      const percentCorrect = qpercent(questionCorrectPercent)
+
       return {
+        name: firstName + ' ' + lastName,
         total: answersConnection.aggregate.count,
         totalCorrect: answersCorrectConnection.aggregate.count,
-        percentCorrect: questionCorrectPercent,
+        percentCorrect: percentCorrect,
       }
+    }
+
+    const course = await ctx.db.query.course( { where: { id: args.courseId } },`{ students { id firstName lastName } }`)
+
+    const statslist = course.students.map(student => (userStat(student.id,args.testId,student.firstName,student.lastName)))
+    return statslist
+
 }
+
 
 async function tests(parent, args, ctx, info) {
 

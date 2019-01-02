@@ -746,57 +746,43 @@ async function sendQuestion(parent, args, ctx, info) {
   var sendToPanel = null
   var panelShuffle = null
 
-  if (students.length > 0) {
-    var sendToStudent = students.pop()
-    var studentShuffle = students
-      console.log('sent to', sendToStudent)
-      console.log('rest of students',studentShuffle)
-      console.log('no shuffle')
-  } else {
+  function popshuffler(topoparr){
+    if (topoparr.length > 0) {
+      var popped = topoparr.pop()
+      var item = { popped: popped, poppedarr: topoparr }
+      return item
 
-    var studentShuffle = shuffleArray(usedStudents)
-    var sendToStudent = studentShuffle.pop()
-    console.log('sent to',sendToStudent)
-    console.log('rest of students',students)
-    console.log('shuffled')
+    } else {
+
+      var shuffled = shuffleArray(topoparr)
+      var popped = shuffled.pop()
+      var item = { popped: popped, poppedarr: shuffled }
+    }
   }
 
-  if (panels.length > 0) {
-      var sendToPanel = panels.pop()
-      var panelShuffle = panels
-      console.log('send panel',sendToPanel)
-      console.log('rest of panels',panelShuffle)
-      console.log('no shuffle')
-
-  } else {
-
-      var panelShuffle = shuffleArray(usedPanels)
-      var sendToPanel = studentPanel.pop()
-      console.log('send panel',sendToPanel)
-      console.log('rest of panels',panelShuffle)
-      console.log('shuffled')
-    }
+  const studentpopped = popshuffler(students)
+  const panelspopped = popshuffler(panels)
 
     const sequence = ctx.db.mutation.updateSequence(
     {
       data: {
         students: {
-          connect: studentShuffle
+          connect: studentpopped.poppedarr
         },
         panels: {
-          connect: panelShuffle
+          connect: panelspopped.poppedarr
         },
         usedStudents: {
-          connect: [sendToStudent]
+          connect: [studentpopped.popped]
         },
         usedPanels: {
-          connect: [sendToPanel]
+          connect: [panelspopped.popped]
         },
         sentTo: {
-          connect: sendToStudent
+          connect: studentpopped.popped
         },
         sentPanel: {
-          connect: sendToPanel
+          connect: panelspopped.popped
         }
       },
       where: {
