@@ -109,16 +109,16 @@ type Mutation {
 
   sendQuestion(id: ID!): Sequence
 
-  joinCourse(courseId: ID!): JoinCourse
+  joinCourse(inviteId: ID!,courseId: ID!): JoinCourse
 
   updateUser(email: String,
   salutation: String,
   firstName: String,
   lastName: String,
-  institution: ID,
-  adminInstitution: ID,
+  adminInstitutions: [ID],
   teacherInstitutions: [ID],
   studentInstitutions: [ID],
+  studentCourseIds:[ID],
   studentIds:[String],
   teacherIds: [String],
   phone: String,
@@ -200,5 +200,4 @@ type SentQuestion {
 
 type JoinCourse {
   authMsg: String!
-  course: Course!
 }

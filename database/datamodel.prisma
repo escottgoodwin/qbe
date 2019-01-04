@@ -25,6 +25,7 @@ type User {
   tokenExpirationTime: DateTime
   confirmed: Boolean
   invites: [Course!]! @relation(name: "UsersByInvitation")
+  adminInstitutions: [Institution!]! @relation(name: "AdminsByInstitutions")
   teacherInstitutions: [Institution!]! @relation(name: "TeachersByInstitutions")
   studentInstitutions: [Institution!]! @relation(name: "StudentsByInstitutions")
   institution: Institution @relation(name: "UsersByInstitution")
@@ -57,14 +58,16 @@ type User {
   sentToSequences: [Sequence!]! @relation(name: "SentToBySequence")
   invitesSent: [Course!]! @relation(name: "InvitesSentByUser")
   adminInstitution: Institution @relation(name: "AdminsByInstitution")
+  invitesSentTo: [CourseInvite!]! @relation(name: "InvitesSentToByCourseInvite")
+  addedInvitesBy: [CourseInvite!]! @relation(name: "AddedByCourseInvite")
   }
 
 type Institution {
   id: ID! @unique
   name: String!
   type: String
-  admins: [User!]! @relation(name: "AdminsByInstitution")
   users: [User!]! @relation(name: "UsersByInstitution")
+  admins: [User!]! @relation(name: "AdminsByInstitutions")
   teachers: [User!]! @relation(name: "TeachersByInstitutions")
   students: [User!]! @relation(name: "StudentsByInstitutions")
   addedDate: DateTime
@@ -93,6 +96,15 @@ type Course {
   students: [User!]! @relation(name: "StudentsByCourse")
   tests: [Test!]! @relation(name: "TestsByCourse" onDelete: CASCADE)
   invitesSent: [User!]! @relation(name: "UsersByInvitation")
+  inviteCourses: [CourseInvite!]! @relation(name: "CoursesByInvitation")
+}
+
+type CourseInvite {
+  id: ID! @unique
+  addedBy: User! @relation(name: "AddedByCourseInvite")
+  addedDate: DateTime
+  inviteSentTo: User! @relation(name: "InvitesSentToByCourseInvite")
+  course: Course! @relation(name: "CoursesByInvitation")
 }
 
 type Test {

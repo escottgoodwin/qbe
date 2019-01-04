@@ -292,7 +292,7 @@ async function confirmEmail(parent, args, ctx, info) {
 async function sendInvite(parent, args, ctx, info) {
 
   const userId = await getUserId(ctx)
-  const invitesSentDate = new Date()
+  const addedDate = new Date()
 
   const course = await ctx.db.query.course({where: { id: args.courseId } },`{ teachers { id } }`)
   const courseTeachers = JSON.stringify(course.teachers)
@@ -302,28 +302,39 @@ async function sendInvite(parent, args, ctx, info) {
 
   async function sendInvite(email) {
 
-      const inviteUser = await ctx.db.mutation.updateUser(
+      const invite = await ctx.db.mutation.createCourseInvite(
         {
           data: {
-            invites:
+            addedDate,
+            addedBy:
             {
-              connect: [{id: args.courseId}]
-            }
-          },
-          where: {
-            email: email
+              connect: {
+                id: userId
+              }
+            },
+            inviteSentTo: {
+              connect: {
+                email: email
+              }
+            },
+            course: {
+              connect: {
+                id: args.courseId
+              }
+            },
           },
         },
-        `{ id firstName lastName email role  }`
+        `{ inviteSentTo { firstName lastName email role } course { name courseNumber }  }`
       )
 
       const htmlEmail =
         `<html>
         <head>
-          <title>Join Course</title>
+
         </head>
         <body>
-          <p>Hi ${inviteUser.firstName} ${inviteUser.lastName},</p>
+          <p>Hi ${invite.inviteSentTo.firstName} ${invite.inviteSentTo.lastName},</p>
+          <p>You have been invited to join course ${invite.course.name} ${invite.course.courseNumber}
           <p><a href="https://example.com/login">Login</a> and accept invitation to join the course.</p>
 
         </body>
@@ -331,7 +342,7 @@ async function sendInvite(parent, args, ctx, info) {
 
       const msg = {
         to: email,
-        subject: 'Join Course',
+        subject: `Join ${invite.course.name} ${invite.course.courseNumber}`,
         text: `Login and accept invitation to join the course. https://example.com/login`,
         html: htmlEmail,
       };
@@ -341,8 +352,7 @@ async function sendInvite(parent, args, ctx, info) {
     }
 
     const email_arr = args.emails.split("\n")
-    console.log(args.emails)
-    console.log(email_arr)
+
     email_arr.map(email => (sendInvite(email)))
 
     const inviteCourse = await ctx.db.mutation.updateCourse(
@@ -351,7 +361,7 @@ async function sendInvite(parent, args, ctx, info) {
           id: args.courseId
         },
         data:{
-          invitesSentDate,
+          invitesSentDate: addedDate,
           invitesSentBy:{
             connect:{
               id:userId
@@ -364,7 +374,7 @@ async function sendInvite(parent, args, ctx, info) {
 
 
 
-    invitationSentMsg = `${args.emails.length} course invitations were sent for ${inviteCourse.name} ${inviteCourse.courseNumber}.`
+    invitationSentMsg = `${args.emails.length} course invitations were sent for ${inviteCourse.name} ${inviteCourse.courseNumber} .`
 
   return {
     authMsg: invitationSentMsg,
@@ -385,11 +395,22 @@ async function joinCourse(parent, args, ctx, info) {
     throw new Error('There has been a problem joining the course.')
   }
 
-  const joinCourse = await ctx.db.mutation.updateCourse(
+  const deletedInvitation = await ctx.db.mutation.deleteCourseInvite(
+    {
+      where: {
+        id: args.inviteId
+      },
+    },
+    ` { id } `
+  )
+
+  const joinedCourse = await ctx.db.mutation.updateCourse(
     {
       data: {
         students: {
-          connect: [userId]
+          connect: {
+            id: userId
+          }
         }
       },
       where: {
@@ -399,13 +420,10 @@ async function joinCourse(parent, args, ctx, info) {
     ` { id name courseNumber } `
   )
 
-  //Be sure to remove the authorization token that you stored locally or in a session cookie.
-
-  joinCourseMsg = `${joinUser.firstName} ${joinUser.lastName}, you have joined ${name} - ${courseNumber}.`
+  joinCourseMsg = `You have joined ${joinedCourse.name} ${joinedCourse.courseNumber}.`
 
   return {
     authMsg: joinCourseMsg,
-    course: joinCourse
   }
 }
 
@@ -1352,9 +1370,10 @@ async function updateUser(parent,  {
       firstName,
       lastName,
       institution,
-      adminInstitution,
+      adminInstitutions,
       teacherInstitutions,
       studentInstitutions,
+      studentCourseIds,
       studentIds,
       teacherIds,
       phone,
@@ -1365,6 +1384,8 @@ async function updateUser(parent,  {
 
   const teacherInstitutions1 = await checkField(teacherInstitutions)
   const studentInstitutions1 = await checkField(studentInstitutions)
+  const adminInstitutions1 = await checkField(adminInstitutions)
+  const studentCourses = await checkField(studentCourseIds)
 
   const updateDate = new Date()
 
@@ -1375,14 +1396,10 @@ async function updateUser(parent,  {
         salutation,
         firstName,
         lastName,
-        adminInstitution:{
-          connect: { id: adminInstitution }
-        },
+        studentCourses,
+        adminInstitutions: adminInstitutions1,
         teacherInstitutions: teacherInstitutions1,
         studentInstitutions: studentInstitutions1,
-        institution: {
-          connect: { id: institution }
-        },
         studentIds,
         teacherIds,
         phone,
@@ -1412,8 +1429,8 @@ module.exports = {
   addCourse,
   updateCourse,
   deleteCourse,
-  joinCourse,
   sendInvite,
+  joinCourse,
   addTest,
   updateTest,
   deleteTest,
