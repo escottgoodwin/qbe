@@ -1,11 +1,15 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Thu Jan 03 2019 15:50:11 GMT-0800 (Pacific Standard Time)
+# timestamp: Fri Jan 04 2019 15:30:01 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
 }
 
 type AggregateChallenge {
+  count: Int!
+}
+
+type AggregateChallengeMessage {
   count: Int!
 }
 
@@ -58,6 +62,7 @@ type Answer implements Node {
   updateDate: DateTime
   updatedBy: User
   question: Question!
+  challenge: Challenge
 }
 
 """A connection to a list of items."""
@@ -78,6 +83,7 @@ input AnswerCreateInput {
   addedBy: UserCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
+  challenge: ChallengeCreateOneWithoutAnswerInput
 }
 
 input AnswerCreateManyWithoutAddedByInput {
@@ -100,6 +106,11 @@ input AnswerCreateManyWithoutUpdatedByInput {
   connect: [AnswerWhereUniqueInput!]
 }
 
+input AnswerCreateOneWithoutChallengeInput {
+  create: AnswerCreateWithoutChallengeInput
+  connect: AnswerWhereUniqueInput
+}
+
 input AnswerCreateWithoutAddedByInput {
   answerCorrect: Boolean
   addedDate: DateTime
@@ -107,12 +118,24 @@ input AnswerCreateWithoutAddedByInput {
   answer: QuestionChoiceCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
+  challenge: ChallengeCreateOneWithoutAnswerInput
 }
 
 input AnswerCreateWithoutAnswerInput {
   answerCorrect: Boolean
   addedDate: DateTime
   updateDate: DateTime
+  addedBy: UserCreateOneWithoutAnswersInput!
+  updatedBy: UserCreateOneWithoutAnswerUpdatesInput
+  question: QuestionCreateOneWithoutQuestionAnswersInput!
+  challenge: ChallengeCreateOneWithoutAnswerInput
+}
+
+input AnswerCreateWithoutChallengeInput {
+  answerCorrect: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  answer: QuestionChoiceCreateOneWithoutAnswersInput!
   addedBy: UserCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
@@ -125,6 +148,7 @@ input AnswerCreateWithoutQuestionInput {
   answer: QuestionChoiceCreateOneWithoutAnswersInput!
   addedBy: UserCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
+  challenge: ChallengeCreateOneWithoutAnswerInput
 }
 
 input AnswerCreateWithoutUpdatedByInput {
@@ -134,6 +158,7 @@ input AnswerCreateWithoutUpdatedByInput {
   answer: QuestionChoiceCreateOneWithoutAnswersInput!
   addedBy: UserCreateOneWithoutAnswersInput!
   question: QuestionCreateOneWithoutQuestionAnswersInput!
+  challenge: ChallengeCreateOneWithoutAnswerInput
 }
 
 """An edge in a connection."""
@@ -313,6 +338,7 @@ input AnswerUpdateInput {
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
 }
 
 input AnswerUpdateManyDataInput {
@@ -376,6 +402,15 @@ input AnswerUpdateManyWithWhereNestedInput {
   data: AnswerUpdateManyDataInput!
 }
 
+input AnswerUpdateOneWithoutChallengeInput {
+  create: AnswerCreateWithoutChallengeInput
+  connect: AnswerWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: AnswerUpdateWithoutChallengeDataInput
+  upsert: AnswerUpsertWithoutChallengeInput
+}
+
 input AnswerUpdateWithoutAddedByDataInput {
   answerCorrect: Boolean
   addedDate: DateTime
@@ -383,12 +418,24 @@ input AnswerUpdateWithoutAddedByDataInput {
   answer: QuestionChoiceUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutAnswerDataInput {
   answerCorrect: Boolean
   addedDate: DateTime
   updateDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutAnswersInput
+  updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
+  question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
+}
+
+input AnswerUpdateWithoutChallengeDataInput {
+  answerCorrect: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  answer: QuestionChoiceUpdateOneRequiredWithoutAnswersInput
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
@@ -401,6 +448,7 @@ input AnswerUpdateWithoutQuestionDataInput {
   answer: QuestionChoiceUpdateOneRequiredWithoutAnswersInput
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutUpdatedByDataInput {
@@ -410,6 +458,7 @@ input AnswerUpdateWithoutUpdatedByDataInput {
   answer: QuestionChoiceUpdateOneRequiredWithoutAnswersInput
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
 }
 
 input AnswerUpdateWithWhereUniqueWithoutAddedByInput {
@@ -430,6 +479,11 @@ input AnswerUpdateWithWhereUniqueWithoutQuestionInput {
 input AnswerUpdateWithWhereUniqueWithoutUpdatedByInput {
   where: AnswerWhereUniqueInput!
   data: AnswerUpdateWithoutUpdatedByDataInput!
+}
+
+input AnswerUpsertWithoutChallengeInput {
+  update: AnswerUpdateWithoutChallengeDataInput!
+  create: AnswerCreateWithoutChallengeInput!
 }
 
 input AnswerUpsertWithWhereUniqueWithoutAddedByInput {
@@ -557,6 +611,7 @@ input AnswerWhereInput {
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   question: QuestionWhereInput
+  challenge: ChallengeWhereInput
 }
 
 input AnswerWhereUniqueInput {
@@ -575,7 +630,9 @@ type Challenge implements Node {
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User
-  question: Question!
+  question: Question
+  answer: Answer
+  challengeMessages(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeMessage!]
 }
 
 """A connection to a list of items."""
@@ -594,7 +651,9 @@ input ChallengeCreateInput {
   updateDate: DateTime
   addedBy: UserCreateOneWithoutChallengesInput!
   updatedBy: UserCreateOneWithoutChallengeUpdatesInput
-  question: QuestionCreateOneWithoutChallengesInput!
+  question: QuestionCreateOneWithoutChallengesInput
+  answer: AnswerCreateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageCreateManyWithoutChallengeInput
 }
 
 input ChallengeCreateManyWithoutAddedByInput {
@@ -612,12 +671,44 @@ input ChallengeCreateManyWithoutUpdatedByInput {
   connect: [ChallengeWhereUniqueInput!]
 }
 
+input ChallengeCreateOneWithoutAnswerInput {
+  create: ChallengeCreateWithoutAnswerInput
+  connect: ChallengeWhereUniqueInput
+}
+
+input ChallengeCreateOneWithoutChallengeMessagesInput {
+  create: ChallengeCreateWithoutChallengeMessagesInput
+  connect: ChallengeWhereUniqueInput
+}
+
 input ChallengeCreateWithoutAddedByInput {
   challenge: String
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: UserCreateOneWithoutChallengeUpdatesInput
-  question: QuestionCreateOneWithoutChallengesInput!
+  question: QuestionCreateOneWithoutChallengesInput
+  answer: AnswerCreateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageCreateManyWithoutChallengeInput
+}
+
+input ChallengeCreateWithoutAnswerInput {
+  challenge: String
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserCreateOneWithoutChallengesInput!
+  updatedBy: UserCreateOneWithoutChallengeUpdatesInput
+  question: QuestionCreateOneWithoutChallengesInput
+  challengeMessages: ChallengeMessageCreateManyWithoutChallengeInput
+}
+
+input ChallengeCreateWithoutChallengeMessagesInput {
+  challenge: String
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserCreateOneWithoutChallengesInput!
+  updatedBy: UserCreateOneWithoutChallengeUpdatesInput
+  question: QuestionCreateOneWithoutChallengesInput
+  answer: AnswerCreateOneWithoutChallengeInput
 }
 
 input ChallengeCreateWithoutQuestionInput {
@@ -626,6 +717,8 @@ input ChallengeCreateWithoutQuestionInput {
   updateDate: DateTime
   addedBy: UserCreateOneWithoutChallengesInput!
   updatedBy: UserCreateOneWithoutChallengeUpdatesInput
+  answer: AnswerCreateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageCreateManyWithoutChallengeInput
 }
 
 input ChallengeCreateWithoutUpdatedByInput {
@@ -633,7 +726,9 @@ input ChallengeCreateWithoutUpdatedByInput {
   addedDate: DateTime
   updateDate: DateTime
   addedBy: UserCreateOneWithoutChallengesInput!
-  question: QuestionCreateOneWithoutChallengesInput!
+  question: QuestionCreateOneWithoutChallengesInput
+  answer: AnswerCreateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageCreateManyWithoutChallengeInput
 }
 
 """An edge in a connection."""
@@ -643,6 +738,430 @@ type ChallengeEdge {
 
   """A cursor for use in pagination."""
   cursor: String!
+}
+
+type ChallengeMessage implements Node {
+  id: ID!
+  challengeMessage: String
+  addedBy: User!
+  addedDate: DateTime
+  challenge: Challenge!
+}
+
+"""A connection to a list of items."""
+type ChallengeMessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ChallengeMessageEdge]!
+  aggregate: AggregateChallengeMessage!
+}
+
+input ChallengeMessageCreateInput {
+  challengeMessage: String
+  addedDate: DateTime
+  addedBy: UserCreateOneWithoutChallengeMessagesAddedInput!
+  challenge: ChallengeCreateOneWithoutChallengeMessagesInput!
+}
+
+input ChallengeMessageCreateManyWithoutAddedByInput {
+  create: [ChallengeMessageCreateWithoutAddedByInput!]
+  connect: [ChallengeMessageWhereUniqueInput!]
+}
+
+input ChallengeMessageCreateManyWithoutChallengeInput {
+  create: [ChallengeMessageCreateWithoutChallengeInput!]
+  connect: [ChallengeMessageWhereUniqueInput!]
+}
+
+input ChallengeMessageCreateWithoutAddedByInput {
+  challengeMessage: String
+  addedDate: DateTime
+  challenge: ChallengeCreateOneWithoutChallengeMessagesInput!
+}
+
+input ChallengeMessageCreateWithoutChallengeInput {
+  challengeMessage: String
+  addedDate: DateTime
+  addedBy: UserCreateOneWithoutChallengeMessagesAddedInput!
+}
+
+"""An edge in a connection."""
+type ChallengeMessageEdge {
+  """The item at the end of the edge."""
+  node: ChallengeMessage!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ChallengeMessageOrderByInput {
+  id_ASC
+  id_DESC
+  challengeMessage_ASC
+  challengeMessage_DESC
+  addedDate_ASC
+  addedDate_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ChallengeMessagePreviousValues {
+  id: ID!
+  challengeMessage: String
+  addedDate: DateTime
+}
+
+input ChallengeMessageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChallengeMessageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChallengeMessageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChallengeMessageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  challengeMessage: String
+
+  """All values that are not equal to given value."""
+  challengeMessage_not: String
+
+  """All values that are contained in given list."""
+  challengeMessage_in: [String!]
+
+  """All values that are not contained in given list."""
+  challengeMessage_not_in: [String!]
+
+  """All values less than the given value."""
+  challengeMessage_lt: String
+
+  """All values less than or equal the given value."""
+  challengeMessage_lte: String
+
+  """All values greater than the given value."""
+  challengeMessage_gt: String
+
+  """All values greater than or equal the given value."""
+  challengeMessage_gte: String
+
+  """All values containing the given string."""
+  challengeMessage_contains: String
+
+  """All values not containing the given string."""
+  challengeMessage_not_contains: String
+
+  """All values starting with the given string."""
+  challengeMessage_starts_with: String
+
+  """All values not starting with the given string."""
+  challengeMessage_not_starts_with: String
+
+  """All values ending with the given string."""
+  challengeMessage_ends_with: String
+
+  """All values not ending with the given string."""
+  challengeMessage_not_ends_with: String
+  addedDate: DateTime
+
+  """All values that are not equal to given value."""
+  addedDate_not: DateTime
+
+  """All values that are contained in given list."""
+  addedDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  addedDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  addedDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  addedDate_lte: DateTime
+
+  """All values greater than the given value."""
+  addedDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  addedDate_gte: DateTime
+}
+
+type ChallengeMessageSubscriptionPayload {
+  mutation: MutationType!
+  node: ChallengeMessage
+  updatedFields: [String!]
+  previousValues: ChallengeMessagePreviousValues
+}
+
+input ChallengeMessageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChallengeMessageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChallengeMessageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChallengeMessageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ChallengeMessageWhereInput
+}
+
+input ChallengeMessageUpdateInput {
+  challengeMessage: String
+  addedDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutChallengeMessagesAddedInput
+  challenge: ChallengeUpdateOneRequiredWithoutChallengeMessagesInput
+}
+
+input ChallengeMessageUpdateManyDataInput {
+  challengeMessage: String
+  addedDate: DateTime
+}
+
+input ChallengeMessageUpdateManyMutationInput {
+  challengeMessage: String
+  addedDate: DateTime
+}
+
+input ChallengeMessageUpdateManyWithoutAddedByInput {
+  create: [ChallengeMessageCreateWithoutAddedByInput!]
+  connect: [ChallengeMessageWhereUniqueInput!]
+  disconnect: [ChallengeMessageWhereUniqueInput!]
+  delete: [ChallengeMessageWhereUniqueInput!]
+  update: [ChallengeMessageUpdateWithWhereUniqueWithoutAddedByInput!]
+  updateMany: [ChallengeMessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [ChallengeMessageScalarWhereInput!]
+  upsert: [ChallengeMessageUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input ChallengeMessageUpdateManyWithoutChallengeInput {
+  create: [ChallengeMessageCreateWithoutChallengeInput!]
+  connect: [ChallengeMessageWhereUniqueInput!]
+  disconnect: [ChallengeMessageWhereUniqueInput!]
+  delete: [ChallengeMessageWhereUniqueInput!]
+  update: [ChallengeMessageUpdateWithWhereUniqueWithoutChallengeInput!]
+  updateMany: [ChallengeMessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [ChallengeMessageScalarWhereInput!]
+  upsert: [ChallengeMessageUpsertWithWhereUniqueWithoutChallengeInput!]
+}
+
+input ChallengeMessageUpdateManyWithWhereNestedInput {
+  where: ChallengeMessageScalarWhereInput!
+  data: ChallengeMessageUpdateManyDataInput!
+}
+
+input ChallengeMessageUpdateWithoutAddedByDataInput {
+  challengeMessage: String
+  addedDate: DateTime
+  challenge: ChallengeUpdateOneRequiredWithoutChallengeMessagesInput
+}
+
+input ChallengeMessageUpdateWithoutChallengeDataInput {
+  challengeMessage: String
+  addedDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutChallengeMessagesAddedInput
+}
+
+input ChallengeMessageUpdateWithWhereUniqueWithoutAddedByInput {
+  where: ChallengeMessageWhereUniqueInput!
+  data: ChallengeMessageUpdateWithoutAddedByDataInput!
+}
+
+input ChallengeMessageUpdateWithWhereUniqueWithoutChallengeInput {
+  where: ChallengeMessageWhereUniqueInput!
+  data: ChallengeMessageUpdateWithoutChallengeDataInput!
+}
+
+input ChallengeMessageUpsertWithWhereUniqueWithoutAddedByInput {
+  where: ChallengeMessageWhereUniqueInput!
+  update: ChallengeMessageUpdateWithoutAddedByDataInput!
+  create: ChallengeMessageCreateWithoutAddedByInput!
+}
+
+input ChallengeMessageUpsertWithWhereUniqueWithoutChallengeInput {
+  where: ChallengeMessageWhereUniqueInput!
+  update: ChallengeMessageUpdateWithoutChallengeDataInput!
+  create: ChallengeMessageCreateWithoutChallengeInput!
+}
+
+input ChallengeMessageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChallengeMessageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChallengeMessageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChallengeMessageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  challengeMessage: String
+
+  """All values that are not equal to given value."""
+  challengeMessage_not: String
+
+  """All values that are contained in given list."""
+  challengeMessage_in: [String!]
+
+  """All values that are not contained in given list."""
+  challengeMessage_not_in: [String!]
+
+  """All values less than the given value."""
+  challengeMessage_lt: String
+
+  """All values less than or equal the given value."""
+  challengeMessage_lte: String
+
+  """All values greater than the given value."""
+  challengeMessage_gt: String
+
+  """All values greater than or equal the given value."""
+  challengeMessage_gte: String
+
+  """All values containing the given string."""
+  challengeMessage_contains: String
+
+  """All values not containing the given string."""
+  challengeMessage_not_contains: String
+
+  """All values starting with the given string."""
+  challengeMessage_starts_with: String
+
+  """All values not starting with the given string."""
+  challengeMessage_not_starts_with: String
+
+  """All values ending with the given string."""
+  challengeMessage_ends_with: String
+
+  """All values not ending with the given string."""
+  challengeMessage_not_ends_with: String
+  addedDate: DateTime
+
+  """All values that are not equal to given value."""
+  addedDate_not: DateTime
+
+  """All values that are contained in given list."""
+  addedDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  addedDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  addedDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  addedDate_lte: DateTime
+
+  """All values greater than the given value."""
+  addedDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  addedDate_gte: DateTime
+  addedBy: UserWhereInput
+  challenge: ChallengeWhereInput
+}
+
+input ChallengeMessageWhereUniqueInput {
+  id: ID
 }
 
 enum ChallengeOrderByInput {
@@ -847,7 +1366,9 @@ input ChallengeUpdateInput {
   updateDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutChallengesInput
   updatedBy: UserUpdateOneWithoutChallengeUpdatesInput
-  question: QuestionUpdateOneRequiredWithoutChallengesInput
+  question: QuestionUpdateOneWithoutChallengesInput
+  answer: AnswerUpdateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageUpdateManyWithoutChallengeInput
 }
 
 input ChallengeUpdateManyDataInput {
@@ -900,12 +1421,50 @@ input ChallengeUpdateManyWithWhereNestedInput {
   data: ChallengeUpdateManyDataInput!
 }
 
+input ChallengeUpdateOneRequiredWithoutChallengeMessagesInput {
+  create: ChallengeCreateWithoutChallengeMessagesInput
+  connect: ChallengeWhereUniqueInput
+  update: ChallengeUpdateWithoutChallengeMessagesDataInput
+  upsert: ChallengeUpsertWithoutChallengeMessagesInput
+}
+
+input ChallengeUpdateOneWithoutAnswerInput {
+  create: ChallengeCreateWithoutAnswerInput
+  connect: ChallengeWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ChallengeUpdateWithoutAnswerDataInput
+  upsert: ChallengeUpsertWithoutAnswerInput
+}
+
 input ChallengeUpdateWithoutAddedByDataInput {
   challenge: String
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: UserUpdateOneWithoutChallengeUpdatesInput
-  question: QuestionUpdateOneRequiredWithoutChallengesInput
+  question: QuestionUpdateOneWithoutChallengesInput
+  answer: AnswerUpdateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageUpdateManyWithoutChallengeInput
+}
+
+input ChallengeUpdateWithoutAnswerDataInput {
+  challenge: String
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutChallengesInput
+  updatedBy: UserUpdateOneWithoutChallengeUpdatesInput
+  question: QuestionUpdateOneWithoutChallengesInput
+  challengeMessages: ChallengeMessageUpdateManyWithoutChallengeInput
+}
+
+input ChallengeUpdateWithoutChallengeMessagesDataInput {
+  challenge: String
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutChallengesInput
+  updatedBy: UserUpdateOneWithoutChallengeUpdatesInput
+  question: QuestionUpdateOneWithoutChallengesInput
+  answer: AnswerUpdateOneWithoutChallengeInput
 }
 
 input ChallengeUpdateWithoutQuestionDataInput {
@@ -914,6 +1473,8 @@ input ChallengeUpdateWithoutQuestionDataInput {
   updateDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutChallengesInput
   updatedBy: UserUpdateOneWithoutChallengeUpdatesInput
+  answer: AnswerUpdateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageUpdateManyWithoutChallengeInput
 }
 
 input ChallengeUpdateWithoutUpdatedByDataInput {
@@ -921,7 +1482,9 @@ input ChallengeUpdateWithoutUpdatedByDataInput {
   addedDate: DateTime
   updateDate: DateTime
   addedBy: UserUpdateOneRequiredWithoutChallengesInput
-  question: QuestionUpdateOneRequiredWithoutChallengesInput
+  question: QuestionUpdateOneWithoutChallengesInput
+  answer: AnswerUpdateOneWithoutChallengeInput
+  challengeMessages: ChallengeMessageUpdateManyWithoutChallengeInput
 }
 
 input ChallengeUpdateWithWhereUniqueWithoutAddedByInput {
@@ -937,6 +1500,16 @@ input ChallengeUpdateWithWhereUniqueWithoutQuestionInput {
 input ChallengeUpdateWithWhereUniqueWithoutUpdatedByInput {
   where: ChallengeWhereUniqueInput!
   data: ChallengeUpdateWithoutUpdatedByDataInput!
+}
+
+input ChallengeUpsertWithoutAnswerInput {
+  update: ChallengeUpdateWithoutAnswerDataInput!
+  create: ChallengeCreateWithoutAnswerInput!
+}
+
+input ChallengeUpsertWithoutChallengeMessagesInput {
+  update: ChallengeUpdateWithoutChallengeMessagesDataInput!
+  create: ChallengeCreateWithoutChallengeMessagesInput!
 }
 
 input ChallengeUpsertWithWhereUniqueWithoutAddedByInput {
@@ -1093,6 +1666,10 @@ input ChallengeWhereInput {
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   question: QuestionWhereInput
+  answer: AnswerWhereInput
+  challengeMessages_every: ChallengeMessageWhereInput
+  challengeMessages_some: ChallengeMessageWhereInput
+  challengeMessages_none: ChallengeMessageWhereInput
 }
 
 input ChallengeWhereUniqueInput {
@@ -3807,6 +4384,7 @@ type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionChoice(data: QuestionChoiceCreateInput!): QuestionChoice!
   createChallenge(data: ChallengeCreateInput!): Challenge!
+  createChallengeMessage(data: ChallengeMessageCreateInput!): ChallengeMessage!
   createSequence(data: SequenceCreateInput!): Sequence!
   createInstitution(data: InstitutionCreateInput!): Institution!
   createQuestion(data: QuestionCreateInput!): Question!
@@ -3819,6 +4397,7 @@ type Mutation {
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionChoice(data: QuestionChoiceUpdateInput!, where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   updateChallenge(data: ChallengeUpdateInput!, where: ChallengeWhereUniqueInput!): Challenge
+  updateChallengeMessage(data: ChallengeMessageUpdateInput!, where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   updateSequence(data: SequenceUpdateInput!, where: SequenceWhereUniqueInput!): Sequence
   updateInstitution(data: InstitutionUpdateInput!, where: InstitutionWhereUniqueInput!): Institution
   updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
@@ -3831,6 +4410,7 @@ type Mutation {
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   deleteChallenge(where: ChallengeWhereUniqueInput!): Challenge
+  deleteChallengeMessage(where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   deleteSequence(where: SequenceWhereUniqueInput!): Sequence
   deleteInstitution(where: InstitutionWhereUniqueInput!): Institution
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
@@ -3843,6 +4423,7 @@ type Mutation {
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionChoice(where: QuestionChoiceWhereUniqueInput!, create: QuestionChoiceCreateInput!, update: QuestionChoiceUpdateInput!): QuestionChoice!
   upsertChallenge(where: ChallengeWhereUniqueInput!, create: ChallengeCreateInput!, update: ChallengeUpdateInput!): Challenge!
+  upsertChallengeMessage(where: ChallengeMessageWhereUniqueInput!, create: ChallengeMessageCreateInput!, update: ChallengeMessageUpdateInput!): ChallengeMessage!
   upsertSequence(where: SequenceWhereUniqueInput!, create: SequenceCreateInput!, update: SequenceUpdateInput!): Sequence!
   upsertInstitution(where: InstitutionWhereUniqueInput!, create: InstitutionCreateInput!, update: InstitutionUpdateInput!): Institution!
   upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
@@ -3855,6 +4436,7 @@ type Mutation {
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestionChoices(data: QuestionChoiceUpdateManyMutationInput!, where: QuestionChoiceWhereInput): BatchPayload!
   updateManyChallenges(data: ChallengeUpdateManyMutationInput!, where: ChallengeWhereInput): BatchPayload!
+  updateManyChallengeMessages(data: ChallengeMessageUpdateManyMutationInput!, where: ChallengeMessageWhereInput): BatchPayload!
   updateManySequences(data: SequenceUpdateManyMutationInput!, where: SequenceWhereInput): BatchPayload!
   updateManyInstitutions(data: InstitutionUpdateManyMutationInput!, where: InstitutionWhereInput): BatchPayload!
   updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
@@ -3867,6 +4449,7 @@ type Mutation {
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionChoices(where: QuestionChoiceWhereInput): BatchPayload!
   deleteManyChallenges(where: ChallengeWhereInput): BatchPayload!
+  deleteManyChallengeMessages(where: ChallengeMessageWhereInput): BatchPayload!
   deleteManySequences(where: SequenceWhereInput): BatchPayload!
   deleteManyInstitutions(where: InstitutionWhereInput): BatchPayload!
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
@@ -4545,6 +5128,7 @@ type Query {
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionChoices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice]!
   challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge]!
+  challengeMessages(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeMessage]!
   sequences(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence]!
   institutions(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Institution]!
   questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
@@ -4557,6 +5141,7 @@ type Query {
   answer(where: AnswerWhereUniqueInput!): Answer
   questionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
   challenge(where: ChallengeWhereUniqueInput!): Challenge
+  challengeMessage(where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   sequence(where: SequenceWhereUniqueInput!): Sequence
   institution(where: InstitutionWhereUniqueInput!): Institution
   question(where: QuestionWhereUniqueInput!): Question
@@ -4569,6 +5154,7 @@ type Query {
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionChoicesConnection(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionChoiceConnection!
   challengesConnection(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeConnection!
+  challengeMessagesConnection(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeMessageConnection!
   sequencesConnection(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SequenceConnection!
   institutionsConnection(where: InstitutionWhereInput, orderBy: InstitutionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InstitutionConnection!
   questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
@@ -5895,13 +6481,6 @@ input QuestionUpdateManyWithWhereNestedInput {
   data: QuestionUpdateManyDataInput!
 }
 
-input QuestionUpdateOneRequiredWithoutChallengesInput {
-  create: QuestionCreateWithoutChallengesInput
-  connect: QuestionWhereUniqueInput
-  update: QuestionUpdateWithoutChallengesDataInput
-  upsert: QuestionUpsertWithoutChallengesInput
-}
-
 input QuestionUpdateOneRequiredWithoutChoicesInput {
   create: QuestionCreateWithoutChoicesInput
   connect: QuestionWhereUniqueInput
@@ -5914,6 +6493,15 @@ input QuestionUpdateOneRequiredWithoutQuestionAnswersInput {
   connect: QuestionWhereUniqueInput
   update: QuestionUpdateWithoutQuestionAnswersDataInput
   upsert: QuestionUpsertWithoutQuestionAnswersInput
+}
+
+input QuestionUpdateOneWithoutChallengesInput {
+  create: QuestionCreateWithoutChallengesInput
+  connect: QuestionWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: QuestionUpdateWithoutChallengesDataInput
+  upsert: QuestionUpsertWithoutChallengesInput
 }
 
 input QuestionUpdateWithoutAddedByDataInput {
@@ -7662,6 +8250,7 @@ type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionChoice(where: QuestionChoiceSubscriptionWhereInput): QuestionChoiceSubscriptionPayload
   challenge(where: ChallengeSubscriptionWhereInput): ChallengeSubscriptionPayload
+  challengeMessage(where: ChallengeMessageSubscriptionWhereInput): ChallengeMessageSubscriptionPayload
   sequence(where: SequenceSubscriptionWhereInput): SequenceSubscriptionPayload
   institution(where: InstitutionSubscriptionWhereInput): InstitutionSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
@@ -8972,6 +9561,7 @@ type User implements Node {
   adminInstitution: Institution
   invitesSentTo(where: CourseInviteWhereInput, orderBy: CourseInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseInvite!]
   addedInvitesBy(where: CourseInviteWhereInput, orderBy: CourseInviteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseInvite!]
+  challengeMessagesAdded(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeMessage!]
 }
 
 """A connection to a list of items."""
@@ -9038,6 +9628,7 @@ input UserCreateInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateManyWithoutAdminInstitutionsInput {
@@ -9107,6 +9698,11 @@ input UserCreateOneWithoutAnswersInput {
 
 input UserCreateOneWithoutAnswerUpdatesInput {
   create: UserCreateWithoutAnswerUpdatesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutChallengeMessagesAddedInput {
+  create: UserCreateWithoutChallengeMessagesAddedInput
   connect: UserWhereUniqueInput
 }
 
@@ -9266,6 +9862,7 @@ input UserCreateWithoutAddedInvitesByInput {
   invitesSent: CourseCreateManyWithoutInvitesSentByInput
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutAdminInstitutionsInput {
@@ -9321,6 +9918,7 @@ input UserCreateWithoutAdminInstitutionsInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutAnswersInput {
@@ -9376,6 +9974,7 @@ input UserCreateWithoutAnswersInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutAnswerUpdatesInput {
@@ -9420,6 +10019,63 @@ input UserCreateWithoutAnswerUpdatesInput {
   testUpdates: TestCreateManyWithoutUpdatedByInput
   questionsAddedBy: QuestionCreateManyWithoutAddedByInput
   questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
+  userUpdates: UserCreateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionCreateManyWithoutSentToInput
+  sequencesAdded: SequenceCreateManyWithoutAddedByInput
+  sentToSequences: SequenceCreateManyWithoutSentToInput
+  invitesSent: CourseCreateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionCreateOneInput
+  invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
+  addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
+}
+
+input UserCreateWithoutChallengeMessagesAddedInput {
+  email: String!
+  password: String!
+  salutation: String
+  firstName: String!
+  lastName: String!
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserCreatestudentIdsInput
+  teacherIds: UserCreateteacherIdsInput
+  invites: CourseCreateManyWithoutInvitesSentInput
+  adminInstitutions: InstitutionCreateManyWithoutAdminsInput
+  teacherInstitutions: InstitutionCreateManyWithoutTeachersInput
+  studentInstitutions: InstitutionCreateManyWithoutStudentsInput
+  institution: InstitutionCreateOneWithoutUsersInput
+  updatedBy: UserCreateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionCreateManyWithoutContactsInput
+  teacherCourses: CourseCreateManyWithoutTeachersInput
+  studentCourses: CourseCreateManyWithoutStudentsInput
+  answers: AnswerCreateManyWithoutAddedByInput
+  questions: QuestionCreateManyInput
+  challenges: ChallengeCreateManyWithoutAddedByInput
+  testSequence: SequenceCreateManyWithoutStudentsInput
+  usedTestSequence: SequenceCreateManyWithoutUsedStudentsInput
+  coursesAdded: CourseCreateManyWithoutAddedByInput
+  testsAdded: TestCreateManyWithoutAddedByInput
+  panelsAdded: PanelCreateManyWithoutAddedByInput
+  institutionsAdded: InstitutionCreateManyWithoutAddedByInput
+  institutionUpdates: InstitutionCreateManyWithoutUpdatedByInput
+  courseUpdates: CourseCreateManyWithoutUpdatedByInput
+  testUpdates: TestCreateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionCreateManyWithoutAddedByInput
+  questionUpdates: QuestionCreateManyWithoutUpdatedByInput
+  answerUpdates: AnswerCreateManyWithoutUpdatedByInput
   questionChoiceAddedBy: QuestionChoiceCreateManyWithoutAddedByInput
   questionChoiceUpdates: QuestionChoiceCreateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeCreateManyWithoutUpdatedByInput
@@ -9486,6 +10142,7 @@ input UserCreateWithoutChallengesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutChallengeUpdatesInput {
@@ -9541,6 +10198,7 @@ input UserCreateWithoutChallengeUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutCoursesAddedInput {
@@ -9596,6 +10254,7 @@ input UserCreateWithoutCoursesAddedInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutCourseUpdatesInput {
@@ -9651,6 +10310,7 @@ input UserCreateWithoutCourseUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInstitutionContactInput {
@@ -9706,6 +10366,7 @@ input UserCreateWithoutInstitutionContactInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInstitutionInput {
@@ -9761,6 +10422,7 @@ input UserCreateWithoutInstitutionInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInstitutionsAddedInput {
@@ -9816,6 +10478,7 @@ input UserCreateWithoutInstitutionsAddedInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInstitutionUpdatesInput {
@@ -9871,6 +10534,7 @@ input UserCreateWithoutInstitutionUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInvitesInput {
@@ -9926,6 +10590,7 @@ input UserCreateWithoutInvitesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInvitesSentInput {
@@ -9981,6 +10646,7 @@ input UserCreateWithoutInvitesSentInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutInvitesSentToInput {
@@ -10036,6 +10702,7 @@ input UserCreateWithoutInvitesSentToInput {
   invitesSent: CourseCreateManyWithoutInvitesSentByInput
   adminInstitution: InstitutionCreateOneInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutPanelsAddedInput {
@@ -10091,6 +10758,7 @@ input UserCreateWithoutPanelsAddedInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutQuestionChoiceAddedByInput {
@@ -10146,6 +10814,7 @@ input UserCreateWithoutQuestionChoiceAddedByInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutQuestionChoiceUpdatesInput {
@@ -10201,6 +10870,7 @@ input UserCreateWithoutQuestionChoiceUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutQuestionsAddedByInput {
@@ -10256,6 +10926,7 @@ input UserCreateWithoutQuestionsAddedByInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutQuestionsSentToInput {
@@ -10311,6 +10982,7 @@ input UserCreateWithoutQuestionsSentToInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutQuestionUpdatesInput {
@@ -10366,6 +11038,7 @@ input UserCreateWithoutQuestionUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutSentToSequencesInput {
@@ -10421,6 +11094,7 @@ input UserCreateWithoutSentToSequencesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutSequencesAddedInput {
@@ -10476,6 +11150,7 @@ input UserCreateWithoutSequencesAddedInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutStudentCoursesInput {
@@ -10531,6 +11206,7 @@ input UserCreateWithoutStudentCoursesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutStudentInstitutionsInput {
@@ -10586,6 +11262,7 @@ input UserCreateWithoutStudentInstitutionsInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutTeacherCoursesInput {
@@ -10641,6 +11318,7 @@ input UserCreateWithoutTeacherCoursesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutTeacherInstitutionsInput {
@@ -10696,6 +11374,7 @@ input UserCreateWithoutTeacherInstitutionsInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutTestsAddedInput {
@@ -10751,6 +11430,7 @@ input UserCreateWithoutTestsAddedInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutTestSequenceInput {
@@ -10806,6 +11486,7 @@ input UserCreateWithoutTestSequenceInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutTestUpdatesInput {
@@ -10861,6 +11542,7 @@ input UserCreateWithoutTestUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutUpdatedByInput {
@@ -10916,6 +11598,7 @@ input UserCreateWithoutUpdatedByInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutUsedTestSequenceInput {
@@ -10971,6 +11654,7 @@ input UserCreateWithoutUsedTestSequenceInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutUserUpdatesInput {
@@ -11026,6 +11710,7 @@ input UserCreateWithoutUserUpdatesInput {
   adminInstitution: InstitutionCreateOneInput
   invitesSentTo: CourseInviteCreateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteCreateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageCreateManyWithoutAddedByInput
 }
 
 """An edge in a connection."""
@@ -11717,6 +12402,7 @@ input UserUpdateInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateManyDataInput {
@@ -11899,6 +12585,13 @@ input UserUpdateOneRequiredWithoutAnswersInput {
   connect: UserWhereUniqueInput
   update: UserUpdateWithoutAnswersDataInput
   upsert: UserUpsertWithoutAnswersInput
+}
+
+input UserUpdateOneRequiredWithoutChallengeMessagesAddedInput {
+  create: UserCreateWithoutChallengeMessagesAddedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutChallengeMessagesAddedDataInput
+  upsert: UserUpsertWithoutChallengeMessagesAddedInput
 }
 
 input UserUpdateOneRequiredWithoutChallengesInput {
@@ -12124,6 +12817,7 @@ input UserUpdateWithoutAddedInvitesByDataInput {
   invitesSent: CourseUpdateManyWithoutInvitesSentByInput
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutAdminInstitutionsDataInput {
@@ -12179,6 +12873,7 @@ input UserUpdateWithoutAdminInstitutionsDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutAnswersDataInput {
@@ -12234,6 +12929,7 @@ input UserUpdateWithoutAnswersDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutAnswerUpdatesDataInput {
@@ -12278,6 +12974,63 @@ input UserUpdateWithoutAnswerUpdatesDataInput {
   testUpdates: TestUpdateManyWithoutUpdatedByInput
   questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
   questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
+  questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
+  challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
+  userUpdates: UserUpdateManyWithoutUpdatedByInput
+  questionsSentTo: QuestionUpdateManyWithoutSentToInput
+  sequencesAdded: SequenceUpdateManyWithoutAddedByInput
+  sentToSequences: SequenceUpdateManyWithoutSentToInput
+  invitesSent: CourseUpdateManyWithoutInvitesSentByInput
+  adminInstitution: InstitutionUpdateOneInput
+  invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
+  addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
+}
+
+input UserUpdateWithoutChallengeMessagesAddedDataInput {
+  email: String
+  password: String
+  salutation: String
+  firstName: String
+  lastName: String
+  phone: String
+  lastLogin: DateTime
+  signUpDate: DateTime
+  online: Boolean
+  pushToken: String
+  updateDate: DateTime
+  resetToken: String
+  confirmationToken: String
+  tokenExpirationTime: DateTime
+  confirmed: Boolean
+  role: UserType
+  studentIds: UserUpdatestudentIdsInput
+  teacherIds: UserUpdateteacherIdsInput
+  invites: CourseUpdateManyWithoutInvitesSentInput
+  adminInstitutions: InstitutionUpdateManyWithoutAdminsInput
+  teacherInstitutions: InstitutionUpdateManyWithoutTeachersInput
+  studentInstitutions: InstitutionUpdateManyWithoutStudentsInput
+  institution: InstitutionUpdateOneWithoutUsersInput
+  updatedBy: UserUpdateOneWithoutUserUpdatesInput
+  institutionContact: InstitutionUpdateManyWithoutContactsInput
+  teacherCourses: CourseUpdateManyWithoutTeachersInput
+  studentCourses: CourseUpdateManyWithoutStudentsInput
+  answers: AnswerUpdateManyWithoutAddedByInput
+  questions: QuestionUpdateManyInput
+  challenges: ChallengeUpdateManyWithoutAddedByInput
+  testSequence: SequenceUpdateManyWithoutStudentsInput
+  usedTestSequence: SequenceUpdateManyWithoutUsedStudentsInput
+  coursesAdded: CourseUpdateManyWithoutAddedByInput
+  testsAdded: TestUpdateManyWithoutAddedByInput
+  panelsAdded: PanelUpdateManyWithoutAddedByInput
+  institutionsAdded: InstitutionUpdateManyWithoutAddedByInput
+  institutionUpdates: InstitutionUpdateManyWithoutUpdatedByInput
+  courseUpdates: CourseUpdateManyWithoutUpdatedByInput
+  testUpdates: TestUpdateManyWithoutUpdatedByInput
+  questionsAddedBy: QuestionUpdateManyWithoutAddedByInput
+  questionUpdates: QuestionUpdateManyWithoutUpdatedByInput
+  answerUpdates: AnswerUpdateManyWithoutUpdatedByInput
   questionChoiceAddedBy: QuestionChoiceUpdateManyWithoutAddedByInput
   questionChoiceUpdates: QuestionChoiceUpdateManyWithoutUpdatedByInput
   challengeUpdates: ChallengeUpdateManyWithoutUpdatedByInput
@@ -12344,6 +13097,7 @@ input UserUpdateWithoutChallengesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutChallengeUpdatesDataInput {
@@ -12399,6 +13153,7 @@ input UserUpdateWithoutChallengeUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutCoursesAddedDataInput {
@@ -12454,6 +13209,7 @@ input UserUpdateWithoutCoursesAddedDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutCourseUpdatesDataInput {
@@ -12509,6 +13265,7 @@ input UserUpdateWithoutCourseUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInstitutionContactDataInput {
@@ -12564,6 +13321,7 @@ input UserUpdateWithoutInstitutionContactDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInstitutionDataInput {
@@ -12619,6 +13377,7 @@ input UserUpdateWithoutInstitutionDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInstitutionsAddedDataInput {
@@ -12674,6 +13433,7 @@ input UserUpdateWithoutInstitutionsAddedDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInstitutionUpdatesDataInput {
@@ -12729,6 +13489,7 @@ input UserUpdateWithoutInstitutionUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInvitesDataInput {
@@ -12784,6 +13545,7 @@ input UserUpdateWithoutInvitesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInvitesSentDataInput {
@@ -12839,6 +13601,7 @@ input UserUpdateWithoutInvitesSentDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutInvitesSentToDataInput {
@@ -12894,6 +13657,7 @@ input UserUpdateWithoutInvitesSentToDataInput {
   invitesSent: CourseUpdateManyWithoutInvitesSentByInput
   adminInstitution: InstitutionUpdateOneInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutPanelsAddedDataInput {
@@ -12949,6 +13713,7 @@ input UserUpdateWithoutPanelsAddedDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutQuestionChoiceAddedByDataInput {
@@ -13004,6 +13769,7 @@ input UserUpdateWithoutQuestionChoiceAddedByDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
@@ -13059,6 +13825,7 @@ input UserUpdateWithoutQuestionChoiceUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutQuestionsAddedByDataInput {
@@ -13114,6 +13881,7 @@ input UserUpdateWithoutQuestionsAddedByDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutQuestionsSentToDataInput {
@@ -13169,6 +13937,7 @@ input UserUpdateWithoutQuestionsSentToDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutQuestionUpdatesDataInput {
@@ -13224,6 +13993,7 @@ input UserUpdateWithoutQuestionUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutSentToSequencesDataInput {
@@ -13279,6 +14049,7 @@ input UserUpdateWithoutSentToSequencesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutSequencesAddedDataInput {
@@ -13334,6 +14105,7 @@ input UserUpdateWithoutSequencesAddedDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutStudentCoursesDataInput {
@@ -13389,6 +14161,7 @@ input UserUpdateWithoutStudentCoursesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutStudentInstitutionsDataInput {
@@ -13444,6 +14217,7 @@ input UserUpdateWithoutStudentInstitutionsDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutTeacherCoursesDataInput {
@@ -13499,6 +14273,7 @@ input UserUpdateWithoutTeacherCoursesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutTeacherInstitutionsDataInput {
@@ -13554,6 +14329,7 @@ input UserUpdateWithoutTeacherInstitutionsDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutTestsAddedDataInput {
@@ -13609,6 +14385,7 @@ input UserUpdateWithoutTestsAddedDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutTestSequenceDataInput {
@@ -13664,6 +14441,7 @@ input UserUpdateWithoutTestSequenceDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutTestUpdatesDataInput {
@@ -13719,6 +14497,7 @@ input UserUpdateWithoutTestUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutUpdatedByDataInput {
@@ -13774,6 +14553,7 @@ input UserUpdateWithoutUpdatedByDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutUsedTestSequenceDataInput {
@@ -13829,6 +14609,7 @@ input UserUpdateWithoutUsedTestSequenceDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutUserUpdatesDataInput {
@@ -13884,6 +14665,7 @@ input UserUpdateWithoutUserUpdatesDataInput {
   adminInstitution: InstitutionUpdateOneInput
   invitesSentTo: CourseInviteUpdateManyWithoutInviteSentToInput
   addedInvitesBy: CourseInviteUpdateManyWithoutAddedByInput
+  challengeMessagesAdded: ChallengeMessageUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithWhereUniqueWithoutAdminInstitutionsInput {
@@ -13954,6 +14736,11 @@ input UserUpsertWithoutAnswersInput {
 input UserUpsertWithoutAnswerUpdatesInput {
   update: UserUpdateWithoutAnswerUpdatesDataInput!
   create: UserCreateWithoutAnswerUpdatesInput!
+}
+
+input UserUpsertWithoutChallengeMessagesAddedInput {
+  update: UserUpdateWithoutChallengeMessagesAddedDataInput!
+  create: UserCreateWithoutChallengeMessagesAddedInput!
 }
 
 input UserUpsertWithoutChallengesInput {
@@ -14731,6 +15518,9 @@ input UserWhereInput {
   addedInvitesBy_every: CourseInviteWhereInput
   addedInvitesBy_some: CourseInviteWhereInput
   addedInvitesBy_none: CourseInviteWhereInput
+  challengeMessagesAdded_every: ChallengeMessageWhereInput
+  challengeMessagesAdded_some: ChallengeMessageWhereInput
+  challengeMessagesAdded_none: ChallengeMessageWhereInput
 }
 
 input UserWhereUniqueInput {

@@ -1159,11 +1159,11 @@ async function deleteQuestionChoice(parent, { id }, ctx, info) {
 
 }
 
-async function addChallenge(parent, { challenge, questionId }, ctx, info) {
+async function addChallenge(parent, { challenge, answerId }, ctx, info) {
   const userId = await getUserId(ctx)
   const addedDate = new Date()
 
-  const test = await ctx.db.query.question({where: { id: questionId } },` { addedBy { id } sentTo { id } test { course { teachers { id }  } } } `)
+  const test = await ctx.db.query.answer({where: { id: answerId } },` { question { addedBy { id } sentTo { id } test { course { teachers { id } } } } } `)
   const challengers = JSON.stringify(test)
 
   if (challengers.includes(userId)){
@@ -1176,8 +1176,8 @@ async function addChallenge(parent, { challenge, questionId }, ctx, info) {
           addedBy: {
             connect: { id: userId },
           },
-          question: {
-            connect: { id: questionId  }
+          answer: {
+            connect: { id: answerId }
           }
         },
       },
@@ -1237,6 +1237,35 @@ async function deleteChallenge(parent, { id }, ctx, info) {
     info
   )
 }
+
+async function addChallengeMessage(parent, { challengeMessage, challengeId }, ctx, info) {
+  const userId = await getUserId(ctx)
+  const addedDate = new Date()
+
+  const challenge = await ctx.db.query.challenge({where: { id: challengeId } },` { answer { question { addedBy { id } sentTo { id } test { course { teachers { id }  } } } } } `)
+  console.log(challenge)
+  const challengers = JSON.stringify(challenge)
+
+
+
+    return await ctx.db.mutation.createChallengeMessage(
+      {
+        data: {
+          challengeMessage,
+          addedDate,
+          addedBy: {
+            connect: { id: userId },
+          },
+          challenge: {
+            connect: { id: challengeId }
+          }
+        },
+      },
+      info
+    )
+
+}
+
 
 async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
   const userId = await getUserId(ctx)
@@ -1448,6 +1477,7 @@ module.exports = {
   addChallenge,
   updateChallenge,
   deleteChallenge,
+  addChallengeMessage,
   addAnswer,
   deleteAnswer,
   addSequence,

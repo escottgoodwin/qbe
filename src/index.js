@@ -12,6 +12,7 @@ const ResponseImageSearch = require('./resolvers/ResponseImageSearch')
 const QuestionSearch = require('./resolvers/QuestionSearch')
 const QuestionChoiceSearch = require('./resolvers/QuestionChoiceSearch')
 const ChallengeSearch = require('./resolvers/ChallengeSearch')
+const ChallengeMessageSearch = require('./resolvers/ChallengeMessageSearch')
 const AnswerSearch = require('./resolvers/AnswerSearch')
 
 const { directiveResolvers } = require("./directives")
@@ -27,6 +28,7 @@ const resolvers = {
   QuestionSearch,
   QuestionChoiceSearch,
   ChallengeSearch,
+  ChallengeMessageSearch,
   AnswerSearch,
   Node: {
     __resolveType() {

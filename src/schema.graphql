@@ -23,6 +23,7 @@ type Query {
   questionStats(questionId: String): PercentCorrect! @isAuthenticated
   questionchoices(filter: String, where: QuestionChoiceWhereInput, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
   challenges(filter: String, where: ChallengeWhereInput, skip: Int, first: Int, orderBy: ChallengeOrderByInput): ChallengeSearch! @isAuthenticated
+  challengeMessages(filter: String, where: ChallengeMessageWhereInput, skip: Int, first: Int, orderBy: ChallengeMessageOrderByInput): ChallengeMessageSearch! @isAuthenticated
   challenge(id: ID!): Challenge! @isAuthenticated
   answers(filter: String, where: AnswerWhereInput, skip: Int, first: Int, orderBy: AnswerOrderByInput): AnswerSearch! @isAuthenticated
   answer(id: ID!): Answer! @isAuthenticated
@@ -89,11 +90,13 @@ type Mutation {
 
   deleteQuestionChoice(id: ID!): QuestionChoice! @hasRole(roles: ["STUDENT"])
 
-  addChallenge(challenge: String!, questionId: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+  addChallenge(challenge: String!, answerId: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   updateChallenge(id: ID!, challenge: String): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   deleteChallenge(id: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
+  addChallengeMessage(challengeMessage: String!, challengeId: ID! ): ChallengeMessage! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   addAnswer(questionId: ID!, answerChoiceId: ID!): Answer! @hasRole(roles: ["STUDENT"])
 
@@ -174,6 +177,11 @@ type QuestionChoiceSearch {
 
 type ChallengeSearch {
   challenges: [Challenge!]!
+  count: Int!
+}
+
+type ChallengeMessageSearch {
+  challengeMessages: [ChallengeMessage!]!
   count: Int!
 }
 

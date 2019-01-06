@@ -60,6 +60,7 @@ type User {
   adminInstitution: Institution @relation(name: "AdminsByInstitution")
   invitesSentTo: [CourseInvite!]! @relation(name: "InvitesSentToByCourseInvite")
   addedInvitesBy: [CourseInvite!]! @relation(name: "AddedByCourseInvite")
+  challengeMessagesAdded: [ChallengeMessage!]! @relation(name: "ChallengeMessagesByUser")
   }
 
 type Institution {
@@ -184,6 +185,7 @@ type Answer {
   updateDate: DateTime
   updatedBy: User @relation(name: "AnswerUpdatesByUser")
   question: Question! @relation(name: "AnswerByQuestion")
+  challenge: Challenge @relation(name: "ChallengeByAnswer" )
 }
 
 type QuestionChoice {
@@ -205,7 +207,17 @@ type Challenge {
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User @relation(name: "ChallengeUpdatesByUser")
-  question: Question! @relation(name: "ChallengesByQuestion")
+  question: Question @relation(name: "ChallengesByQuestion")
+  answer: Answer @relation(name: "ChallengeByAnswer")
+  challengeMessages: [ChallengeMessage!]! @relation(name: "ChallengeMessageByChallenge")
+}
+
+type ChallengeMessage {
+  id: ID! @unique
+  challengeMessage: String
+  addedBy: User! @relation(name: "ChallengeMessagesByUser")
+  addedDate: DateTime
+  challenge: Challenge! @relation(name: "ChallengeMessageByChallenge")
 }
 
 type Sequence {

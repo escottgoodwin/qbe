@@ -436,6 +436,40 @@ async function challenge(parent, args, ctx, info) {
 
 }
 
+async function challengeMessages(parent, args, ctx, info) {
+
+  const where = args.where
+
+  const where1 = args.filter
+      ? {
+          OR: [
+            { id: args.filter },
+            { challengeMessage_contains: args.filter },
+          ],
+        }
+      : {}
+
+      const queriedChallengeMessages = await ctx.db.query.challengeMessages(
+      { where },
+      `{ id }`,
+    )
+
+      const countSelectionSet = `
+        {
+          aggregate {
+            count
+          }
+        }
+      `
+      const challengeMessagesConnection = await ctx.db.query.challengeMessagesConnection({ where }, countSelectionSet)
+
+      return {
+        count: challengeMessagesConnection.aggregate.count,
+        challengeMessageIds: queriedChallengeMessages.map(challengeMessage => challengeMessage.id),
+        args1: args
+      }
+}
+
 async function answers(parent, args, ctx, info) {
 
   const where = args.where
@@ -510,6 +544,7 @@ module.exports = {
   questionchoices,
   challenges,
   challenge,
+  challengeMessages,
   answers,
   answer,
   sequences
