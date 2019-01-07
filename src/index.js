@@ -3,6 +3,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 const Mutation = require('./resolvers/Mutation')
 const Query = require('./resolvers/Query')
+const Subscription = require('./resolvers/Subscription')
 const CourseSearch = require('./resolvers/CourseSearch')
 const UserSearch = require('./resolvers/UserSearch')
 const InstitutionSearch = require('./resolvers/InstitutionSearch')
@@ -20,6 +21,29 @@ const { directiveResolvers } = require("./directives")
 const resolvers = {
   Query,
   Mutation,
+  Subscription: {
+    challengeMsg: {
+      subscribe: (parent, args, ctx, info) => {
+        return ctx.db.subscription.challengeMessage(
+          { where:{
+            AND: [
+              {
+                mutation_in: ["CREATED"]
+              },
+              {
+              node: {
+                challenge: {
+                  id: args.challengeId
+                  }
+                }
+              }
+            ] }
+          },
+          info
+        );
+      }
+    }
+  },
   CourseSearch,
   UserSearch,
   InstitutionSearch,
