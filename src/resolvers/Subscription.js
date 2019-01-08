@@ -13,7 +13,7 @@ function newChallengeMessageSubscribe(parent, args, ctx, info) {
         }
       ] }
     },
-    `{ node { challengeMessage addedBy challenge { challenge addedBy } } }`
+    `{ node { challengeMessage id addedBy challenge { challenge addedBy } } }`
   )
 }
 
@@ -24,7 +24,7 @@ const newChallengeMessage = {
           mutation_in: [CREATED]
         }
       },
-      `{ node { challengeMessage addedBy challenge { challenge addedBy } } }`
+      `{ node { challengeMessage id addedBy challenge { challenge addedBy } } }`
     )
   }
 }
