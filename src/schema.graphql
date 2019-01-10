@@ -27,6 +27,8 @@ type Query {
 
   testQuestionStats(testId: ID!): [PercentQuestionCorrect!]! @isAuthenticated
 
+  testPanelStats(testId: ID!): [PercentQuestionCorrect!]! @isAuthenticated
+
   responseImages(filter: String, where: ResponseImageWhereInput,  skip: Int, first: Int, orderBy: ResponseImageOrderByInput): ResponseImageSearch! @isAuthenticated
 
   panels(filter: String, where: PanelWhereInput, skip: Int, first: Int, orderBy: PanelOrderByInput): PanelSearch! @isAuthenticated

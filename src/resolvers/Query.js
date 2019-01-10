@@ -206,6 +206,23 @@ async function testQuestionStats(parent, args, ctx, info) {
 
 }
 
+async function testPanelStats(parent, args, ctx, info) {
+
+      const panels = await ctx.db.query.panels({ where: { test: { id: args.testId } } }, `{ id link questions { questionAnswers {  answer { correct } } } } ` )
+
+      const panelPercents = panels.map(panel => ({
+        question:'',
+        panelLink:panel.link,
+        total: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length,
+        totalCorrect: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length,
+        percentCorrect: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length > 0 ? panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length : 0.0
+      })
+    )
+      
+      return panelPercents
+
+}
+
 async function tests(parent, args, ctx, info) {
 
   const where = args.where
@@ -554,6 +571,7 @@ module.exports = {
   testStats,
   userTestStats,
   testQuestionStats,
+  testPanelStats,
   panels,
   responseImages,
   questions,
