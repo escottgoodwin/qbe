@@ -80,7 +80,7 @@ async function signup(parent, args, ctx, info) {
     </head>
     <body>
       <p>Hi ${ user.firstName} ${ user.lastName },</p>
-      <p><a href="https://example.com/reset?token=${confirmationToken}&email=${user.email}">Click here to confirm your email address.</a></p>
+      <p><a href="https://quandria-fe.herokuapp.com/reset?token=${confirmationToken}&email=${user.email}">Click here to confirm your email address.</a></p>
       <p>This token will expire in 2 hours.</p>
     </body>
     </html>`
@@ -88,7 +88,7 @@ async function signup(parent, args, ctx, info) {
   const msg = {
     to: args.email,
     subject: 'Confirm your email address',
-    text: `Click on this link to resent your password https://example.com/reset?token=${confirmationToken}&email=${user.email} This token will expire in 2 hours.`,
+    text: `Click on this link to resent your password https://quandria-fe.herokuapp.com/reset?token=${confirmationToken}&email=${user.email} This token will expire in 2 hours.`,
     html: htmlEmail,
   };
 
@@ -139,7 +139,7 @@ async function newPasswordRequest(parent, args, ctx, info) {
     </head>
     <body>
       <p>Hi ${userResetUpdate.firstName} ${userResetUpdate.lastName},</p>
-      <p><a href="https://example.com/reset?token=${resetToken}&email=${userResetUpdate.email}">Click here to reset your password.</a></p>
+      <p><a href="https://quandria-fe.herokuapp.com/reset?token=${resetToken}&email=${userResetUpdate.email}">Click here to reset your password.</a></p>
       <p>This token will expire in 2 hours.</p>
     </body>
     </html>`
@@ -147,7 +147,7 @@ async function newPasswordRequest(parent, args, ctx, info) {
   const msg = {
     to: userResetUpdate.email,
     subject: 'Reset password request',
-    text: `Click on this link to reset your password https://example.com/reset?token=${resetToken}&email=${userResetUpdate.email} This token will expire in 2 hours.`,
+    text: `Click on this link to reset your password https://quandria-fe.herokuapp.com/reset?token=${resetToken}&email=${userResetUpdate.email} This token will expire in 2 hours.`,
     html: htmlEmail,
   };
 
@@ -267,14 +267,14 @@ async function confirmEmail(parent, args, ctx, info) {
     </head>
     <body>
       <p>Hi ${confirmUser.firstName} ${confirmUser.lastName},</p>
-      <p>Please login: <a href="https://example.com/login">Login</a></p>
+      <p>Please login: <a href="https://quandria-fe.herokuapp.com/login">Login</a></p>
     </body>
     </html>`
 
   const msg = {
     to: args.email,
     subject: 'Account confirmed',
-    text: 'Your account has been confirmed. Please login in at https://example.com/login',
+    text: 'Your account has been confirmed. Please login in at https://quandria-fe.herokuapp.com/login',
     html: htmlEmail,
   };
 
@@ -335,7 +335,7 @@ async function sendInvite(parent, args, ctx, info) {
         <body>
           <p>Hi ${invite.inviteSentTo.firstName} ${invite.inviteSentTo.lastName},</p>
           <p>You have been invited to join course ${invite.course.name} ${invite.course.courseNumber}
-          <p><a href="https://example.com/login">Login</a> and accept invitation to join the course.</p>
+          <p><a href="https://quandria-be.herokuapp.com/login">Login</a> and accept invitation to join the course.</p>
 
         </body>
         </html>`
@@ -343,7 +343,7 @@ async function sendInvite(parent, args, ctx, info) {
       const msg = {
         to: email,
         subject: `Join ${invite.course.name} ${invite.course.courseNumber}`,
-        text: `Login and accept invitation to join the course. https://example.com/login`,
+        text: `Login and accept invitation to join the course. https://quandria-be.herokuapp.com/login`,
         html: htmlEmail,
       };
 
