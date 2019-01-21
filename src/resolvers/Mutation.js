@@ -706,7 +706,7 @@ async function publishTest(parent, args, ctx, info) {
         },
       },
       where: {
-        id: args.id
+        id: args.testId
     },
   },
   `{ id subject testNumber testDate panels { id } course { students { id } } }`
@@ -721,7 +721,6 @@ async function publishTest(parent, args, ctx, info) {
   const studentShuffleIds = studentShuffle.map(student => student.id)
   const panelShuffleIds = panelShuffle.map(panel => panel.id)
 
-
   const sequence =  ctx.db.mutation.createSequence(
     {
       data: {
@@ -733,7 +732,7 @@ async function publishTest(parent, args, ctx, info) {
         endHour:args.endHour,
         testEndDate,
         test: {
-          connect: { id: args.id }
+          connect: { id: args.testId }
         },
         studs: {set: studentShuffleIds},
         pans: {set: panelShuffleIds}

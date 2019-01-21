@@ -132,7 +132,7 @@ type Mutation {
 
   deleteSequence(id: ID!): Sequence!
 
-  publishTest(id: ID!, startHour: String, endHour: String, testEndDate: DateTime): Test!
+  publishTest(testId: ID!, startHour: String, endHour: String, testEndDate: DateTime): Test!
 
   sendQuestion(testId: ID!, questionId: ID!): Question!
 
