@@ -1,5 +1,5 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Fri Jan 04 2019 15:30:01 GMT-0800 (Pacific Standard Time)
+# timestamp: Sun Jan 20 2019 14:56:07 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
   count: Int!
@@ -4492,6 +4492,7 @@ type Panel implements Node {
   usedSequence(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
   questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
   sentPanels(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence!]
+  questionPanelsSent: Question
 }
 
 """A connection to a list of items."""
@@ -4513,6 +4514,7 @@ input PanelCreateInput {
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 input PanelCreateManyWithoutAddedByInput {
@@ -4535,6 +4537,11 @@ input PanelCreateManyWithoutUsedSequenceInput {
   connect: [PanelWhereUniqueInput!]
 }
 
+input PanelCreateOneWithoutQuestionPanelsSentInput {
+  create: PanelCreateWithoutQuestionPanelsSentInput
+  connect: PanelWhereUniqueInput
+}
+
 input PanelCreateOneWithoutQuestionsInput {
   create: PanelCreateWithoutQuestionsInput
   connect: PanelWhereUniqueInput
@@ -4553,6 +4560,18 @@ input PanelCreateWithoutAddedByInput {
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
+}
+
+input PanelCreateWithoutQuestionPanelsSentInput {
+  addedDate: DateTime
+  link: String!
+  addedBy: UserCreateOneWithoutPanelsAddedInput!
+  test: TestCreateOneWithoutPanelsInput!
+  sequences: SequenceCreateManyWithoutPanelsInput
+  usedSequence: SequenceCreateManyWithoutUsedPanelsInput
+  questions: QuestionCreateManyWithoutPanelInput
+  sentPanels: SequenceCreateManyWithoutSentPanelInput
 }
 
 input PanelCreateWithoutQuestionsInput {
@@ -4563,6 +4582,7 @@ input PanelCreateWithoutQuestionsInput {
   sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 input PanelCreateWithoutSentPanelsInput {
@@ -4573,6 +4593,7 @@ input PanelCreateWithoutSentPanelsInput {
   sequences: SequenceCreateManyWithoutPanelsInput
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 input PanelCreateWithoutSequencesInput {
@@ -4583,6 +4604,7 @@ input PanelCreateWithoutSequencesInput {
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 input PanelCreateWithoutTestInput {
@@ -4593,6 +4615,7 @@ input PanelCreateWithoutTestInput {
   usedSequence: SequenceCreateManyWithoutUsedPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 input PanelCreateWithoutUsedSequenceInput {
@@ -4603,6 +4626,7 @@ input PanelCreateWithoutUsedSequenceInput {
   sequences: SequenceCreateManyWithoutPanelsInput
   questions: QuestionCreateManyWithoutPanelInput
   sentPanels: SequenceCreateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionCreateOneWithoutSentPanelInput
 }
 
 """An edge in a connection."""
@@ -4794,6 +4818,7 @@ input PanelUpdateInput {
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateManyDataInput {
@@ -4855,6 +4880,15 @@ input PanelUpdateManyWithWhereNestedInput {
   data: PanelUpdateManyDataInput!
 }
 
+input PanelUpdateOneWithoutQuestionPanelsSentInput {
+  create: PanelCreateWithoutQuestionPanelsSentInput
+  connect: PanelWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: PanelUpdateWithoutQuestionPanelsSentDataInput
+  upsert: PanelUpsertWithoutQuestionPanelsSentInput
+}
+
 input PanelUpdateOneWithoutQuestionsInput {
   create: PanelCreateWithoutQuestionsInput
   connect: PanelWhereUniqueInput
@@ -4881,6 +4915,18 @@ input PanelUpdateWithoutAddedByDataInput {
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
+}
+
+input PanelUpdateWithoutQuestionPanelsSentDataInput {
+  addedDate: DateTime
+  link: String
+  addedBy: UserUpdateOneRequiredWithoutPanelsAddedInput
+  test: TestUpdateOneRequiredWithoutPanelsInput
+  sequences: SequenceUpdateManyWithoutPanelsInput
+  usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
+  questions: QuestionUpdateManyWithoutPanelInput
+  sentPanels: SequenceUpdateManyWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutQuestionsDataInput {
@@ -4891,6 +4937,7 @@ input PanelUpdateWithoutQuestionsDataInput {
   sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutSentPanelsDataInput {
@@ -4901,6 +4948,7 @@ input PanelUpdateWithoutSentPanelsDataInput {
   sequences: SequenceUpdateManyWithoutPanelsInput
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutSequencesDataInput {
@@ -4911,6 +4959,7 @@ input PanelUpdateWithoutSequencesDataInput {
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutTestDataInput {
@@ -4921,6 +4970,7 @@ input PanelUpdateWithoutTestDataInput {
   usedSequence: SequenceUpdateManyWithoutUsedPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateWithoutUsedSequenceDataInput {
@@ -4931,6 +4981,7 @@ input PanelUpdateWithoutUsedSequenceDataInput {
   sequences: SequenceUpdateManyWithoutPanelsInput
   questions: QuestionUpdateManyWithoutPanelInput
   sentPanels: SequenceUpdateManyWithoutSentPanelInput
+  questionPanelsSent: QuestionUpdateOneWithoutSentPanelInput
 }
 
 input PanelUpdateWithWhereUniqueWithoutAddedByInput {
@@ -4951,6 +5002,11 @@ input PanelUpdateWithWhereUniqueWithoutTestInput {
 input PanelUpdateWithWhereUniqueWithoutUsedSequenceInput {
   where: PanelWhereUniqueInput!
   data: PanelUpdateWithoutUsedSequenceDataInput!
+}
+
+input PanelUpsertWithoutQuestionPanelsSentInput {
+  update: PanelUpdateWithoutQuestionPanelsSentDataInput!
+  create: PanelCreateWithoutQuestionPanelsSentInput!
 }
 
 input PanelUpsertWithoutQuestionsInput {
@@ -5112,6 +5168,7 @@ input PanelWhereInput {
   sentPanels_every: SequenceWhereInput
   sentPanels_some: SequenceWhereInput
   sentPanels_none: SequenceWhereInput
+  questionPanelsSent: QuestionWhereInput
 }
 
 input PanelWhereUniqueInput {
@@ -5177,6 +5234,7 @@ type Question implements Node {
   updatedBy: User
   panel: Panel
   sentTo: User
+  sentPanel: Panel
   sentDate: DateTime
   test: Test!
   choices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice!]
@@ -5809,6 +5867,7 @@ input QuestionCreateInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -5872,6 +5931,11 @@ input QuestionCreateOneWithoutQuestionAnswersInput {
   connect: QuestionWhereUniqueInput
 }
 
+input QuestionCreateOneWithoutSentPanelInput {
+  create: QuestionCreateWithoutSentPanelInput
+  connect: QuestionWhereUniqueInput
+}
+
 input QuestionCreateWithoutAddedByInput {
   question: String!
   addedDate: DateTime
@@ -5882,6 +5946,7 @@ input QuestionCreateWithoutAddedByInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -5901,6 +5966,7 @@ input QuestionCreateWithoutChallengesInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
@@ -5919,6 +5985,7 @@ input QuestionCreateWithoutChoicesInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
@@ -5937,6 +6004,7 @@ input QuestionCreateWithoutCorrectResponseInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -5955,6 +6023,7 @@ input QuestionCreateWithoutIncorrectResponseInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -5972,6 +6041,7 @@ input QuestionCreateWithoutPanelInput {
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -5991,9 +6061,29 @@ input QuestionCreateWithoutQuestionAnswersInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
+  correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionCreateWithoutSentPanelInput {
+  question: String!
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserCreateOneWithoutQuestionsAddedByInput!
+  updatedBy: UserCreateOneWithoutQuestionUpdatesInput
+  panel: PanelCreateOneWithoutQuestionsInput
+  sentTo: UserCreateOneWithoutQuestionsSentToInput
+  test: TestCreateOneWithoutQuestionsInput!
+  choices: QuestionChoiceCreateManyWithoutQuestionInput
+  challenges: ChallengeCreateManyWithoutQuestionInput
+  questionAnswers: AnswerCreateManyWithoutQuestionInput
   correctResponse: ResponseImageCreateOneWithoutCorrectQuestionResponsesInput
   incorrectResponse: ResponseImageCreateOneWithoutIncorrectQuestionResponsesInput
 }
@@ -6008,6 +6098,7 @@ input QuestionCreateWithoutSentToInput {
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -6027,6 +6118,7 @@ input QuestionCreateWithoutTestInput {
   updatedBy: UserCreateOneWithoutQuestionUpdatesInput
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
   questionAnswers: AnswerCreateManyWithoutQuestionInput
@@ -6044,6 +6136,7 @@ input QuestionCreateWithoutUpdatedByInput {
   addedBy: UserCreateOneWithoutQuestionsAddedByInput!
   panel: PanelCreateOneWithoutQuestionsInput
   sentTo: UserCreateOneWithoutQuestionsSentToInput
+  sentPanel: PanelCreateOneWithoutQuestionPanelsSentInput
   test: TestCreateOneWithoutQuestionsInput!
   choices: QuestionChoiceCreateManyWithoutQuestionInput
   challenges: ChallengeCreateManyWithoutQuestionInput
@@ -6343,6 +6436,7 @@ input QuestionUpdateDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6362,6 +6456,7 @@ input QuestionUpdateInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6504,6 +6599,15 @@ input QuestionUpdateOneWithoutChallengesInput {
   upsert: QuestionUpsertWithoutChallengesInput
 }
 
+input QuestionUpdateOneWithoutSentPanelInput {
+  create: QuestionCreateWithoutSentPanelInput
+  connect: QuestionWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: QuestionUpdateWithoutSentPanelDataInput
+  upsert: QuestionUpsertWithoutSentPanelInput
+}
+
 input QuestionUpdateWithoutAddedByDataInput {
   question: String
   addedDate: DateTime
@@ -6514,6 +6618,7 @@ input QuestionUpdateWithoutAddedByDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6533,6 +6638,7 @@ input QuestionUpdateWithoutChallengesDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
@@ -6551,6 +6657,7 @@ input QuestionUpdateWithoutChoicesDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
@@ -6569,6 +6676,7 @@ input QuestionUpdateWithoutCorrectResponseDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6587,6 +6695,7 @@ input QuestionUpdateWithoutIncorrectResponseDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6604,6 +6713,7 @@ input QuestionUpdateWithoutPanelDataInput {
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6623,9 +6733,29 @@ input QuestionUpdateWithoutQuestionAnswersDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
+  correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
+  incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
+}
+
+input QuestionUpdateWithoutSentPanelDataInput {
+  question: String
+  addedDate: DateTime
+  questionTime: DateTime
+  expirationTime: DateTime
+  updateDate: DateTime
+  sentDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
+  updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
+  panel: PanelUpdateOneWithoutQuestionsInput
+  sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  test: TestUpdateOneRequiredWithoutQuestionsInput
+  choices: QuestionChoiceUpdateManyWithoutQuestionInput
+  challenges: ChallengeUpdateManyWithoutQuestionInput
+  questionAnswers: AnswerUpdateManyWithoutQuestionInput
   correctResponse: ResponseImageUpdateOneWithoutCorrectQuestionResponsesInput
   incorrectResponse: ResponseImageUpdateOneWithoutIncorrectQuestionResponsesInput
 }
@@ -6640,6 +6770,7 @@ input QuestionUpdateWithoutSentToDataInput {
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6659,6 +6790,7 @@ input QuestionUpdateWithoutTestDataInput {
   updatedBy: UserUpdateOneWithoutQuestionUpdatesInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
   questionAnswers: AnswerUpdateManyWithoutQuestionInput
@@ -6676,6 +6808,7 @@ input QuestionUpdateWithoutUpdatedByDataInput {
   addedBy: UserUpdateOneRequiredWithoutQuestionsAddedByInput
   panel: PanelUpdateOneWithoutQuestionsInput
   sentTo: UserUpdateOneWithoutQuestionsSentToInput
+  sentPanel: PanelUpdateOneWithoutQuestionPanelsSentInput
   test: TestUpdateOneRequiredWithoutQuestionsInput
   choices: QuestionChoiceUpdateManyWithoutQuestionInput
   challenges: ChallengeUpdateManyWithoutQuestionInput
@@ -6737,6 +6870,11 @@ input QuestionUpsertWithoutChoicesInput {
 input QuestionUpsertWithoutQuestionAnswersInput {
   update: QuestionUpdateWithoutQuestionAnswersDataInput!
   create: QuestionCreateWithoutQuestionAnswersInput!
+}
+
+input QuestionUpsertWithoutSentPanelInput {
+  update: QuestionUpdateWithoutSentPanelDataInput!
+  create: QuestionCreateWithoutSentPanelInput!
 }
 
 input QuestionUpsertWithWhereUniqueNestedInput {
@@ -6990,6 +7128,7 @@ input QuestionWhereInput {
   updatedBy: UserWhereInput
   panel: PanelWhereInput
   sentTo: UserWhereInput
+  sentPanel: PanelWhereInput
   test: TestWhereInput
   choices_every: QuestionChoiceWhereInput
   choices_some: QuestionChoiceWhereInput
@@ -7304,6 +7443,10 @@ type Sequence implements Node {
   usedPanels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
   students(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   panels(where: PanelWhereInput, orderBy: PanelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Panel!]
+  studs: [String!]!
+  pans: [String!]!
+  usedstuds: [String!]!
+  usedpans: [String!]!
 }
 
 """A connection to a list of items."""
@@ -7321,6 +7464,10 @@ input SequenceCreateInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7371,11 +7518,31 @@ input SequenceCreateOneWithoutTestInput {
   connect: SequenceWhereUniqueInput
 }
 
+input SequenceCreatepansInput {
+  set: [String!]
+}
+
+input SequenceCreatestudsInput {
+  set: [String!]
+}
+
+input SequenceCreateusedpansInput {
+  set: [String!]
+}
+
+input SequenceCreateusedstudsInput {
+  set: [String!]
+}
+
 input SequenceCreateWithoutAddedByInput {
   sequenceAddedDate: DateTime
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
   sentPanel: PanelCreateOneWithoutSentPanelsInput
@@ -7390,6 +7557,10 @@ input SequenceCreateWithoutPanelsInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7404,6 +7575,10 @@ input SequenceCreateWithoutSentPanelInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7418,6 +7593,10 @@ input SequenceCreateWithoutSentToInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentPanel: PanelCreateOneWithoutSentPanelsInput
@@ -7432,6 +7611,10 @@ input SequenceCreateWithoutStudentsInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7446,6 +7629,10 @@ input SequenceCreateWithoutTestInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
   sentPanel: PanelCreateOneWithoutSentPanelsInput
@@ -7460,6 +7647,10 @@ input SequenceCreateWithoutUsedPanelsInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7474,6 +7665,10 @@ input SequenceCreateWithoutUsedStudentsInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceCreatestudsInput
+  pans: SequenceCreatepansInput
+  usedstuds: SequenceCreateusedstudsInput
+  usedpans: SequenceCreateusedpansInput
   addedBy: UserCreateOneWithoutSequencesAddedInput!
   test: TestCreateOneWithoutSequencesInput!
   sentTo: UserCreateOneWithoutSentToSequencesInput
@@ -7515,6 +7710,10 @@ type SequencePreviousValues {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: [String!]!
+  pans: [String!]!
+  usedstuds: [String!]!
+  usedpans: [String!]!
 }
 
 input SequenceScalarWhereInput {
@@ -7736,6 +7935,10 @@ input SequenceUpdateInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
@@ -7751,6 +7954,10 @@ input SequenceUpdateManyDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
 }
 
 input SequenceUpdateManyMutationInput {
@@ -7758,6 +7965,10 @@ input SequenceUpdateManyMutationInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
 }
 
 input SequenceUpdateManyWithoutAddedByInput {
@@ -7851,11 +8062,31 @@ input SequenceUpdateOneWithoutTestInput {
   upsert: SequenceUpsertWithoutTestInput
 }
 
+input SequenceUpdatepansInput {
+  set: [String!]
+}
+
+input SequenceUpdatestudsInput {
+  set: [String!]
+}
+
+input SequenceUpdateusedpansInput {
+  set: [String!]
+}
+
+input SequenceUpdateusedstudsInput {
+  set: [String!]
+}
+
 input SequenceUpdateWithoutAddedByDataInput {
   sequenceAddedDate: DateTime
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
   sentPanel: PanelUpdateOneWithoutSentPanelsInput
@@ -7870,6 +8101,10 @@ input SequenceUpdateWithoutPanelsDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
@@ -7884,6 +8119,10 @@ input SequenceUpdateWithoutSentPanelDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
@@ -7898,6 +8137,10 @@ input SequenceUpdateWithoutSentToDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentPanel: PanelUpdateOneWithoutSentPanelsInput
@@ -7912,6 +8155,10 @@ input SequenceUpdateWithoutStudentsDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
@@ -7926,6 +8173,10 @@ input SequenceUpdateWithoutTestDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
   sentPanel: PanelUpdateOneWithoutSentPanelsInput
@@ -7940,6 +8191,10 @@ input SequenceUpdateWithoutUsedPanelsDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput
@@ -7954,6 +8209,10 @@ input SequenceUpdateWithoutUsedStudentsDataInput {
   startHour: String
   endHour: String
   testEndDate: DateTime
+  studs: SequenceUpdatestudsInput
+  pans: SequenceUpdatepansInput
+  usedstuds: SequenceUpdateusedstudsInput
+  usedpans: SequenceUpdateusedpansInput
   addedBy: UserUpdateOneRequiredWithoutSequencesAddedInput
   test: TestUpdateOneRequiredWithoutSequencesInput
   sentTo: UserUpdateOneWithoutSentToSequencesInput

@@ -134,7 +134,7 @@ type Mutation {
 
   publishTest(id: ID!, startHour: String, endHour: String, testEndDate: DateTime): Test!
 
-  sendQuestion(id: ID!): Sequence
+  sendQuestion(testId: ID!, questionId: ID!): Question!
 
   joinCourse(inviteId: ID!,courseId: ID!): JoinCourse
 

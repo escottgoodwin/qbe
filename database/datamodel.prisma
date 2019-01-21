@@ -141,6 +141,7 @@ type Panel {
   usedSequence: [Sequence!]! @relation(name: "UsedPanelBySequence")
   questions: [Question!]! @relation(name: "PanelByQuestion")
   sentPanels: [Sequence!]! @relation(name: "SentPanelBySequence")
+  questionPanelsSent: Question @relation(name: "QuestionSentToByPanel")
 }
 
 type Question {
@@ -154,6 +155,7 @@ type Question {
   updatedBy: User @relation(name: "QuestionUpdatesByUser")
   panel: Panel @relation(name: "PanelByQuestion")
   sentTo: User @relation(name: "QuestionSentTotByUser")
+  sentPanel: Panel @relation(name: "QuestionSentToByPanel")
   sentDate: DateTime
   test: Test! @relation(name: "QuestionsByTest")
   choices: [QuestionChoice!]! @relation(name: "QuestionChoicesByQuestion" onDelete: CASCADE)
@@ -234,5 +236,8 @@ type Sequence {
   usedPanels: [Panel!]! @relation(name: "UsedPanelBySequence")
   students: [User!]! @relation(name: "UserBySequence")
   panels: [Panel!]! @relation(name: "PanelSequenceByTest")
-
+  studs: [String!]!
+  pans: [String!]!
+  usedstuds: [String!]!
+  usedpans: [String!]!
 }

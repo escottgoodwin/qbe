@@ -709,18 +709,20 @@ async function publishTest(parent, args, ctx, info) {
         id: args.id
     },
   },
-  `{ id panels { id } course { students { id } } }`
+  `{ id subject testNumber testDate panels { id } course { students { id } } }`
   )
     // get all students for a course
   const studentIds = test.course.students
+
   const panelIds = test.panels
+
   const studentShuffle = shuffleArray(studentIds)
   const panelShuffle = shuffleArray(panelIds)
   const studentShuffleIds = studentShuffle.map(student => student.id)
   const panelShuffleIds = panelShuffle.map(panel => panel.id)
 
 
-  return ctx.db.mutation.createSequence(
+  const sequence =  ctx.db.mutation.createSequence(
     {
       data: {
         sequenceAddedDate,
@@ -733,15 +735,11 @@ async function publishTest(parent, args, ctx, info) {
         test: {
           connect: { id: args.id }
         },
-        students: {
-          connect: studentShuffle
-        },
-        panels: {
-          connect: panelShuffle
-          }
+        studs: {set: studentShuffleIds},
+        pans: {set: panelShuffleIds}
       },
     },
-    info
+    `{ id studs pans }`
   )
 
   return test
@@ -752,68 +750,66 @@ async function sendQuestion(parent, args, ctx, info) {
   const userId = await getUserId(ctx)
   const sequenceUpdateDate = new Date()
 
-  const testSequence = await ctx.db.query.sequences({where:{test:{id:args.id}}},`{ id students { id } panels { id } usedStudents { id } usedPanels { id } } `)
+  const testSequence = await ctx.db.query.sequences({ where: { test: { id: args.testId } } },`{ id studs pans usedpans usedstuds test { id } } `)
+  const seqId = testSequence[0].id
+  const testId = testSequence[0].test.id
+  let usedStudents = testSequence[0].usedstuds
+  let usedPanels = testSequence[0].usedpans
+  let students = testSequence[0].studs
+  let panels =  testSequence[0].pans
 
-  let students = testSequence[0].students.map(student => student)
-  let panels = testSequence[0].panels.map(panel => panel)
-  const testId = testSequence[0].id
-  var usedStudents = testSequence[0].usedStudents.map(student => student)
-  var usedPanels = testSequence[0].usedPanels.map(panel => panel)
-
-  var studentShuffle = null
-  var sendToStudent = null
-
-  var sendToPanel = null
-  var panelShuffle = null
-
-  function popshuffler(topoparr){
-    if (topoparr.length > 0) {
-      var popped = topoparr.pop()
-      var item = { popped: popped, poppedarr: topoparr }
+  function popshuffler(toPopArr, usedArr){
+    if (toPopArr.length > 0) {
+      let popped = toPopArr.pop()
+      let newUsedArr = usedArr.concat(popped)
+      let item = { popped: popped, poppedArr: toPopArr, usedPopArr: newUsedArr }
       return item
 
     } else {
-
-      var shuffled = shuffleArray(topoparr)
-      var popped = shuffled.pop()
-      var item = { popped: popped, poppedarr: shuffled }
+      let newUsedArr = []
+      let shuffled = shuffleArray(usedArr)
+      let popped = shuffled.pop()
+      var item = { popped: popped, poppedArr: shuffled, usedPopArr: newUsedArr.concat(popped) }
+      return item
     }
   }
 
-  const studentpopped = popshuffler(students)
-  const panelspopped = popshuffler(panels)
+  const studentPopped = popshuffler(students,usedStudents)
+  const panelsPopped = popshuffler(panels,usedPanels)
 
-    const sequence = ctx.db.mutation.updateSequence(
+  const sequence = ctx.db.mutation.updateSequence(
+  {
+    data: {
+      studs: {set: studentPopped.poppedArr},
+      pans: {set: panelsPopped.poppedArr},
+      usedstuds: {set: studentPopped.usedPopArr},
+      usedpans: {set: panelsPopped.usedPopArr},
+    },
+    where: {
+      id: seqId
+  },
+  },
+  `{ id usedstuds usedpans }`
+)
+
+  const question =  await ctx.db.mutation.updateQuestion(
     {
       data: {
-        students: {
-          connect: studentpopped.poppedarr
-        },
-        panels: {
-          connect: panelspopped.poppedarr
-        },
-        usedStudents: {
-          connect: [studentpopped.popped]
-        },
-        usedPanels: {
-          connect: [panelspopped.popped]
-        },
         sentTo: {
-          connect: studentpopped.popped
+          connect: { id: studentPopped.popped }
         },
         sentPanel: {
-          connect: panelspopped.popped
-        }
+          connect: { id: panelsPopped.popped }
+        },
       },
       where: {
-        id: testId
+        id: args.questionId
+        }
     },
-    },
-    `{ sentPanel { link } sentTo { firstName lastName email pushToken }  }`
+    `{ id question addedBy { firstName lastName } choices { id choice } test { id subject testDate course { id name } } sentTo { firstName lastName } sentPanel { link } }`
   )
 
-  console.log(sequence)
-  return sequence
+  return question
 
 }
 
@@ -997,9 +993,6 @@ async function addQuestion(parent, { question, testId, panelId, sentToId, correc
           },
           panel: {
             connect: { id: panelId  }
-          },
-          sentTo: {
-            connect: { id: sentToId  }
           },
           addedBy: {
             connect: { id: userId },
