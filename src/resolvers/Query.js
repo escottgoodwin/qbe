@@ -1,4 +1,5 @@
 const { getUserId, getUser, getUserRole } = require('../utils')
+const uuidv4 = require('uuid/v4');
 
 async function users(parent, args, ctx, info) {
 
@@ -218,7 +219,7 @@ async function testPanelStats(parent, args, ctx, info) {
         percentCorrect: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length > 0 ? panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length : 0.0
       })
     )
-      
+
       return panelPercents
 
 }
