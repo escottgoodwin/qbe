@@ -397,6 +397,53 @@ async function question(parent, args, ctx, info) {
 
 }
 
+async function questionsAnswered(parent, args, ctx, info) {
+      const userId = await getUserId(ctx)
+      const queriedAnswered = await ctx.db.query.answers(
+      { where: {
+        AND: [{question:{test:{id:args.testId}}},
+              {addedBy:{id:userId}}]
+            }},
+          `{ id answerCorrect }`,
+        )
+
+        const answered = queriedAnswered.length > 0 ? queriedAnswered.length : 0
+        const answeredCorrect = queriedAnswered.filter(question => question.answerCorrect == true).length > 0 ? queriedAnswered.filter(question => question.answerCorrect == true).length : 0
+        const answeredPercent = answeredCorrect / answered > 0 ? answeredCorrect / answered : 0.0
+
+        const queriedQuestions = await ctx.db.query.questions(
+        { where: {
+          AND:[{test:{id:args.testId}},
+            {addedBy:{id:userId}}] }},
+            `{ question }`,
+          )
+
+          const queriedAskedAnswers = await ctx.db.query.answers(
+          { where:{
+            AND:[{question:{test:{id:args.testId}}},
+                {question:{addedBy:{id:userId}}}
+                ] }},
+          `{ id answerCorrect }`,
+            )
+
+          const asked = queriedQuestions.length > 0 ? queriedQuestions.length : 0
+
+          const askedAnswered = queriedAskedAnswers.length > 0 ? queriedAskedAnswers.length : 0
+          const askedAnsweredCorrect = queriedAskedAnswers.filter(question => question.answerCorrect == true).length > 0 ? queriedAskedAnswers.filter(question => question.answerCorrect == true).length : 0
+          const askedAnsweredPercent = askedAnsweredCorrect / askedAnswered > 0 ? askedAnsweredCorrect / askedAnswered : 0.0
+
+
+      return {
+        answered: answered,
+        answeredCorrect: answeredCorrect,
+        answeredPercent: answeredPercent,
+        asked: asked,
+        askedAnswered: askedAnswered,
+        askedAnsweredCorrect: askedAnsweredCorrect,
+        askedAnsweredPercent: askedAnsweredPercent
+      }
+    }
+
 async function questionchoices(parent, args, ctx, info) {
 
   const where = args.where
@@ -577,6 +624,7 @@ module.exports = {
   responseImages,
   questions,
   question,
+  questionsAnswered,
   questionStats,
   questionchoices,
   challenges,

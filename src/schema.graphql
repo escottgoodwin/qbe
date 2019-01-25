@@ -37,6 +37,8 @@ type Query {
 
   question(id: ID!): Question! @isAuthenticated
 
+  questionsAnswered(testId: String!): AnswerStats! @isAuthenticated
+
   questionStats(questionId: String): PercentCorrect! @isAuthenticated
 
   questionchoices(filter: String, where: QuestionChoiceWhereInput, skip: Int, first: Int, orderBy: QuestionChoiceOrderByInput): QuestionChoiceSearch! @isAuthenticated
@@ -189,6 +191,16 @@ type ResponseImageSearch {
 type QuestionSearch {
   questions: [Question!]!
   count: Int!
+}
+
+type AnswerStats {
+  answered: Int!
+  answeredCorrect: Int!
+  answeredPercent: Float!
+  asked: Int!
+  askedAnswered: Int!
+  askedAnsweredCorrect: Int!
+  askedAnsweredPercent: Float!
 }
 
 type PercentCorrect {
