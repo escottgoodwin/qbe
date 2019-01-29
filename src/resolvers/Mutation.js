@@ -1067,6 +1067,58 @@ async function deleteQuestion(parent, { id }, ctx, info) {
 
 }
 
+async function createQuestion(parent, args, ctx, info) {
+
+  const userId = await getUserId(ctx)
+  const addedDate = new Date()
+
+  const test = await ctx.db.query.test({where: { id: args.testId } },`{ course { students { id } } }`)
+  const testStudents = JSON.stringify(test.course.students)
+
+  if (testStudents.includes(userId)){
+    console.log('authorized')
+  }
+  else {
+    console.log('not authorized')
+  }
+
+    return await ctx.db.mutation.createQuestion(
+      {
+        data: {
+          question,
+          expirationTime,
+          addedDate,
+          test: {
+            connect: { id: args.testId  }
+          },
+          panel: {
+            connect: { id: args.panelId  }
+          },
+          addedBy: {
+            connect: { id: userId },
+          },
+          choices: [
+            {
+            choice:args.choice1,
+            correct: args.choiceCorrect1
+            },
+            {
+            choice:args.choice2,
+            correct: args.choiceCorrect2
+            },{
+            choice:args.choice3,
+            correct: args.choiceCorrect3
+            },{
+            choice:args.choice4,
+            correct: args.choiceCorrect4
+            },
+          ]
+        },
+      },
+      `{ id question test { subject id } panel { id link } choices { id choice correct } }`
+    )
+}
+
 async function addQuestionChoice(parent, { choice, correct, questionId }, ctx, info) {
   const userId = await getUserId(ctx)
   const addedDate = new Date()
@@ -1277,11 +1329,9 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
   { where: { id: answerChoiceId } },
   ` { correct } `,
 )
-  if(questionChoice.correct){
-    answerCorrect = true
-  } else {
-    answerCorrect = false
-  }
+
+  const answerCorrect = questionChoice.correct
+
     return ctx.db.mutation.createAnswer(
       {
         data: {
@@ -1298,9 +1348,8 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
           },
         },
       },
-      info
+      `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice } } }`
     )
-
 }
 
 async function deleteAnswer(parent, { id }, ctx, info) {
@@ -1465,6 +1514,7 @@ module.exports = {
   addQuestion,
   updateQuestion,
   deleteQuestion,
+  createQuestion,
   addQuestionChoice,
   updateQuestionChoice,
   deleteQuestionChoice,

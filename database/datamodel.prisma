@@ -188,18 +188,27 @@ type Answer {
   updatedBy: User @relation(name: "AnswerUpdatesByUser")
   question: Question! @relation(name: "AnswerByQuestion")
   challenge: Challenge @relation(name: "ChallengeByAnswer" )
+  answerChoices: [AnswerChoice!]! @relation(name: "AnswerChoiceByAnswer")
 }
 
 type QuestionChoice {
   id: ID! @unique
   choice: String!
+  correct: Boolean  @default(value: false)
   addedBy: User! @relation(name: "QuestionChoiceByUser")
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User @relation(name: "QuestionChoiceUpdatesByUser")
   question: Question! @relation(name: "QuestionChoicesByQuestion")
-  answers: [Answer!]! @relation(name: "AnswerByQuestionChoice" onDelete: CASCADE)
-  correct: Boolean  @default(value: false)
+  answers: [Answer!]! @relation(name: "AnswerByQuestionChoice")
+  answerChoices: [AnswerChoice!]! @relation(name: "QuestionChoiceByAnswerChoice")
+}
+
+type AnswerChoice {
+  id: ID! @unique
+  choice: QuestionChoice! @relation(name: "QuestionChoiceByAnswerChoice")
+  response: Boolean  @default(value: false)
+  answer: Answer! @relation(name: "AnswerChoiceByAnswer")
 }
 
 type Challenge {

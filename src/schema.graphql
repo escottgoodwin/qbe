@@ -116,6 +116,8 @@ type Mutation {
 
   deleteQuestionChoice(id: ID!): QuestionChoice! @hasRole(roles: ["STUDENT"])
 
+  createQuestion(question: String!, choice1: String!, choice2: String!, choice3: String!, choice4: String!, choiceCorrect1: Boolean!, choiceCorrect2: Boolean!, choiceCorrect3: Boolean!, choiceCorrect4: Boolean!, testId: ID!, panelId: ID!, sentToId: ID, correctResponseImageId: ID, incorrectResponseImageId: ID): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
+
   addChallenge(challenge: String!, answerId: ID!): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   updateChallenge(id: ID!, challenge: String): Challenge! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])

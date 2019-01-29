@@ -1,7 +1,11 @@
 # source: https://qbe-59fcbd371e.herokuapp.com/database/dev
-# timestamp: Sun Jan 20 2019 14:56:07 GMT-0800 (Pacific Standard Time)
+# timestamp: Mon Jan 28 2019 16:16:52 GMT-0800 (Pacific Standard Time)
 
 type AggregateAnswer {
+  count: Int!
+}
+
+type AggregateAnswerChoice {
   count: Int!
 }
 
@@ -63,6 +67,303 @@ type Answer implements Node {
   updatedBy: User
   question: Question!
   challenge: Challenge
+  answerChoices(where: AnswerChoiceWhereInput, orderBy: AnswerChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AnswerChoice!]
+}
+
+type AnswerChoice implements Node {
+  id: ID!
+  choice: QuestionChoice!
+  response: Boolean
+  answer: Answer!
+}
+
+"""A connection to a list of items."""
+type AnswerChoiceConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AnswerChoiceEdge]!
+  aggregate: AggregateAnswerChoice!
+}
+
+input AnswerChoiceCreateInput {
+  response: Boolean
+  choice: QuestionChoiceCreateOneWithoutAnswerChoicesInput!
+  answer: AnswerCreateOneWithoutAnswerChoicesInput!
+}
+
+input AnswerChoiceCreateManyWithoutAnswerInput {
+  create: [AnswerChoiceCreateWithoutAnswerInput!]
+  connect: [AnswerChoiceWhereUniqueInput!]
+}
+
+input AnswerChoiceCreateManyWithoutChoiceInput {
+  create: [AnswerChoiceCreateWithoutChoiceInput!]
+  connect: [AnswerChoiceWhereUniqueInput!]
+}
+
+input AnswerChoiceCreateWithoutAnswerInput {
+  response: Boolean
+  choice: QuestionChoiceCreateOneWithoutAnswerChoicesInput!
+}
+
+input AnswerChoiceCreateWithoutChoiceInput {
+  response: Boolean
+  answer: AnswerCreateOneWithoutAnswerChoicesInput!
+}
+
+"""An edge in a connection."""
+type AnswerChoiceEdge {
+  """The item at the end of the edge."""
+  node: AnswerChoice!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum AnswerChoiceOrderByInput {
+  id_ASC
+  id_DESC
+  response_ASC
+  response_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AnswerChoicePreviousValues {
+  id: ID!
+  response: Boolean
+}
+
+input AnswerChoiceScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AnswerChoiceScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AnswerChoiceScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AnswerChoiceScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  response: Boolean
+
+  """All values that are not equal to given value."""
+  response_not: Boolean
+}
+
+type AnswerChoiceSubscriptionPayload {
+  mutation: MutationType!
+  node: AnswerChoice
+  updatedFields: [String!]
+  previousValues: AnswerChoicePreviousValues
+}
+
+input AnswerChoiceSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AnswerChoiceSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AnswerChoiceSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AnswerChoiceSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AnswerChoiceWhereInput
+}
+
+input AnswerChoiceUpdateInput {
+  response: Boolean
+  choice: QuestionChoiceUpdateOneRequiredWithoutAnswerChoicesInput
+  answer: AnswerUpdateOneRequiredWithoutAnswerChoicesInput
+}
+
+input AnswerChoiceUpdateManyDataInput {
+  response: Boolean
+}
+
+input AnswerChoiceUpdateManyMutationInput {
+  response: Boolean
+}
+
+input AnswerChoiceUpdateManyWithoutAnswerInput {
+  create: [AnswerChoiceCreateWithoutAnswerInput!]
+  connect: [AnswerChoiceWhereUniqueInput!]
+  disconnect: [AnswerChoiceWhereUniqueInput!]
+  delete: [AnswerChoiceWhereUniqueInput!]
+  update: [AnswerChoiceUpdateWithWhereUniqueWithoutAnswerInput!]
+  updateMany: [AnswerChoiceUpdateManyWithWhereNestedInput!]
+  deleteMany: [AnswerChoiceScalarWhereInput!]
+  upsert: [AnswerChoiceUpsertWithWhereUniqueWithoutAnswerInput!]
+}
+
+input AnswerChoiceUpdateManyWithoutChoiceInput {
+  create: [AnswerChoiceCreateWithoutChoiceInput!]
+  connect: [AnswerChoiceWhereUniqueInput!]
+  disconnect: [AnswerChoiceWhereUniqueInput!]
+  delete: [AnswerChoiceWhereUniqueInput!]
+  update: [AnswerChoiceUpdateWithWhereUniqueWithoutChoiceInput!]
+  updateMany: [AnswerChoiceUpdateManyWithWhereNestedInput!]
+  deleteMany: [AnswerChoiceScalarWhereInput!]
+  upsert: [AnswerChoiceUpsertWithWhereUniqueWithoutChoiceInput!]
+}
+
+input AnswerChoiceUpdateManyWithWhereNestedInput {
+  where: AnswerChoiceScalarWhereInput!
+  data: AnswerChoiceUpdateManyDataInput!
+}
+
+input AnswerChoiceUpdateWithoutAnswerDataInput {
+  response: Boolean
+  choice: QuestionChoiceUpdateOneRequiredWithoutAnswerChoicesInput
+}
+
+input AnswerChoiceUpdateWithoutChoiceDataInput {
+  response: Boolean
+  answer: AnswerUpdateOneRequiredWithoutAnswerChoicesInput
+}
+
+input AnswerChoiceUpdateWithWhereUniqueWithoutAnswerInput {
+  where: AnswerChoiceWhereUniqueInput!
+  data: AnswerChoiceUpdateWithoutAnswerDataInput!
+}
+
+input AnswerChoiceUpdateWithWhereUniqueWithoutChoiceInput {
+  where: AnswerChoiceWhereUniqueInput!
+  data: AnswerChoiceUpdateWithoutChoiceDataInput!
+}
+
+input AnswerChoiceUpsertWithWhereUniqueWithoutAnswerInput {
+  where: AnswerChoiceWhereUniqueInput!
+  update: AnswerChoiceUpdateWithoutAnswerDataInput!
+  create: AnswerChoiceCreateWithoutAnswerInput!
+}
+
+input AnswerChoiceUpsertWithWhereUniqueWithoutChoiceInput {
+  where: AnswerChoiceWhereUniqueInput!
+  update: AnswerChoiceUpdateWithoutChoiceDataInput!
+  create: AnswerChoiceCreateWithoutChoiceInput!
+}
+
+input AnswerChoiceWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AnswerChoiceWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AnswerChoiceWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AnswerChoiceWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  response: Boolean
+
+  """All values that are not equal to given value."""
+  response_not: Boolean
+  choice: QuestionChoiceWhereInput
+  answer: AnswerWhereInput
+}
+
+input AnswerChoiceWhereUniqueInput {
+  id: ID
 }
 
 """A connection to a list of items."""
@@ -84,6 +385,7 @@ input AnswerCreateInput {
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
   challenge: ChallengeCreateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
 }
 
 input AnswerCreateManyWithoutAddedByInput {
@@ -106,6 +408,11 @@ input AnswerCreateManyWithoutUpdatedByInput {
   connect: [AnswerWhereUniqueInput!]
 }
 
+input AnswerCreateOneWithoutAnswerChoicesInput {
+  create: AnswerCreateWithoutAnswerChoicesInput
+  connect: AnswerWhereUniqueInput
+}
+
 input AnswerCreateOneWithoutChallengeInput {
   create: AnswerCreateWithoutChallengeInput
   connect: AnswerWhereUniqueInput
@@ -119,6 +426,18 @@ input AnswerCreateWithoutAddedByInput {
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
   challenge: ChallengeCreateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
+}
+
+input AnswerCreateWithoutAnswerChoicesInput {
+  answerCorrect: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  answer: QuestionChoiceCreateOneWithoutAnswersInput!
+  addedBy: UserCreateOneWithoutAnswersInput!
+  updatedBy: UserCreateOneWithoutAnswerUpdatesInput
+  question: QuestionCreateOneWithoutQuestionAnswersInput!
+  challenge: ChallengeCreateOneWithoutAnswerInput
 }
 
 input AnswerCreateWithoutAnswerInput {
@@ -129,6 +448,7 @@ input AnswerCreateWithoutAnswerInput {
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
   challenge: ChallengeCreateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
 }
 
 input AnswerCreateWithoutChallengeInput {
@@ -139,6 +459,7 @@ input AnswerCreateWithoutChallengeInput {
   addedBy: UserCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   question: QuestionCreateOneWithoutQuestionAnswersInput!
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
 }
 
 input AnswerCreateWithoutQuestionInput {
@@ -149,6 +470,7 @@ input AnswerCreateWithoutQuestionInput {
   addedBy: UserCreateOneWithoutAnswersInput!
   updatedBy: UserCreateOneWithoutAnswerUpdatesInput
   challenge: ChallengeCreateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
 }
 
 input AnswerCreateWithoutUpdatedByInput {
@@ -159,6 +481,7 @@ input AnswerCreateWithoutUpdatedByInput {
   addedBy: UserCreateOneWithoutAnswersInput!
   question: QuestionCreateOneWithoutQuestionAnswersInput!
   challenge: ChallengeCreateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutAnswerInput
 }
 
 """An edge in a connection."""
@@ -339,6 +662,7 @@ input AnswerUpdateInput {
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
   challenge: ChallengeUpdateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
 }
 
 input AnswerUpdateManyDataInput {
@@ -402,6 +726,13 @@ input AnswerUpdateManyWithWhereNestedInput {
   data: AnswerUpdateManyDataInput!
 }
 
+input AnswerUpdateOneRequiredWithoutAnswerChoicesInput {
+  create: AnswerCreateWithoutAnswerChoicesInput
+  connect: AnswerWhereUniqueInput
+  update: AnswerUpdateWithoutAnswerChoicesDataInput
+  upsert: AnswerUpsertWithoutAnswerChoicesInput
+}
+
 input AnswerUpdateOneWithoutChallengeInput {
   create: AnswerCreateWithoutChallengeInput
   connect: AnswerWhereUniqueInput
@@ -419,6 +750,18 @@ input AnswerUpdateWithoutAddedByDataInput {
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
   challenge: ChallengeUpdateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
+}
+
+input AnswerUpdateWithoutAnswerChoicesDataInput {
+  answerCorrect: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  answer: QuestionChoiceUpdateOneRequiredWithoutAnswersInput
+  addedBy: UserUpdateOneRequiredWithoutAnswersInput
+  updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
+  question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  challenge: ChallengeUpdateOneWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutAnswerDataInput {
@@ -429,6 +772,7 @@ input AnswerUpdateWithoutAnswerDataInput {
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
   challenge: ChallengeUpdateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutChallengeDataInput {
@@ -439,6 +783,7 @@ input AnswerUpdateWithoutChallengeDataInput {
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutQuestionDataInput {
@@ -449,6 +794,7 @@ input AnswerUpdateWithoutQuestionDataInput {
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   updatedBy: UserUpdateOneWithoutAnswerUpdatesInput
   challenge: ChallengeUpdateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
 }
 
 input AnswerUpdateWithoutUpdatedByDataInput {
@@ -459,6 +805,7 @@ input AnswerUpdateWithoutUpdatedByDataInput {
   addedBy: UserUpdateOneRequiredWithoutAnswersInput
   question: QuestionUpdateOneRequiredWithoutQuestionAnswersInput
   challenge: ChallengeUpdateOneWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutAnswerInput
 }
 
 input AnswerUpdateWithWhereUniqueWithoutAddedByInput {
@@ -479,6 +826,11 @@ input AnswerUpdateWithWhereUniqueWithoutQuestionInput {
 input AnswerUpdateWithWhereUniqueWithoutUpdatedByInput {
   where: AnswerWhereUniqueInput!
   data: AnswerUpdateWithoutUpdatedByDataInput!
+}
+
+input AnswerUpsertWithoutAnswerChoicesInput {
+  update: AnswerUpdateWithoutAnswerChoicesDataInput!
+  create: AnswerCreateWithoutAnswerChoicesInput!
 }
 
 input AnswerUpsertWithoutChallengeInput {
@@ -612,6 +964,9 @@ input AnswerWhereInput {
   updatedBy: UserWhereInput
   question: QuestionWhereInput
   challenge: ChallengeWhereInput
+  answerChoices_every: AnswerChoiceWhereInput
+  answerChoices_some: AnswerChoiceWhereInput
+  answerChoices_none: AnswerChoiceWhereInput
 }
 
 input AnswerWhereUniqueInput {
@@ -4383,6 +4738,7 @@ type Mutation {
   createResponseImage(data: ResponseImageCreateInput!): ResponseImage!
   createAnswer(data: AnswerCreateInput!): Answer!
   createQuestionChoice(data: QuestionChoiceCreateInput!): QuestionChoice!
+  createAnswerChoice(data: AnswerChoiceCreateInput!): AnswerChoice!
   createChallenge(data: ChallengeCreateInput!): Challenge!
   createChallengeMessage(data: ChallengeMessageCreateInput!): ChallengeMessage!
   createSequence(data: SequenceCreateInput!): Sequence!
@@ -4396,6 +4752,7 @@ type Mutation {
   updateResponseImage(data: ResponseImageUpdateInput!, where: ResponseImageWhereUniqueInput!): ResponseImage
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateQuestionChoice(data: QuestionChoiceUpdateInput!, where: QuestionChoiceWhereUniqueInput!): QuestionChoice
+  updateAnswerChoice(data: AnswerChoiceUpdateInput!, where: AnswerChoiceWhereUniqueInput!): AnswerChoice
   updateChallenge(data: ChallengeUpdateInput!, where: ChallengeWhereUniqueInput!): Challenge
   updateChallengeMessage(data: ChallengeMessageUpdateInput!, where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   updateSequence(data: SequenceUpdateInput!, where: SequenceWhereUniqueInput!): Sequence
@@ -4409,6 +4766,7 @@ type Mutation {
   deleteResponseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteQuestionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
+  deleteAnswerChoice(where: AnswerChoiceWhereUniqueInput!): AnswerChoice
   deleteChallenge(where: ChallengeWhereUniqueInput!): Challenge
   deleteChallengeMessage(where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   deleteSequence(where: SequenceWhereUniqueInput!): Sequence
@@ -4422,6 +4780,7 @@ type Mutation {
   upsertResponseImage(where: ResponseImageWhereUniqueInput!, create: ResponseImageCreateInput!, update: ResponseImageUpdateInput!): ResponseImage!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   upsertQuestionChoice(where: QuestionChoiceWhereUniqueInput!, create: QuestionChoiceCreateInput!, update: QuestionChoiceUpdateInput!): QuestionChoice!
+  upsertAnswerChoice(where: AnswerChoiceWhereUniqueInput!, create: AnswerChoiceCreateInput!, update: AnswerChoiceUpdateInput!): AnswerChoice!
   upsertChallenge(where: ChallengeWhereUniqueInput!, create: ChallengeCreateInput!, update: ChallengeUpdateInput!): Challenge!
   upsertChallengeMessage(where: ChallengeMessageWhereUniqueInput!, create: ChallengeMessageCreateInput!, update: ChallengeMessageUpdateInput!): ChallengeMessage!
   upsertSequence(where: SequenceWhereUniqueInput!, create: SequenceCreateInput!, update: SequenceUpdateInput!): Sequence!
@@ -4435,6 +4794,7 @@ type Mutation {
   updateManyResponseImages(data: ResponseImageUpdateManyMutationInput!, where: ResponseImageWhereInput): BatchPayload!
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   updateManyQuestionChoices(data: QuestionChoiceUpdateManyMutationInput!, where: QuestionChoiceWhereInput): BatchPayload!
+  updateManyAnswerChoices(data: AnswerChoiceUpdateManyMutationInput!, where: AnswerChoiceWhereInput): BatchPayload!
   updateManyChallenges(data: ChallengeUpdateManyMutationInput!, where: ChallengeWhereInput): BatchPayload!
   updateManyChallengeMessages(data: ChallengeMessageUpdateManyMutationInput!, where: ChallengeMessageWhereInput): BatchPayload!
   updateManySequences(data: SequenceUpdateManyMutationInput!, where: SequenceWhereInput): BatchPayload!
@@ -4448,6 +4808,7 @@ type Mutation {
   deleteManyResponseImages(where: ResponseImageWhereInput): BatchPayload!
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   deleteManyQuestionChoices(where: QuestionChoiceWhereInput): BatchPayload!
+  deleteManyAnswerChoices(where: AnswerChoiceWhereInput): BatchPayload!
   deleteManyChallenges(where: ChallengeWhereInput): BatchPayload!
   deleteManyChallengeMessages(where: ChallengeMessageWhereInput): BatchPayload!
   deleteManySequences(where: SequenceWhereInput): BatchPayload!
@@ -5184,6 +5545,7 @@ type Query {
   responseImages(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ResponseImage]!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   questionChoices(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionChoice]!
+  answerChoices(where: AnswerChoiceWhereInput, orderBy: AnswerChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AnswerChoice]!
   challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge]!
   challengeMessages(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeMessage]!
   sequences(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sequence]!
@@ -5197,6 +5559,7 @@ type Query {
   responseImage(where: ResponseImageWhereUniqueInput!): ResponseImage
   answer(where: AnswerWhereUniqueInput!): Answer
   questionChoice(where: QuestionChoiceWhereUniqueInput!): QuestionChoice
+  answerChoice(where: AnswerChoiceWhereUniqueInput!): AnswerChoice
   challenge(where: ChallengeWhereUniqueInput!): Challenge
   challengeMessage(where: ChallengeMessageWhereUniqueInput!): ChallengeMessage
   sequence(where: SequenceWhereUniqueInput!): Sequence
@@ -5210,6 +5573,7 @@ type Query {
   responseImagesConnection(where: ResponseImageWhereInput, orderBy: ResponseImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ResponseImageConnection!
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   questionChoicesConnection(where: QuestionChoiceWhereInput, orderBy: QuestionChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionChoiceConnection!
+  answerChoicesConnection(where: AnswerChoiceWhereInput, orderBy: AnswerChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerChoiceConnection!
   challengesConnection(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeConnection!
   challengeMessagesConnection(where: ChallengeMessageWhereInput, orderBy: ChallengeMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeMessageConnection!
   sequencesConnection(where: SequenceWhereInput, orderBy: SequenceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SequenceConnection!
@@ -5247,13 +5611,14 @@ type Question implements Node {
 type QuestionChoice implements Node {
   id: ID!
   choice: String!
+  correct: Boolean
   addedBy: User!
   addedDate: DateTime
   updateDate: DateTime
   updatedBy: User
   question: Question!
   answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
-  correct: Boolean
+  answerChoices(where: AnswerChoiceWhereInput, orderBy: AnswerChoiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AnswerChoice!]
 }
 
 """A connection to a list of items."""
@@ -5268,13 +5633,14 @@ type QuestionChoiceConnection {
 
 input QuestionChoiceCreateInput {
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserCreateOneWithoutQuestionChoiceAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionCreateOneWithoutChoicesInput!
   answers: AnswerCreateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutChoiceInput
 }
 
 input QuestionChoiceCreateManyWithoutAddedByInput {
@@ -5292,6 +5658,11 @@ input QuestionChoiceCreateManyWithoutUpdatedByInput {
   connect: [QuestionChoiceWhereUniqueInput!]
 }
 
+input QuestionChoiceCreateOneWithoutAnswerChoicesInput {
+  create: QuestionChoiceCreateWithoutAnswerChoicesInput
+  connect: QuestionChoiceWhereUniqueInput
+}
+
 input QuestionChoiceCreateOneWithoutAnswersInput {
   create: QuestionChoiceCreateWithoutAnswersInput
   connect: QuestionChoiceWhereUniqueInput
@@ -5299,9 +5670,21 @@ input QuestionChoiceCreateOneWithoutAnswersInput {
 
 input QuestionChoiceCreateWithoutAddedByInput {
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
+  updatedBy: UserCreateOneWithoutQuestionChoiceUpdatesInput
+  question: QuestionCreateOneWithoutChoicesInput!
+  answers: AnswerCreateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutChoiceInput
+}
+
+input QuestionChoiceCreateWithoutAnswerChoicesInput {
+  choice: String!
   correct: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserCreateOneWithoutQuestionChoiceAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionCreateOneWithoutChoicesInput!
   answers: AnswerCreateManyWithoutAnswerInput
@@ -5309,32 +5692,35 @@ input QuestionChoiceCreateWithoutAddedByInput {
 
 input QuestionChoiceCreateWithoutAnswersInput {
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserCreateOneWithoutQuestionChoiceAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionCreateOneWithoutChoicesInput!
+  answerChoices: AnswerChoiceCreateManyWithoutChoiceInput
 }
 
 input QuestionChoiceCreateWithoutQuestionInput {
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserCreateOneWithoutQuestionChoiceAddedByInput!
   updatedBy: UserCreateOneWithoutQuestionChoiceUpdatesInput
   answers: AnswerCreateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutChoiceInput
 }
 
 input QuestionChoiceCreateWithoutUpdatedByInput {
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserCreateOneWithoutQuestionChoiceAddedByInput!
   question: QuestionCreateOneWithoutChoicesInput!
   answers: AnswerCreateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceCreateManyWithoutChoiceInput
 }
 
 """An edge in a connection."""
@@ -5351,12 +5737,12 @@ enum QuestionChoiceOrderByInput {
   id_DESC
   choice_ASC
   choice_DESC
+  correct_ASC
+  correct_DESC
   addedDate_ASC
   addedDate_DESC
   updateDate_ASC
   updateDate_DESC
-  correct_ASC
-  correct_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -5366,9 +5752,9 @@ enum QuestionChoiceOrderByInput {
 type QuestionChoicePreviousValues {
   id: ID!
   choice: String!
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
 }
 
 input QuestionChoiceScalarWhereInput {
@@ -5460,6 +5846,10 @@ input QuestionChoiceScalarWhereInput {
 
   """All values not ending with the given string."""
   choice_not_ends_with: String
+  correct: Boolean
+
+  """All values that are not equal to given value."""
+  correct_not: Boolean
   addedDate: DateTime
 
   """All values that are not equal to given value."""
@@ -5504,10 +5894,6 @@ input QuestionChoiceScalarWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
-  correct: Boolean
-
-  """All values that are not equal to given value."""
-  correct_not: Boolean
 }
 
 type QuestionChoiceSubscriptionPayload {
@@ -5551,27 +5937,28 @@ input QuestionChoiceSubscriptionWhereInput {
 
 input QuestionChoiceUpdateInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserUpdateOneRequiredWithoutQuestionChoiceAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionUpdateOneRequiredWithoutChoicesInput
   answers: AnswerUpdateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutChoiceInput
 }
 
 input QuestionChoiceUpdateManyDataInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
 }
 
 input QuestionChoiceUpdateManyMutationInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
 }
 
 input QuestionChoiceUpdateManyWithoutAddedByInput {
@@ -5612,6 +5999,13 @@ input QuestionChoiceUpdateManyWithWhereNestedInput {
   data: QuestionChoiceUpdateManyDataInput!
 }
 
+input QuestionChoiceUpdateOneRequiredWithoutAnswerChoicesInput {
+  create: QuestionChoiceCreateWithoutAnswerChoicesInput
+  connect: QuestionChoiceWhereUniqueInput
+  update: QuestionChoiceUpdateWithoutAnswerChoicesDataInput
+  upsert: QuestionChoiceUpsertWithoutAnswerChoicesInput
+}
+
 input QuestionChoiceUpdateOneRequiredWithoutAnswersInput {
   create: QuestionChoiceCreateWithoutAnswersInput
   connect: QuestionChoiceWhereUniqueInput
@@ -5621,9 +6015,21 @@ input QuestionChoiceUpdateOneRequiredWithoutAnswersInput {
 
 input QuestionChoiceUpdateWithoutAddedByDataInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
+  updatedBy: UserUpdateOneWithoutQuestionChoiceUpdatesInput
+  question: QuestionUpdateOneRequiredWithoutChoicesInput
+  answers: AnswerUpdateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutChoiceInput
+}
+
+input QuestionChoiceUpdateWithoutAnswerChoicesDataInput {
+  choice: String
   correct: Boolean
+  addedDate: DateTime
+  updateDate: DateTime
+  addedBy: UserUpdateOneRequiredWithoutQuestionChoiceAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionUpdateOneRequiredWithoutChoicesInput
   answers: AnswerUpdateManyWithoutAnswerInput
@@ -5631,32 +6037,35 @@ input QuestionChoiceUpdateWithoutAddedByDataInput {
 
 input QuestionChoiceUpdateWithoutAnswersDataInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserUpdateOneRequiredWithoutQuestionChoiceAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionChoiceUpdatesInput
   question: QuestionUpdateOneRequiredWithoutChoicesInput
+  answerChoices: AnswerChoiceUpdateManyWithoutChoiceInput
 }
 
 input QuestionChoiceUpdateWithoutQuestionDataInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserUpdateOneRequiredWithoutQuestionChoiceAddedByInput
   updatedBy: UserUpdateOneWithoutQuestionChoiceUpdatesInput
   answers: AnswerUpdateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutChoiceInput
 }
 
 input QuestionChoiceUpdateWithoutUpdatedByDataInput {
   choice: String
+  correct: Boolean
   addedDate: DateTime
   updateDate: DateTime
-  correct: Boolean
   addedBy: UserUpdateOneRequiredWithoutQuestionChoiceAddedByInput
   question: QuestionUpdateOneRequiredWithoutChoicesInput
   answers: AnswerUpdateManyWithoutAnswerInput
+  answerChoices: AnswerChoiceUpdateManyWithoutChoiceInput
 }
 
 input QuestionChoiceUpdateWithWhereUniqueWithoutAddedByInput {
@@ -5672,6 +6081,11 @@ input QuestionChoiceUpdateWithWhereUniqueWithoutQuestionInput {
 input QuestionChoiceUpdateWithWhereUniqueWithoutUpdatedByInput {
   where: QuestionChoiceWhereUniqueInput!
   data: QuestionChoiceUpdateWithoutUpdatedByDataInput!
+}
+
+input QuestionChoiceUpsertWithoutAnswerChoicesInput {
+  update: QuestionChoiceUpdateWithoutAnswerChoicesDataInput!
+  create: QuestionChoiceCreateWithoutAnswerChoicesInput!
 }
 
 input QuestionChoiceUpsertWithoutAnswersInput {
@@ -5786,6 +6200,10 @@ input QuestionChoiceWhereInput {
 
   """All values not ending with the given string."""
   choice_not_ends_with: String
+  correct: Boolean
+
+  """All values that are not equal to given value."""
+  correct_not: Boolean
   addedDate: DateTime
 
   """All values that are not equal to given value."""
@@ -5830,16 +6248,15 @@ input QuestionChoiceWhereInput {
 
   """All values greater than or equal the given value."""
   updateDate_gte: DateTime
-  correct: Boolean
-
-  """All values that are not equal to given value."""
-  correct_not: Boolean
   addedBy: UserWhereInput
   updatedBy: UserWhereInput
   question: QuestionWhereInput
   answers_every: AnswerWhereInput
   answers_some: AnswerWhereInput
   answers_none: AnswerWhereInput
+  answerChoices_every: AnswerChoiceWhereInput
+  answerChoices_some: AnswerChoiceWhereInput
+  answerChoices_none: AnswerChoiceWhereInput
 }
 
 input QuestionChoiceWhereUniqueInput {
@@ -8508,6 +8925,7 @@ type Subscription {
   responseImage(where: ResponseImageSubscriptionWhereInput): ResponseImageSubscriptionPayload
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   questionChoice(where: QuestionChoiceSubscriptionWhereInput): QuestionChoiceSubscriptionPayload
+  answerChoice(where: AnswerChoiceSubscriptionWhereInput): AnswerChoiceSubscriptionPayload
   challenge(where: ChallengeSubscriptionWhereInput): ChallengeSubscriptionPayload
   challengeMessage(where: ChallengeMessageSubscriptionWhereInput): ChallengeMessageSubscriptionPayload
   sequence(where: SequenceSubscriptionWhereInput): SequenceSubscriptionPayload
