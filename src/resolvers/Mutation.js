@@ -1085,7 +1085,7 @@ async function createQuestion(parent, args, ctx, info) {
     return await ctx.db.mutation.createQuestion(
       {
         data: {
-          question,
+          question: args.question,
           expirationTime,
           addedDate,
           test: {
