@@ -1086,7 +1086,6 @@ async function createQuestion(parent, args, ctx, info) {
       {
         data: {
           question: args.question,
-          expirationTime,
           addedDate,
           test: {
             connect: { id: args.testId  }
