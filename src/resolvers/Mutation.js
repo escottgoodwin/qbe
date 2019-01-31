@@ -1096,21 +1096,28 @@ async function createQuestion(parent, args, ctx, info) {
           addedBy: {
             connect: { id: userId },
           },
-          choices: [
-            {
+          choices: [ {
+            create: {
             choice:args.choice1,
             correct: args.choiceCorrect1
-            },
-            {
+            }
+          },
+          {
+            create: {
             choice:args.choice2,
             correct: args.choiceCorrect2
-            },{
+            }
+          },{
+            create: {
             choice:args.choice3,
             correct: args.choiceCorrect3
-            },{
+            }
+          },{
+            create: {
             choice:args.choice4,
             correct: args.choiceCorrect4
-            },
+            }
+          },
           ]
         },
       },
