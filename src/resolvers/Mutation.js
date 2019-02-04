@@ -1361,7 +1361,7 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
           },
         },
       },
-      `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice } } }`
+      `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice correct } } }`
     )
 }
 
