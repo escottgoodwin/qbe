@@ -1338,33 +1338,31 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
     throw new Error(`Unauthorized, this question wasn't sent to you`)
   }
 
-    const questionChoice = ctx.db.query.questionChoice({ where: { id: answerChoiceId } },
-      `{ id correct }`)
+  const questionChoice = await ctx.db.query.questionChoice(
+{ where: { id: answerChoiceId } },
+` { correct } `,
+)
 
-    console.log('answer correct',questionChoice.id)
+const answerCorrect = questionChoice.correct
 
-    const createAnswer = ctx.db.mutation.createAnswer(
-      {
-        data: {
-          answerCorrect:questionChoice.correct,
-          addedDate,
-          addedBy: {
-            connect: { id: userId },
-          },
-          answer: {
-            connect: { id: answerChoiceId  }
-          },
-          question: {
-            connect: { id: questionId  }
-          },
-        },
+return ctx.db.mutation.createAnswer(
+  {
+    data: {
+      answerCorrect,
+      addedDate,
+      addedBy: {
+        connect: { id: userId },
       },
-      `{ id answerCorrect answer { id choice correct } question { id question choices { id choice correct } } }`
-    )
-    console.log('answer correct',questionChoice.id)
-    console.log('answer ',createAnswer.answerCorrect)
-
-    return createAnswer
+      answer: {
+        connect: { id: answerChoiceId  }
+      },
+      question: {
+        connect: { id: questionId  }
+      },
+    },
+  },
+  `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice correct } } }`
+)
 }
 
 async function deleteAnswer(parent, { id }, ctx, info) {
