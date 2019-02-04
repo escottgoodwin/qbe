@@ -1343,12 +1343,10 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
   ` { correct } `,
 )
 
-  const answerCorrect = questionChoice.correct
-
     return ctx.db.mutation.createAnswer(
       {
         data: {
-          answerCorrect,
+          answerCorrect:questionChoice.correct,
           addedDate,
           addedBy: {
             connect: { id: userId },
