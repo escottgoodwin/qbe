@@ -1346,7 +1346,7 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
     return ctx.db.mutation.createAnswer(
       {
         data: {
-          answerCorrect:questionChoice.correct,
+          answerCorrect:questionChoice.correct ? true : false,
           addedDate,
           addedBy: {
             connect: { id: userId },
