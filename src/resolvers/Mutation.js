@@ -1338,13 +1338,15 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
     throw new Error(`Unauthorized, this question wasn't sent to you`)
   }
 
-    const answerCorrect = ctx.db.mutation.query.questionChoice({id:answerChoiceId},
-      `{ correct }`)
+    const questionChoice = ctx.db.query.questionChoice({ where: { id: answerChoiceId } },
+      `{ id correct }`)
 
-    return ctx.db.mutation.createAnswer(
+    console.log('answer correct',questionChoice.id)
+
+    const createAnswer = ctx.db.mutation.createAnswer(
       {
         data: {
-          answerCorrect,
+          answerCorrect:questionChoice.correct,
           addedDate,
           addedBy: {
             connect: { id: userId },
@@ -1359,6 +1361,10 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
       },
       `{ id answerCorrect answer { id choice correct } question { id question choices { id choice correct } } }`
     )
+    console.log('answer correct',questionChoice.id)
+    console.log('answer ',createAnswer.answerCorrect)
+
+    return createAnswer
 }
 
 async function deleteAnswer(parent, { id }, ctx, info) {
