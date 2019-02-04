@@ -1338,15 +1338,9 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
     throw new Error(`Unauthorized, this question wasn't sent to you`)
   }
 
-  const questionChoice = await ctx.db.query.questionChoice(
-  { where: { id: answerChoiceId } },
-  ` { correct } `,
-)
-
     return ctx.db.mutation.createAnswer(
       {
         data: {
-          answerCorrect:questionChoice.correct ? true : false,
           addedDate,
           addedBy: {
             connect: { id: userId },
@@ -1359,7 +1353,7 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
           },
         },
       },
-      `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice correct } } }`
+      `{ id answer { id choice correct } question { id question choices { id choice correct } } }`
     )
 }
 
