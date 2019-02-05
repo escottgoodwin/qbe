@@ -1339,9 +1339,9 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
   }
 
   const questionChoice = await ctx.db.query.questionChoice(
-{ where: { id: answerChoiceId } },
-` { correct } `,
-)
+    { where: { id: answerChoiceId } },
+    ` { id choice correct } `,
+    )
 
 const answerCorrect = questionChoice.correct
 
@@ -1361,7 +1361,7 @@ return ctx.db.mutation.createAnswer(
       },
     },
   },
-  `{ id answerCorrect answer { id choice correct } question { id question choices{ id choice correct } } }`
+  `{ id }`
 )
 }
 
