@@ -1079,7 +1079,7 @@ async function updateQuestion(parent, args, ctx, info) {
       }
       },
       where: {
-        id: id
+        id: args.id
         }
     },
     info
