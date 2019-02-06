@@ -1008,7 +1008,7 @@ async function updateQuestion(parent, args, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
   const questionExists = await ctx.db.exists.Question({
-    id,
+    id: args.id,
     addedBy: { id: userId },
   })
   if (!questionExists) {
