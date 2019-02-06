@@ -1004,7 +1004,7 @@ async function addQuestion(parent, { question, testId, panelId, sentToId, correc
   throw new Error(`Unauthorized, must be a student for this test`)
 }
 
-async function updateQuestion(parent, { id, question, sentToId, correctResponseId, incorrectResponseId, }, ctx, info) {
+async function updateQuestion(parent, args, ctx, info) {
   const userId = await getUserId(ctx)
   const updateDate = new Date()
   const questionExists = await ctx.db.exists.Question({
@@ -1018,22 +1018,65 @@ async function updateQuestion(parent, { id, question, sentToId, correctResponseI
   return await ctx.db.mutation.updateQuestion(
     {
       data: {
-        question,
-        sentTo: {
-          connect: { id: sentToId  }
-        },
-        correctResponseImage: {
-          connect: { id: correctResponseImageId  }
-        },
-        incorrectResponseImage: {
-          connect: { id: incorrectResponseImageId  }
-        },
+        question: args.question,
         updateDate,
         updatedBy: {
-          connect: {
-            id: userId
-          },
+          connect: { id: userId },
         },
+        choices: {
+          update: [
+            {
+              where: {
+                id: args.choice1Id
+              },
+              data: {
+                choice:args.choice1,
+                correct: args.choiceCorrect1,
+                updateDate,
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              }
+            },
+            {
+              where: {
+                id: args.choice2Id
+              },
+              data: {
+                choice:args.choice2,
+                correct: args.choiceCorrect2,
+                updateDate,
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              }
+            },{
+              where: {
+                id: args.choice3Id
+              },
+              data: {
+                choice:args.choice3,
+                correct: args.choiceCorrect3,
+                updateDate,
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              }
+            },{
+              where: {
+                id: args.choice4Id
+              },
+              data: {
+                choice:args.choice4,
+                correct: args.choiceCorrect4,
+                updateDate,
+                updatedBy: {
+                  connect: { id: userId },
+                },
+              }
+            },
+        ]
+      }
       },
       where: {
         id: id
@@ -1041,7 +1084,6 @@ async function updateQuestion(parent, { id, question, sentToId, correctResponseI
     },
     info
   )
-
 }
 
 async function deleteQuestion(parent, { id }, ctx, info) {
