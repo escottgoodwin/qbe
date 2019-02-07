@@ -148,6 +148,81 @@ async function testStats(parent, args, ctx, info) {
       }
 }
 
+async function userAnsweredStats(parent, args, ctx, info){
+
+    const userId = await getUserId(ctx)
+
+    const countSelectionSet = `
+      {
+        aggregate {
+          count
+        }
+      }
+    `
+
+    const answersConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: userId }, answer: { question: { test: { id: args.testId } } } } },
+      countSelectionSet)
+
+    const answersCorrectConnection = await ctx.db.query.answersConnection({ where: { addedBy: { id: userId }, answer: { question: { test: { id: args.testId } } }, answerCorrect: true } },
+      countSelectionSet)
+
+    const questionCorrectPercent = answersCorrectConnection.aggregate.count / answersConnection.aggregate.count
+
+    function qpercent(qpercent){
+      if (qpercent > 0){ return qpercent } else { return 0.0 }
+    }
+
+    const percentCorrect = qpercent(questionCorrectPercent)
+
+    return {
+      name: '',
+      total: answersConnection.aggregate.count,
+      totalCorrect: answersCorrectConnection.aggregate.count,
+      percentCorrect: percentCorrect,
+    }
+  }
+
+async function userQuestionStats(parent, args, ctx, info){
+
+    const userId = await getUserId(ctx)
+
+    const countSelectionSet = `
+      {
+        aggregate {
+          count
+        }
+      }
+    `
+
+  const totalQuestions = await ctx.db.query.questionsConnection({ where: { addedBy: { id: userId }, test: { id: args.testId } } },
+      countSelectionSet)
+
+    //user's questions that have answers
+    const answeredQuestions = await ctx.db.query.answersConnection({ where: { answer: { question: { addedBy: { id: userId } } } }, answer: { question: { test: { id: args.testId } } } },
+      countSelectionSet)
+
+    //user's questions that have answers that are correct
+    const answeredQuestionsCorrect = await ctx.db.query.answersConnection({ where: { AND: [ { addedBy: { id: userId } }, { answer: { question: { test: { id: args.testId } } }, answerCorrect: true } ] } },
+      countSelectionSet)
+
+    // percent correct of user's questions that have answers
+    const questionCorrectPercent = answeredQuestionsCorrect.aggregate.count / answeredQuestions.aggregate.count
+
+    function qpercent(qpercent){
+      if (qpercent > 0){ return qpercent } else { return 0.0 }
+    }
+
+     const percentCorrect = qpercent(questionCorrectPercent)
+
+    return {
+      totalQuestions: totalQuestions.aggregate.count,
+      answers: answeredQuestions.aggregate.count,
+      totalCorrect: answeredQuestionsCorrect.aggregate.count,
+      percentCorrect: percentCorrect,
+    }
+  }
+
+
 async function userTestStats(parent, args, ctx, info) {
 
   const countSelectionSet = `
@@ -617,6 +692,8 @@ module.exports = {
   tests,
   test,
   testStats,
+  userAnsweredStats,
+  userQuestionStats,
   userTestStats,
   testQuestionStats,
   testPanelStats,
