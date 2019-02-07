@@ -198,7 +198,7 @@ async function userQuestionStats(parent, args, ctx, info){
       countSelectionSet)
 
     //user's questions that have answers
-    const answeredQuestions = await ctx.db.query.answersConnection({ where: { answer: { question: { addedBy: { id: userId } } } }, answer: { question: { test: { id: args.testId } } } },
+    const answeredQuestions = await ctx.db.query.answersConnection({ where: { AND: [ { addedBy: { id: userId } }, { answer: { question: { test: { id: args.testId } } } } ] } },
       countSelectionSet)
 
     //user's questions that have answers that are correct
