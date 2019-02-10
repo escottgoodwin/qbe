@@ -1374,10 +1374,9 @@ async function addAnswer(parent, { answerChoiceId, questionId }, ctx, info) {
 
   const answerExists = await ctx.db.exists.Question({
     id: questionId,
-    sentTo: { id: userId },
   })
   if (!answerExists) {
-    throw new Error(`Unauthorized, this question wasn't sent to you`)
+    throw new Error(`This question doesn't exist.`)
   }
 
   const questionChoice = await ctx.db.query.questionChoice(
