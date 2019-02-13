@@ -41,6 +41,10 @@ type Query {
 
   question(id: ID!): Question! @isAuthenticated
 
+  userQuestions(testId:ID!): [Question!] @isAuthenticated
+
+  userAnswers(testId:ID!): [Answer!] @isAuthenticated
+
   questionsAnswered(testId: String!): AnswerStats! @isAuthenticated
 
   questionStats(questionId: String): PercentCorrect! @isAuthenticated
