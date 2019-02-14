@@ -154,6 +154,7 @@ type Mutation {
   salutation: String,
   firstName: String,
   lastName: String,
+  pushToken: String,
   adminInstitutions: [ID],
   teacherInstitutions: [ID],
   studentInstitutions: [ID],
