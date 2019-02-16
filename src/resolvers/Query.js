@@ -1,5 +1,6 @@
 const { getUserId, getUser, getUserRole } = require('../utils')
 const uuidv4 = require('uuid/v4');
+var flat = require('array.prototype.flat');
 
 async function users(parent, args, ctx, info) {
 
@@ -268,9 +269,9 @@ async function testPanelStats(parent, args, ctx, info) {
       const panelPercents = panels.map(panel => ({
         question:'',
         panelLink:panel.link,
-        total: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length,
-        totalCorrect: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length,
-        percentCorrect: panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length > 0 ? panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().filter(a => a).length / panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct)).flat().length : 0.0
+        total: flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).length,
+        totalCorrect: flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).filter(a => a).length,
+        percentCorrect: flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).filter(a => a).length / flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).length > 0 ? flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).filter(a => a).length / flat(panel.questions.map(q => q.questionAnswers.map(a => a.answer.correct))).length : 0.0
       })
     )
 
