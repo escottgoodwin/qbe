@@ -437,7 +437,7 @@ async function login(parent, args, ctx, info) {
       where: {
         email: args.email,
       }
-    }, ` { id password firstName lastName role confirmed } ` )
+    }, ` { id password firstName lastName role confirmed pushToken } ` )
   //` { id password firstName lastName role } `
   if (!user) {
     throw new Error('No such user found.')
