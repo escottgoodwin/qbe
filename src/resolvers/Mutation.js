@@ -456,7 +456,8 @@ async function login(parent, args, ctx, info) {
     {
       data: {
         lastLogin,
-        online:true
+        online:true,
+        pushToken:args.pushToken
       },
       where: {
         id: user.id,
@@ -464,6 +465,86 @@ async function login(parent, args, ctx, info) {
     },
     ` { id password firstName lastName pushToken role online teacherInstitutions { id name } studentInstitutions { id name } } `
   )
+
+  loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
+
+  return {
+    authMsg: loginMsg,
+    token: jwt.sign({ userId: user.id }, APP_SECRET),
+    user: updateUser,
+  }
+}
+
+async function mobileLogin(parent, args, ctx, info) {
+  const lastLogin = new Date()
+
+  const user = await ctx.db.query.user(
+    {
+      where: {
+        email: args.email,
+      }
+    }, ` { id password firstName lastName role confirmed pushToken } ` )
+  //` { id password firstName lastName role } `
+  if (!user) {
+    throw new Error('No such user found.')
+  }
+
+  if (!user.confirmed) {
+    throw new Error('You have not confirmed your email account yet.')
+  }
+
+  const valid = await bcrypt.compare(args.password, user.password)
+  if (!valid) {
+    throw new Error('Invalid password')
+  }
+
+  if (user.pushToken) {
+
+      const updateUser = await ctx.db.mutation.updateUser(
+        {
+          data: {
+            lastLogin,
+            online:true,
+          },
+          where: {
+            id: user.id,
+          },
+        },
+        ` { id password firstName lastName pushToken role online teacherInstitutions { id name } studentInstitutions { id name } } `
+      )
+
+      loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
+
+      return {
+        authMsg: loginMsg,
+        token: jwt.sign({ userId: user.id }, APP_SECRET),
+        user: updateUser,
+      }
+
+    } else {
+
+      const updateUser = await ctx.db.mutation.updateUser(
+        {
+          data: {
+            lastLogin,
+            online:true,
+            pushToken:args.pushToken
+          },
+          where: {
+            id: user.id,
+          },
+        },
+        ` { id password firstName lastName pushToken role online teacherInstitutions { id name } studentInstitutions { id name } } `
+      )
+
+      loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
+
+      return {
+        authMsg: loginMsg,
+        token: jwt.sign({ userId: user.id }, APP_SECRET),
+        user: updateUser,
+      }
+    }
 
   loginMsg = updateUser.firstName + ' ' + updateUser.lastName + ', you have successfully logged in.'
 
@@ -1550,6 +1631,7 @@ module.exports = {
   resetPassword,
   confirmEmail,
   login,
+  mobileLogin,
   logout,
   addInstitution,
   updateInstitution,

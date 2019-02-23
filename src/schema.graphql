@@ -72,6 +72,8 @@ type Mutation {
 
   login(email: String!, password: String!): AuthPayload
 
+  mobileLogin(email: String!, password: String!, pushToken: String): AuthPayload
+
   logout: signUpPayload
 
   newPasswordRequest(email: String!): signUpPayload
