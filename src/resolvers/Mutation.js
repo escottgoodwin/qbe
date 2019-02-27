@@ -1167,6 +1167,23 @@ async function updateQuestion(parent, args, ctx, info) {
   )
 }
 
+async function notificationSent(parent, args, ctx, info) {
+
+  return await ctx.db.mutation.updateQuestion(
+    {
+      data: {
+        sentDate: args.sentDate,
+        expirationTime: args.expirationTime,
+      },
+      where: {
+        id: args.id
+        }
+    },
+    info
+  )
+}
+
+
 async function deleteQuestion(parent, { id }, ctx, info) {
 
   const userId = await getUserId(ctx)
@@ -1651,6 +1668,7 @@ module.exports = {
   deleteResponseImage,
   addQuestion,
   updateQuestion,
+  notificationSent,
   deleteQuestion,
   createQuestion,
   addQuestionChoice,

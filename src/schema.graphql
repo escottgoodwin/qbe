@@ -118,6 +118,8 @@ type Mutation {
 
   updateQuestion(id: ID!, question: String, choice1: String, choice2: String, choice3: String, choice4: String, choiceCorrect1: Boolean, choiceCorrect2: Boolean, choiceCorrect3: Boolean, choiceCorrect4: Boolean, choice1Id: ID, choice2Id: ID, choice3Id: ID, choice4Id: ID, correctResponseImageId: ID, incorrectResponseImageId: ID): Question! @hasRole(roles: ["STUDENT"])
 
+  notificationSent(id: ID!, sentDate: DateTime!, expirationTime: DateTime!): Question!
+
   deleteQuestion(id: ID!): Question! @hasRole(roles: ["TEACHER","STUDENT","ADMIN"])
 
   addQuestionChoice(choice: String!, correct: Boolean, questionId: ID!): QuestionChoice! @hasRole(roles: ["STUDENT"])
