@@ -251,7 +251,6 @@ async function testQuestionStats(parent, args, ctx, info) {
       const questionPercents = questionsAnswers.map(question =>
         ({
           question: question.question,
-          panelLink: question.panel.link,
           total: question.questionAnswers.length,
           totalCorrect: question.questionAnswers.filter(answer => answer.answer.correct).length,
           percentCorrect: (question.questionAnswers.filter(answer => answer.answer.correct).length / question.questionAnswers.length) > 0 ? question.questionAnswers.filter(answer => answer.answer.correct).length / question.questionAnswers.length : 0.0,

@@ -31,7 +31,7 @@ type Query {
 
   testQuestionStats(testId: ID!): [PercentQuestionCorrect!]! @isAuthenticated
 
-  testPanelStats(testId: ID!): [PercentQuestionCorrect!]! @isAuthenticated
+  testPanelStats(testId: ID!): [PercentPanelCorrect!]! @isAuthenticated
 
   responseImages(filter: String, where: ResponseImageWhereInput,  skip: Int, first: Int, orderBy: ResponseImageOrderByInput): ResponseImageSearch! @isAuthenticated
 
@@ -232,9 +232,16 @@ type PercentCorrectUserQuestions {
   percentCorrect: Float!
 }
 
-type PercentQuestionCorrect {
+type PercentPanelCorrect {
   question: String!
   panelLink: String!
+  total: Int!
+  totalCorrect: Int!
+  percentCorrect: Float!
+}
+
+type PercentQuestionCorrect {
+  question: String!
   total: Int!
   totalCorrect: Int!
   percentCorrect: Float!

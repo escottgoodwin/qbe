@@ -1179,7 +1179,7 @@ async function notificationSent(parent, args, ctx, info) {
         id: args.id
         }
     },
-    info
+    `{ id sentDate expirationTime }`
   )
 }
 
