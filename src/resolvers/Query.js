@@ -2,6 +2,43 @@ const { getUserId, getUser, getUserRole } = require('../utils')
 const uuidv4 = require('uuid/v4');
 var flat = require('array.prototype.flat');
 
+
+
+async function articleRecommendations(parent, args, ctx, info) {
+
+  const searchData = {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, cors, *same-origin
+      headers: {
+        "Content-Type": "application/json",
+          // "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({"link":args.link}) // body data type must match "Content-Type" header
+  }
+
+  apiCall = async (apiurl) => {
+    let response = await fetch(apiurl,searchData);
+    let data = await response.json();
+    return {
+      recommendations: data[0].recs,
+      link: args.link
+    }
+  }
+
+  if (args.transLang==="fr"){
+    const apiurl = 'http://18.144.62.198/apis/link_search_pg'
+    let data = await apiCall(apiurl)
+    return data
+  }
+
+  if (args.transLang==="es"){
+    const apiurl ='http://13.56.20.91/apis/link_search_pg'
+    let data = apiCall(apiurl)
+    return data
+  }
+
+}
+
 async function users(parent, args, ctx, info) {
 
   const where = args.where
@@ -620,6 +657,7 @@ async function sequences(parent, args, ctx, info) {
 
 
 module.exports = {
+  articleRecommendations,
   users,
   user,
   institutions,

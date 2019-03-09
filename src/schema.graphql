@@ -5,6 +5,8 @@ directive @hasRole(roles: [String]) on QUERY | FIELD_DEFINITION  | MUTATION
 
 type Query {
 
+  articleRecommendations(transLang: String!, link: String!): ArticleRecommendations! 
+
   institutions(filter: String, where: InstitutionWhereInput, skip: Int, first: Int, orderBy: InstitutionOrderByInput): InstitutionSearch! @isAuthenticated
 
   institution(id: ID!): Institution! @isAuthenticated
@@ -167,6 +169,17 @@ type Mutation {
   teacherIds: [String],
   phone: String,
   online: Boolean): User!
+}
+
+type ArticleRecommendation {
+  link: String!
+  title: String!
+  art_id: String!
+}
+
+type ArticleRecommendations {
+  link: String!
+  recommendations: [ArticleRecommendation!]!
 }
 
 type Subscription {
